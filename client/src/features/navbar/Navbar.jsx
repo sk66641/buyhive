@@ -1,6 +1,9 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { selectItems } from '../cart/CartSlice'
+import { selectLoggedInUser } from '../auth/authSlice'
 
 const user = {
     name: 'Tom Cook',
@@ -16,9 +19,9 @@ const navigation = [
     { name: 'Reports', href: '#', current: false },
 ]
 const userNavigation = [
-    { name: 'Your Profile', href: '#' },
-    { name: 'Settings', href: '#' },
-    { name: 'Sign out', href: '#' },
+    { name: 'Your Profile', link: '/' },
+    { name: 'Settings', link: '/' },
+    { name: 'Sign out', link: '/login' },
 ]
 
 function classNames(...classes) {
@@ -26,6 +29,11 @@ function classNames(...classes) {
 }
 
 export default function Navbar({ children }) {
+
+    // const user = useSelector(selectLoggedInUser);
+    // console.log("user",user)
+    const items = useSelector(selectItems)
+    // console.log("items",items.length)
     return (
         <>
             {/*
@@ -76,9 +84,9 @@ export default function Navbar({ children }) {
                                         <span className="sr-only">View notifications</span>
                                         <ShoppingCartIcon aria-hidden="true" className="size-6" />
                                     </Link>
-                                    <span className="mb-5 -ml-3 z-0 inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset">
-                                        3
-                                    </span>
+                                    {items.length > 0 && <span className="mb-5 -ml-3 z-0 inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset">
+                                        {items.length}
+                                    </span>}
 
                                     {/* Profile dropdown */}
                                     <Menu as="div" className="relative ml-3">
@@ -95,12 +103,12 @@ export default function Navbar({ children }) {
                                         >
                                             {userNavigation.map((item) => (
                                                 <MenuItem key={item.name}>
-                                                    <a
-                                                        href={item.href}
+                                                    <Link
+                                                        to={item.link}
                                                         className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                                                     >
                                                         {item.name}
-                                                    </a>
+                                                    </Link>
                                                 </MenuItem>
                                             ))}
                                         </MenuItems>
@@ -153,9 +161,9 @@ export default function Navbar({ children }) {
                                     <span className="sr-only">View notifications</span>
                                     <ShoppingCartIcon aria-hidden="true" className="size-6" />
                                 </Link>
-                                <span className="inline-flex items-center rounded-md bg-gray-50 mb-5 -ml-3 px-1.5 py-0.5 z-0 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset">
-                                    3
-                                </span>
+                                {items.length > 0 && <span className="inline-flex items-center rounded-md bg-gray-50 mb-5 -ml-3 px-1.5 py-0.5 z-0 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset">
+                                    {items.length}
+                                </span>}
 
                             </div>
                             <div className="mt-3 space-y-1 px-2">

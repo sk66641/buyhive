@@ -6,6 +6,14 @@ export function fetchAllProducts() {
         resolve({ data })
     })
 }
+export function fetchProductsById(id) {
+    return new Promise(async (resolve) => {
+        //TODO: we will not hard-code server URL here
+        const response = await fetch(`http://localhost:3000/products/${id}`)
+        const data = await response.json();
+        resolve({ data })
+    })
+}
 export function fetchProductsByFilters(filter, sort, pagination) {
     // console.log("fetchProductsByFilters", filter)
     // filter = {"category":["smartphone","laptops"]}
@@ -23,11 +31,11 @@ export function fetchProductsByFilters(filter, sort, pagination) {
     }
     for (let key in sort) {
         queryString += `${key}=${sort[key]}&`
-        console.log("sort query", { queryString });
+        // console.log("sort query", { queryString });
     }
     for (let key in pagination) {
         queryString += `${key}=${pagination[key]}&`;
-        console.log("pagination query", { pagination })
+        // console.log("pagination query", { pagination })
     }
 
     return new Promise(async (resolve) => {
