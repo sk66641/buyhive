@@ -4,7 +4,7 @@ import { Radio, RadioGroup } from '@headlessui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchProductsByIdAsync, selectedProductById } from '../productSlice'
 import { useParams } from 'react-router-dom'
-import { addToCartAsync, DuplicateItemError } from '../../cart/CartSlice'
+import { addToCartAsync} from '../../cart/CartSlice'
 import { selectLoggedInUser } from '../../auth/authSlice'
 
 const colors = [
@@ -43,7 +43,6 @@ export default function ProductDetails() {
   const dispatch = useDispatch();
   const params = useParams();
   const user = useSelector(selectLoggedInUser);
-  const error = useSelector(DuplicateItemError);
   // console.log("user", user)
   useEffect(() => {
     dispatch(fetchProductsByIdAsync(params.id));
@@ -236,7 +235,6 @@ export default function ProductDetails() {
                 >
                   Add to cart
                 </button>
-                {error && <p className='text-red-500 text-center'>{error.message}</p>}
               </form>
             </div>
 
