@@ -2,7 +2,8 @@ import { Link, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCartAsync, deleteItemFromCartAsync, selectItems } from '../features/cart/CartSlice';
 import { useForm } from 'react-hook-form';
-import { selectLoggedInUser, updateUserAsync } from '../features/auth/authSlice';
+import { selectLoggedInUser } from '../features/auth/authSlice';
+import { updateUserAsync } from '../features/user/userSlice';
 import { useState } from 'react';
 import { createOrderAsync, selectCurrentOrder } from '../features/order/orderSlice';
 
@@ -40,7 +41,7 @@ function Checkout() {
     setPaymentMethod(e.target.value)
   }
   const handleOrder = () => {
-    if (user.addresses.length === 0) {
+    if (user.addresses.length === 0 || !selectedAddress) {
       alert("address not selected");
       return;
     };
@@ -234,7 +235,6 @@ function Checkout() {
                             value={index}
                             name="address"
                             type="radio"
-                            checked={index === 0}
                             className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                           />
                           <div className="min-w-0 flex-auto">
