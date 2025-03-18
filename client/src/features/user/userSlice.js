@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { fetchLoggedInUserOrders, updateUser } from './userAPI';
+import { fetchLoggedInUserOrders, updateUser, fetchLoggedInUser } from './userAPI';
 
 const initialState = {
     state: 'idle',
@@ -8,11 +8,20 @@ const initialState = {
     error: null,
 }
 export const fetchLoggedInUserOrdersAsync = createAsyncThunk(
-    'cart/fetchLoggedInUserOrders',
+    'user/fetchLoggedInUserOrders',
     async (userId) => {
         const response = await fetchLoggedInUserOrders(userId);
         return response.data;
     })
+
+export const fetchLoggedInUserAsync = createAsyncThunk(
+    'user/fetchLoggedInUser',
+    async (id) => {
+        const response = await fetchLoggedInUser(id);
+        // The value we return becomes the `fulfilled` action payload
+        return response.data;
+    }
+);
 
 export const updateUserAsync = createAsyncThunk(
     'user/updateUser',
@@ -32,7 +41,6 @@ export const userSlice = createSlice({
             })
             .addCase(fetchLoggedInUserOrdersAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
-                // this info can be differenct or more from logged in user info
                 state.userOrders = action.payload;
             })
             .addCase(updateUserAsync.pending, (state) => {
@@ -42,10 +50,19 @@ export const userSlice = createSlice({
                 state.status = 'idle';
                 state.userInfo = action.payload;
             })
+            .addCase(fetchLoggedInUserAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchLoggedInUserAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                // this info can be differenct or more from logged in user info
+                state.userInfo = action.payload;
+            })
     }
 })
 
 export const selectUserOrders = (state) => state.user.userOrders;
+export const selectUserInfo = (state) => state.user.userInfo;
 // export const { increment, decrement, incrementByAmount } = counterSlice.actions
 
 export default userSlice.reducer

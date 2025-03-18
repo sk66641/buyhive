@@ -2,8 +2,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCartAsync, deleteItemFromCartAsync, selectItems } from '../features/cart/CartSlice';
 import { useForm } from 'react-hook-form';
-import { selectLoggedInUser } from '../features/auth/authSlice';
-import { updateUserAsync } from '../features/user/userSlice';
+import { selectUserInfo, updateUserAsync } from '../features/user/userSlice';
 import { useState } from 'react';
 import { createOrderAsync, selectCurrentOrder } from '../features/order/orderSlice';
 
@@ -14,7 +13,7 @@ function Checkout() {
     reset,
     formState: { errors },
   } = useForm();
-  const user = useSelector(selectLoggedInUser);
+  const user = useSelector(selectUserInfo);
   const items = useSelector(selectItems);
   const currentOrder = useSelector(selectCurrentOrder);
   // console.log(currentOrder)

@@ -26,3 +26,12 @@ export function updateUser(update) {
         resolve({ data })
     })
 }
+
+export function fetchLoggedInUser(userId) {
+    return new Promise(async (resolve) => {
+        const response = await fetch('http://localhost:3000/users/' + userId)
+        const data = await response.json()
+        resolve({ data })
+    }
+    );
+}
