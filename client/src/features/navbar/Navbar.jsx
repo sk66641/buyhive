@@ -24,13 +24,18 @@ const userNavigation = [
     { name: 'Sign out', link: '/logout' },
 ]
 
+const adminNavigation = [
+    { name: 'Admin', link: '/admin' },
+    { name: 'Orders', link: '/admin/orders' },
+]
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar({ children }) {
 
-    // const user = useSelector(selectLoggedInUser);
+    const getUser = useSelector(selectLoggedInUser);
     // console.log("user",user)
     const items = useSelector(selectItems)
     // console.log("items",items.length)
@@ -58,8 +63,8 @@ export default function Navbar({ children }) {
                                 </div>
                                 <div className="hidden md:block">
                                     <div className="ml-10 flex items-baseline space-x-4">
-                                        {navigation.map((item) => (
-                                            <a
+                                        {getUser.role !== 'admin' ? navigation.map((item) => (
+                                            <Link
                                                 key={item.name}
                                                 href={item.href}
                                                 aria-current={item.current ? 'page' : undefined}
@@ -69,8 +74,12 @@ export default function Navbar({ children }) {
                                                 )}
                                             >
                                                 {item.name}
-                                            </a>
-                                        ))}
+                                            </Link>
+                                        )) :
+                                            adminNavigation.map((item) => (
+                                                <Link className='text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium' key={item.name} to={item.link}>{item.name}</Link>
+                                            ))
+                                        }
                                     </div>
                                 </div>
                             </div>

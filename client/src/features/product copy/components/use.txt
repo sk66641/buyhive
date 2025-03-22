@@ -1,0 +1,11 @@
+Day 1: Quick Understanding & Setup
+->Understand the requirements.
+->Research and select learning resources considering the given time period.
+->Set up the environment and go through the selected resources.
+Day 2: Learning & Implementation
+->Continue going through the selected resources while following coding conventions.
+->End the day with debugging and optimization.
+->Day 3: Error Handling & Practical Application
+Learn handling errors.
+->Decide on a basic practical project.
+->Build and implement the project.

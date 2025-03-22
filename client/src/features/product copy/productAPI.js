@@ -6,7 +6,6 @@ export function fetchAllProducts() {
         resolve({ data })
     })
 }
-
 export function fetchProductsById(id) {
     return new Promise(async (resolve) => {
         //TODO: we will not hard-code server URL here
@@ -15,7 +14,6 @@ export function fetchProductsById(id) {
         resolve({ data })
     })
 }
-
 export function fetchProductsByFilters(filter, sort, pagination) {
     // console.log("fetchProductsByFilters", filter)
     // filter = {"category":["smartphone","laptops"]}
@@ -48,38 +46,4 @@ export function fetchProductsByFilters(filter, sort, pagination) {
         // resolve({ data });
     }
     );
-}
-
-export function updateProduct(update) {
-    return new Promise(async (resolve) => {
-        //TODO: we will not hard-code server URL here
-        const response = await fetch('http://localhost:3000/products/' + update.id,
-            {
-                method: 'PATCH',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify(update)
-            }
-        )
-        const data = await response.json();
-        // console.log("createUser", data)
-        resolve({ data })
-    })
-}
-
-export function createProduct(product) {
-    return new Promise(async (resolve) => {
-        const response = await fetch('http://localhost:3000/products',
-            {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify(product)
-            }
-        )
-        const data = await response.json();
-        resolve({ data })
-    })
 }

@@ -5,9 +5,9 @@
       "title": "Essence Mascara Lash Princess",
       "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
       "category": "beauty",
-      "price": 9.99,
+      "price": "10",
       "discountPercentage": 7.17,
-      "rating": 4.94,
+      "rating": 4,
       "stock": 5,
       "tags": [
         "beauty",
@@ -58,7 +58,8 @@
       "images": [
         "https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/1.png"
       ],
-      "thumbnail": "https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png"
+      "thumbnail": "https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png",
+      "deleted": true
     },
     {
       "id": "2",
@@ -6016,6 +6017,7 @@
     {
       "id": "5141",
       "email": "user@gmail.com",
+      "role": "user",
       "addresses": [
         {
           "name": "sanu",
@@ -6050,6 +6052,7 @@
     {
       "id": "949f",
       "email": "user1@gmail.com",
+      "role": "user",
       "addresses": [
         {
           "name": "san",
@@ -6066,8 +6069,26 @@
     {
       "id": "aea5",
       "email": "test@gmail.com",
+      "role": "user",
       "addresses": [],
       "password": "User@12345"
+    },
+    {
+      "id": "dd6e",
+      "email": "admin@gmail.com",
+      "addresses": [
+        {
+          "name": "sanu",
+          "email": "admin@gmail.com",
+          "phone": "123456789",
+          "street": "BSNL Office",
+          "city": "EkangarSarai",
+          "region": "Nalanda, Bihar",
+          "pinCode": "801301"
+        }
+      ],
+      "password": "User@12345",
+      "role": "admin"
     }
   ],
   "carts": [],
@@ -7065,6 +7086,109 @@
           }
         ],
         "password": "User@12345"
+      },
+      "paymentMethod": "cash",
+      "status": "pending"
+    },
+    {
+      "id": "c2b8",
+      "items": [
+        {
+          "id": "1",
+          "title": "Essence Mascara Lash Princess",
+          "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
+          "category": "beauty",
+          "price": "10",
+          "discountPercentage": 7.17,
+          "rating": 4,
+          "stock": 5,
+          "tags": [
+            "beauty",
+            "mascara"
+          ],
+          "brand": "Essence",
+          "sku": "RCH45Q1A",
+          "weight": 2,
+          "dimensions": {
+            "width": 23.17,
+            "height": 14.43,
+            "depth": 28.01
+          },
+          "warrantyInformation": "1 month warranty",
+          "shippingInformation": "Ships in 1 month",
+          "availabilityStatus": "Low Stock",
+          "reviews": [
+            {
+              "rating": 2,
+              "comment": "Very unhappy with my purchase!",
+              "date": "2024-05-23T08:56:21.618Z",
+              "reviewerName": "John Doe",
+              "reviewerEmail": "john.doe@x.dummyjson.com"
+            },
+            {
+              "rating": 2,
+              "comment": "Not as described!",
+              "date": "2024-05-23T08:56:21.618Z",
+              "reviewerName": "Nolan Gonzalez",
+              "reviewerEmail": "nolan.gonzalez@x.dummyjson.com"
+            },
+            {
+              "rating": 5,
+              "comment": "Very satisfied!",
+              "date": "2024-05-23T08:56:21.618Z",
+              "reviewerName": "Scarlett Wright",
+              "reviewerEmail": "scarlett.wright@x.dummyjson.com"
+            }
+          ],
+          "returnPolicy": "30 days return policy",
+          "minimumOrderQuantity": 24,
+          "meta": {
+            "createdAt": "2024-05-23T08:56:21.618Z",
+            "updatedAt": "2024-05-23T08:56:21.618Z",
+            "barcode": "9164035109868",
+            "qrCode": "https://assets.dummyjson.com/public/qr-code.png"
+          },
+          "images": [
+            "https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/1.png"
+          ],
+          "thumbnail": "https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png",
+          "quantity": 1,
+          "user": {
+            "id": "dd6e",
+            "email": "admin@gmail.com",
+            "addresses": [],
+            "password": "User@12345",
+            "role": "admin"
+          }
+        }
+      ],
+      "selectedAddress": {
+        "name": "sanu",
+        "email": "admin@gmail.com",
+        "phone": "123456789",
+        "street": "BSNL Office",
+        "city": "EkangarSarai",
+        "region": "Nalanda, Bihar",
+        "pinCode": "801301"
+      },
+      "totalAmount": 10,
+      "totalItems": 1,
+      "user": {
+        "id": "dd6e",
+        "email": "admin@gmail.com",
+        "addresses": [
+          {
+            "name": "sanu",
+            "email": "admin@gmail.com",
+            "phone": "123456789",
+            "street": "BSNL Office",
+            "city": "EkangarSarai",
+            "region": "Nalanda, Bihar",
+            "pinCode": "801301"
+          }
+        ],
+        "password": "User@12345",
+        "role": "admin"
       },
       "paymentMethod": "cash",
       "status": "pending"

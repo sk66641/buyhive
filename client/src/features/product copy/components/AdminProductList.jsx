@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
+import { filters } from '../../product/components/productList'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectAllProducts, fetchAllProductsAsync, fetchProductsByFiltersAsync, selectTotalItems } from '../productSlice'
+import { selectAllProducts, fetchAllProductsAsync, fetchProductsByFiltersAsync, selectTotalItems } from '../../product/productSlice'
 import {
     Dialog,
     DialogBackdrop,
@@ -25,71 +26,13 @@ const sortOptions = [
     { name: 'Price: Low to High', sort: 'price', current: false },
     { name: 'Price: High to Low', sort: '-price', current: false },
 ]
-export const filters =
-    [
-        {
-            "id": "brand",
-            "name": "Brands",
-            "options": [
-                { "value": "Essence", "label": "Essence", "checked": false },
-                { "value": "Glamour Beauty", "label": "Glamour Beauty", "checked": false },
-                { "value": "Velvet Touch", "label": "Velvet Touch", "checked": false },
-                { "value": "Chic Cosmetics", "label": "Chic Cosmetics", "checked": false },
-                { "value": "Nail Couture", "label": "Nail Couture", "checked": false },
-                { "value": "Calvin Klein", "label": "Calvin Klein", "checked": false },
-                { "value": "Chanel", "label": "Chanel", "checked": false },
-                { "value": "Dior", "label": "Dior", "checked": false },
-                { "value": "Dolce & Gabbana", "label": "Dolce & Gabbana", "checked": false },
-                { "value": "Gucci", "label": "Gucci", "checked": false },
-                { "value": "Annibale Colombo", "label": "Annibale Colombo", "checked": false },
-                { "value": "Furniture Co.", "label": "Furniture Co.", "checked": false },
-                { "value": "Knoll", "label": "Knoll", "checked": false },
-                { "value": "Bath Trends", "label": "Bath Trends", "checked": false },
-                { "value": "Apple", "label": "Apple", "checked": false },
-                { "value": "Asus", "label": "Asus", "checked": false },
-                { "value": "Huawei", "label": "Huawei", "checked": false },
-                { "value": "Lenovo", "label": "Lenovo", "checked": false },
-                { "value": "Dell", "label": "Dell", "checked": false },
-                { "value": "Fashion Trends", "label": "Fashion Trends", "checked": false },
-                { "value": "Gigabyte", "label": "Gigabyte", "checked": false },
-                { "value": "Classic Wear", "label": "Classic Wear", "checked": false },
-                { "value": "Casual Comfort", "label": "Casual Comfort", "checked": false },
-                { "value": "Urban Chic", "label": "Urban Chic", "checked": false },
-                { "value": "Nike", "label": "Nike", "checked": false },
-                { "value": "Puma", "label": "Puma", "checked": false },
-                { "value": "Off White", "label": "Off White", "checked": false },
-                { "value": "Fashion Timepieces", "label": "Fashion Timepieces", "checked": false },
-                { "value": "Longines", "label": "Longines", "checked": false },
-                { "value": "Rolex", "label": "Rolex", "checked": false },
-                { "value": "Amazon", "label": "Amazon", "checked": false },
-                { "value": "Al Munakh", "label": "Al Munakh", "checked": false }
-            ]
-        },
-        {
-            "id": "category",
-            "name": "Category",
-            "options": [
-                { "value": "beauty", "label": "Beauty", "checked": false },
-                { "value": "fragrances", "label": "Fragrances", "checked": false },
-                { "value": "furniture", "label": "Furniture", "checked": false },
-                { "value": "groceries", "label": "Groceries", "checked": false },
-                { "value": "home-decoration", "label": "Home-decoration", "checked": false },
-                { "value": "kitchen-accessories", "label": "Kitchen-accessories", "checked": false },
-                { "value": "laptops", "label": "Laptops", "checked": false },
-                { "value": "mens-shirts", "label": "Mens-shirts", "checked": false },
-                { "value": "mens-shoes", "label": "Mens-shoes", "checked": false },
-                { "value": "mens-watches", "label": "Mens-watches", "checked": false },
-                { "value": "mobile-accessories", "label": "Mobile-accessories", "checked": false },
-                { "value": "womens-shoes", "label": "Womens-shoes", "checked": false }
-            ]
-        }
-    ]
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const ProductList = () => {
+const AdminProductList = () => {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
     const products = useSelector(selectAllProducts)
     const totalItems = useSelector(selectTotalItems)
@@ -223,7 +166,7 @@ const ProductList = () => {
     )
 }
 
-export default ProductList
+export default AdminProductList
 
 
 function MobileFilter({ handleFilter, mobileFiltersOpen, setMobileFiltersOpen }) {
@@ -455,31 +398,44 @@ function ProductGrid({ products }) {
 
             <div className="bg-white">
                 <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
+                    <Link to={'/admin/product-form'}
+                        className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                    >
+                        Add Product
+                    </Link>
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+
                         {products.map((product) => (
-                            <Link className='border rounded-md p-2 h-full' to={`/product-details/${product.id}`}>
-                                <div key={product.id} className="group relative">
-                                    <img
-                                        alt={product.imageAlt}
-                                        src={product.images}
-                                        className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
-                                    />
-                                    <div className="mt-4 flex justify-between">
-                                        <div>
-                                            <h3 className="text-sm text-gray-700">
-                                                <a href={product.href}>
-                                                    <span aria-hidden="true" className="absolute inset-0" />
-                                                    {product.title}
-                                                </a>
-                                            </h3>
-                                            <p className="mt-1 text-sm text-gray-500">{product.rating}</p>
-                                            {/* <p className="mt-1 text-sm text-gray-500">{product.reviews.length}</p> */}
+                            <div className='flex flex-col justify-between gap-2'>
+                                <Link className='border rounded-md p-2 h-full' to={`/product-details/${product.id}`}>
+                                    <div key={product.id} className="group relative">
+                                        <img
+                                            alt={product.imageAlt}
+                                            src={product.images}
+                                            className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
+                                        />
+                                        <div className="mt-4 flex justify-between">
+                                            <div>
+                                                <h3 className="text-sm text-gray-700">
+                                                    <a href={product.href}>
+                                                        <span aria-hidden="true" className="absolute inset-0" />
+                                                        {product.title}
+                                                    </a>
+                                                </h3>
+                                                <p className="mt-1 text-sm text-gray-500">{product.rating}</p>
+                                                {/* <p className="mt-1 text-sm text-gray-500">{product.reviews.length}</p> */}
+                                            </div>
+                                            <p className="text-sm font-medium text-gray-900">{product.price}</p>
                                         </div>
-                                        <p className="text-sm font-medium text-gray-900">{product.price}</p>
+                                        {product.deleted && <p className='text-red-500'>Product is deleted</p>}
                                     </div>
-                                    {product.deleted && <p className='text-red-500'>Product is deleted</p>}
-                                </div>
-                            </Link>
+                                </Link>
+                                <Link to={`/admin/product-form/edit/${product.id}`}
+                                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                >
+                                    Edit Product
+                                </Link>
+                            </div>
                         ))}
                     </div>
                 </div>
