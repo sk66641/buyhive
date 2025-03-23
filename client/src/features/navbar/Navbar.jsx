@@ -1,7 +1,7 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { selectItems } from '../cart/CartSlice'
 import { selectLoggedInUser } from '../auth/authSlice'
 
@@ -12,11 +12,11 @@ const user = {
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
-    { name: 'Dashboard', href: '#', current: true },
-    { name: 'Team', href: '#', current: false },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
-    { name: 'Reports', href: '#', current: false },
+    { name: 'Home', href: '/', current: true },
+    { name: 'My Profile', href: '/profile', current: false },
+    { name: 'Orders', href: '/orders', current: false },
+    // { name: 'Calendar', href: '#', current: false },
+    // { name: 'Reports', href: '#', current: false },
 ]
 const userNavigation = [
     { name: 'My Profile', link: '/profile' },
@@ -25,6 +25,7 @@ const userNavigation = [
 ]
 
 const adminNavigation = [
+    { name: 'Home', link: '/' },
     { name: 'Admin', link: '/admin' },
     { name: 'Orders', link: '/admin/orders' },
 ]
@@ -64,20 +65,31 @@ export default function Navbar({ children }) {
                                 <div className="hidden md:block">
                                     <div className="ml-10 flex items-baseline space-x-4">
                                         {getUser.role !== 'admin' ? navigation.map((item) => (
-                                            <Link
+                                            <NavLink
                                                 key={item.name}
-                                                href={item.href}
-                                                aria-current={item.current ? 'page' : undefined}
-                                                className={classNames(
-                                                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                                    'rounded-md px-3 py-2 text-sm font-medium',
-                                                )}
+                                                to={item.href}
+                                                className={({ isActive }) =>
+                                                    `rounded-md px-3 py-2 text-sm font-medium ${isActive
+                                                        ? 'bg-gray-900 text-white'
+                                                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                                                    }`
+                                                }
                                             >
                                                 {item.name}
-                                            </Link>
+                                            </NavLink>
                                         )) :
                                             adminNavigation.map((item) => (
-                                                <Link className='text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium' key={item.name} to={item.link}>{item.name}</Link>
+                                                <NavLink
+                                                    end
+                                                    className={({ isActive }) =>
+                                                        `rounded-md px-3 py-2 text-sm font-medium ${isActive
+                                                            ? 'bg-gray-900 text-white'
+                                                            : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                                                        }`
+                                                    }
+                                                    key={item.name} to={item.link}>{item.name}
+
+                                                </NavLink>
                                             ))
                                         }
                                     </div>

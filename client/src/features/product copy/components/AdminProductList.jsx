@@ -428,6 +428,7 @@ function ProductGrid({ products }) {
                                             <p className="text-sm font-medium text-gray-900">{product.price}</p>
                                         </div>
                                         {product.deleted && <p className='text-red-500'>Product is deleted</p>}
+                                        {product.stock === 0 && <p className='text-red-500'>Product out of stock</p>}
                                     </div>
                                 </Link>
                                 <Link to={`/admin/product-form/edit/${product.id}`}
