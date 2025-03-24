@@ -55,7 +55,7 @@ export function updateOrder(order) {
             body: JSON.stringify(order),
             headers: { 'content-type': 'application/json' },
         });
-        const data = await response.jsoin();
+        const data = await response.json();
         resolve({ data });
     });
 }

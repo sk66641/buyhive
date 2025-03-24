@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from '../features/navbar/Navbar'
-import AdminProductForm from '../features/product copy/components/AdminProductForm'
+import AdminProductForm from '../features/admin/components/AdminProductForm'
 
 const AdminProductFormPage = () => {
     return (

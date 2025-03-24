@@ -6485,7 +6485,7 @@
         "password": "User@12345"
       },
       "paymentMethod": "cash",
-      "status": "pending"
+      "status": "cancelled"
     },
     {
       "id": "ad44",
@@ -6673,7 +6673,7 @@
         "password": "User@12345"
       },
       "paymentMethod": "cash",
-      "status": "pending"
+      "status": "delivered"
     },
     {
       "id": "cdd6",
@@ -6978,7 +6978,7 @@
         "role": "admin"
       },
       "paymentMethod": "cash",
-      "status": "pending"
+      "status": "dispatched"
     },
     {
       "id": "e52c",

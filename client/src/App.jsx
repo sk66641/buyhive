@@ -22,7 +22,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ProtectedAdmin from './features/auth/component/ProtectedAdmin'
 import AdminHome from './pages/AdminHome'
 import AdminProductDetailsPage from './pages/AdminProductDetailsPage'
-import ProductForm from './features/product copy/components/AdminProductForm'
+import ProductForm from './features/admin/components/AdminProductForm'
 import AdminProductFormPage from './pages/AdminProductFormPage'
 import AdminOrdersPage from './pages/AdminOrdersPage'
 
