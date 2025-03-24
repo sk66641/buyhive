@@ -247,10 +247,9 @@ const UserProfile = () => {
                         <div>
                             {user.addresses.map((address, index) => {
                                 return (
-                                    <div>
-
+                                    <div key={index}>
                                         <div
-                                            key={index}
+
                                             className="flex justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200"
                                         >
 

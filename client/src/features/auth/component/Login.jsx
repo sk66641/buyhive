@@ -25,7 +25,7 @@ export default function Login() {
       {user && <Navigate to={'/'} replace={true}></Navigate>}
       {/* Without replace, the navigation would be added to the history stack, and the user could go back to the previous page. */}
       <div className=" flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div classNam="sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             alt="Your Company"
             src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"

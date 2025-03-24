@@ -368,6 +368,7 @@ function Pagination({ handlePage, page, setPage, totalItems }) {
                         {Array.from({ length: Math.ceil(totalItems / ITEMS_PER_PAGE) }).map((el, index) => {
                             return (
                                 <div
+                                    key={index}
                                     onClick={() => handlePage(index + 1)}
                                     aria-current="page"
                                     className={`relative cursor-pointer  z-10 inline-flex items-center ${page === index + 1 ? 'bg-indigo-600 text-white' : 'text-gray-400'}  px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
@@ -406,9 +407,9 @@ function ProductGrid({ products }) {
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
 
                         {products.map((product) => (
-                            <div className='flex flex-col justify-between gap-2'>
+                            <div key={product.id} className='flex flex-col justify-between gap-2'>
                                 <Link className='border rounded-md p-2 h-full' to={`/product-details/${product.id}`}>
-                                    <div key={product.id} className="group relative">
+                                    <div className="group relative">
                                         <img
                                             alt={product.imageAlt}
                                             src={product.images}
@@ -416,11 +417,11 @@ function ProductGrid({ products }) {
                                         />
                                         <div className="mt-4 flex justify-between">
                                             <div>
-                                                <h3 className="text-sm text-gray-700">
-                                                    <a href={product.href}>
-                                                        <span aria-hidden="true" className="absolute inset-0" />
-                                                        {product.title}
-                                                    </a>
+                                                <h3 className="text-sm">
+                                                    {/* <a href={product.href}>
+                                                        <span aria-hidden="true" className="absolute inset-0" /> */}
+                                                    {product.title}
+                                                    {/* </a> */}
                                                 </h3>
                                                 <p className="mt-1 text-sm text-gray-500">{product.rating}</p>
                                                 {/* <p className="mt-1 text-sm text-gray-500">{product.reviews.length}</p> */}

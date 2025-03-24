@@ -3,6 +3,9 @@ const server = express();
 const port = 3333;
 
 const mongoose = require('mongoose');
+const { createProduct } = require('./controller/Product')
+
+server.use(express.json());
 
 main().catch(err => console.log(err));
 
@@ -14,6 +17,8 @@ async function main() {
 server.get('/', (req, res) => {
     res.send({ status: "success" });
 })
+
+server.post('/products', createProduct);
 
 server.listen(port, () => {
     console.log(`server running at http://localhost:${port}`);

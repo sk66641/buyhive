@@ -78,7 +78,7 @@ const AdminOrders = () => {
                         </thead>
                         <tbody className="text-gray-600 text-sm font-light">
                             {orders.data && orders.data.map((order, index) => (
-                                <tr className="border-b border-gray-200 hover:bg-gray-100">
+                                <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-100">
                                     <td className="p-3 text-center whitespace-nowrap">
                                         {/* <div className="flex justify-center items-center"> */}
                                         <span className="font-medium">{index + 1}</span>
@@ -86,7 +86,7 @@ const AdminOrders = () => {
                                     </td>
                                     <td className="p-3">
                                         {order.items.map((item) => (
-                                            <div className="flex justify-center items-center">
+                                            <div key={item.id} className="flex justify-center items-center">
                                                 <div className="mr-2">
 
                                                     <img

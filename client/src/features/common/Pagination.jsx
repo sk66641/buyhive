@@ -42,6 +42,7 @@ export default function Pagination({ handlePage, page, setPage, totalItems }) {
                         {Array.from({ length: Math.ceil(totalItems / ITEMS_PER_PAGE) }).map((el, index) => {
                             return (
                                 <div
+                                    key={index}
                                     onClick={() => handlePage(index + 1)}
                                     aria-current="page"
                                     className={`relative cursor-pointer  z-10 inline-flex items-center ${page === index + 1 ? 'bg-indigo-600 text-white' : 'text-gray-400'}  px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}

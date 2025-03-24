@@ -1,10 +1,22 @@
 const mongoose = require('mongoose');
+
 const productSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
-    price: { type: Number, min: [1, 'price can\'t be less than 1'], max:[]
-     }
-});
+    price: { type: Number, min: [1, 'price can\'t be less than 1'] },
+    discountPercentage: { type: Number, min: [0, 'discount can\'t be less than 0'], max: [100, 'discount can\'t be more than 100'] },
+    rating: { type: Number, min: [1, 'rating can\'t be less than 1'], max: [5, 'rating can\'t be more than 5'] },
+    stock: { type: Number, min: [0, 'stock can\'t be less than 0'], default: 0 },
+    brand: { type: String, required: true },
+    category: { type: String, required: true },
+    thumbnail: { type: String, required: true },
+    images: { type: [String], required: true },
+    deleted: { type: Boolean, default: false },
+})
+
+exports.Product = mongoose.model('Product', productSchema);
+// const Product = mongoose.model('Product', productSchema);
+// module.exports = Product;
 
 // {
 //     "id": "1",
@@ -67,7 +79,3 @@ const productSchema = new mongoose.Schema({
 //     "thumbnail": "https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png",
 //     "deleted": true
 //   },
-
-exports.Product = mongoose.model('Product', productSchema);
-// const Product = mongoose.model('Product', productSchema);
-// module.exports = Product;
