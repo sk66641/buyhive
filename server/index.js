@@ -4,6 +4,7 @@ const port = 3333;
 
 const mongoose = require('mongoose');
 const { createProduct } = require('./controller/Product')
+const productsRoutes = require('./routes/Products')
 
 server.use(express.json());
 
@@ -18,7 +19,7 @@ server.get('/', (req, res) => {
     res.send({ status: "success" });
 })
 
-server.post('/products', createProduct);
+server.use('/products', productsRoutes.router);
 
 server.listen(port, () => {
     console.log(`server running at http://localhost:${port}`);
