@@ -1,7 +1,7 @@
 export function fetchAllProducts() {
     return new Promise(async (resolve) => {
         //TODO: we will not hard-code server URL here
-        const response = await fetch('http://localhost:3000/products')
+        const response = await fetch(`${import.meta.env.VITE_HOST}/products`)
         const data = await response.json();
         resolve({ data })
     })
@@ -10,7 +10,7 @@ export function fetchAllProducts() {
 export function fetchProductsById(id) {
     return new Promise(async (resolve) => {
         //TODO: we will not hard-code server URL here
-        const response = await fetch(`http://localhost:3000/products/${id}`)
+        const response = await fetch(`${import.meta.env.VITE_HOST}/products/${id}`)
         const data = await response.json();
         resolve({ data })
     })
@@ -42,7 +42,7 @@ export function fetchProductsByFilters(filter, sort, pagination) {
 
     return new Promise(async (resolve) => {
         //TODO: we will not hard-code server URL here
-        const response = await fetch('http://localhost:3000/products?' + queryString)
+        const response = await fetch(`${import.meta.env.VITE_HOST}/products?` + queryString)
         const data = await response.json()
         resolve({ data: { products: data, totalItems: data.items } })
         // resolve({ data });
@@ -53,7 +53,7 @@ export function fetchProductsByFilters(filter, sort, pagination) {
 export function updateProduct(update) {
     return new Promise(async (resolve) => {
         //TODO: we will not hard-code server URL here
-        const response = await fetch('http://localhost:3000/products/' + update.id,
+        const response = await fetch(`${import.meta.env.VITE_HOST}/products/` + update.id,
             {
                 method: 'PATCH',
                 headers: {
@@ -70,7 +70,7 @@ export function updateProduct(update) {
 
 export function createProduct(product) {
     return new Promise(async (resolve) => {
-        const response = await fetch('http://localhost:3000/products',
+        const response = await fetch(`${import.meta.env.VITE_HOST}/products`,
             {
                 method: 'POST',
                 headers: {

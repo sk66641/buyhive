@@ -1,6 +1,6 @@
 export function fetchLoggedInUserOrders(userId) {
     return new Promise(async (resolve) => {
-        const response = await fetch('http://localhost:3000/orders?user.id=' + userId)
+        const response = await fetch(`${import.meta.env.VITE_HOST}/orders?user.id=` + userId)
         const data = await response.json();
         // console.log("createUser", data)
         resolve({ data })
@@ -11,7 +11,7 @@ export function updateUser(update) {
         //TODO: we will not hard-code server URL here
         // console.log(update)
         // console.log(update,update.id)
-        const response = await fetch('http://localhost:3000/users/' + update.id,
+        const response = await fetch(`${import.meta.env.VITE_HOST}/users/` + update.id,
             {
                 method: 'PATCH',
                 headers: {
@@ -29,7 +29,7 @@ export function updateUser(update) {
 
 export function fetchLoggedInUser(userId) {
     return new Promise(async (resolve) => {
-        const response = await fetch('http://localhost:3000/users/' + userId)
+        const response = await fetch(`${import.meta.env.VITE_HOST}/users/` + userId)
         const data = await response.json()
         resolve({ data })
     }

@@ -1,6 +1,6 @@
 export function createOrder(orderData) {
     return new Promise(async (resolve) => {
-        const response = await fetch('http://localhost:3000/orders',
+        const response = await fetch(`${import.meta.env.VITE_HOST}/orders`,
             {
                 method: 'POST',
                 headers: {
@@ -40,7 +40,7 @@ export function fetchAllOrders(sort, pagination) {
     }
     return new Promise(async (resolve) => {
         //TODO: we will not hard-code server URL here
-        const response = await fetch('http://localhost:3000/orders?' + queryString)
+        const response = await fetch(`${import.meta.env.VITE_HOST}/orders?` + queryString)
         const data = await response.json()
         resolve({ data: { orders: data, totalOrders: data.items } })
         // resolve({ data });
@@ -50,7 +50,7 @@ export function fetchAllOrders(sort, pagination) {
 
 export function updateOrder(order) {
     return new Promise(async (resolve) => {
-        const response = await fetch('http://localhost:3000/orders/' + order.id, {
+        const response = await fetch(`${import.meta.env.VITE_HOST}/orders/` + order.id, {
             method: 'PATCH',
             body: JSON.stringify(order),
             headers: { 'content-type': 'application/json' },

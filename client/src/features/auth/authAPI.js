@@ -2,7 +2,7 @@ export function createUser(userData) {
     return new Promise(async (resolve) => {
         //TODO: we will not hard-code server URL here
         // console.log(userData)
-        const response = await fetch('http://localhost:3000/users',
+        const response = await fetch(`${import.meta.env.VITE_HOST}/users`,
             {
                 method: 'POST',
                 headers: {
@@ -22,7 +22,7 @@ export function checkUser(loginInfo) {
         const password = loginInfo.password;
         //TODO: we will not hard-code server URL here
         // console.log(userData)
-        const response = await fetch('http://localhost:3000/users?email=' + email)
+        const response = await fetch(`${import.meta.env.VITE_HOST}/users?email=` + email)
         const data = await response.json();
         if (data.length) {
             if (password === data[0].password) {
