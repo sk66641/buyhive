@@ -100,6 +100,7 @@ const router = createBrowserRouter([
 const App = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
+  // console.log("app.jsx",user)
   useEffect(() => {
     if (user) {
       dispatch(fetchItemsByUserIdAsync(user.id));

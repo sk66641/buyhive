@@ -11,7 +11,7 @@ exports.createProduct = async (req, res) => {
 }
 
 exports.fetchAllProducts = async (req, res) => {
-    let query = Product.find({});
+    let query = Product.find({ deleted: { $ne: true } });
 
     if (req.query._sort) {
         const sortBy = req.query._sort[0] === "-" ? req.query._sort.slice(1) : req.query._sort;
@@ -56,7 +56,7 @@ exports.updateProduct = async (req, res) => {
     const { id } = req.params;
     try {
         const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
-        res.status(200).json({ items: totalDocs, data: updatedProduct });
+        res.status(200).json(updatedProduct);
     } catch (error) {
         res.status(400).json(error);
     }

@@ -39,7 +39,7 @@ export default function SignUp() {
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form noValidate onSubmit={handleSubmit((data) => {
-            dispatch(createUserAsync({ email: data.email, addresses: [], password: data.password, role: 'user' }));
+            dispatch(createUserAsync({ email: data.email, addresses: [], orders: [], password: data.password, role: 'user' }));
             console.log(data)
           })} className="space-y-6">
             <div>

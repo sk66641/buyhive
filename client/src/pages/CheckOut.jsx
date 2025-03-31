@@ -19,14 +19,14 @@ function Checkout() {
   // console.log(currentOrder)
   // console.log(items)
   const dispatch = useDispatch();
-  const totalAmount = items.reduce((amount, item) => item.price * item.quantity + amount, 0);
+  const totalAmount = items.reduce((amount, item) => item.product.price * item.quantity + amount, 0);
   const totalItems = items.reduce((totalCount, item) => item.quantity + totalCount, 0);
 
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('cash');
 
   const handleQuantatiy = (e, item) => {
-    dispatch(updateCartAsync({ ...item, quantity: +e.target.value }))
+    dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }))
   }
   const handleRemove = (id) => {
     dispatch(deleteItemFromCartAsync(id));
@@ -44,7 +44,7 @@ function Checkout() {
       alert("address not selected");
       return;
     };
-    const order = { items, selectedAddress, totalAmount, totalItems, user, paymentMethod, status: 'pending' };
+    const order = { items, selectedAddress, totalAmount, totalItems, user: user.id, paymentMethod, status: 'pending' };
     dispatch(createOrderAsync(order));
     // todo: redirect to order-success page
     // todo: clear cart after order
@@ -323,26 +323,26 @@ function Checkout() {
                   <div className="mt-8">
                     <div className="flow-root">
                       <ul role="list" className="-my-6 divide-y divide-gray-200">
-                        {items.map((product) => (
-                          <li key={product.id} className="flex py-6">
+                        {items.map((item) => (
+                          <li key={item.id} className="flex py-6">
                             <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
-                              <img alt={product.imageAlt} src={product.imageSrc} className="size-full object-cover" />
+                              <img alt={item.product.imageAlt} src={item.product.imageSrc} className="size-full object-cover" />
                             </div>
 
                             <div className="ml-4 flex flex-1 flex-col">
                               <div>
                                 <div className="flex justify-between text-base font-medium text-gray-900">
                                   <h3>
-                                    <a href={product.href}>product.name</a>
+                                    <a href={item.product.href}>item.product.name</a>
                                   </h3>
-                                  <p className="ml-4">{product.price}</p>
+                                  <p className="ml-4">{item.product.price}</p>
                                 </div>
-                                <p className="mt-1 text-sm text-gray-500">product.color</p>
+                                <p className="mt-1 text-sm text-gray-500">item.product.color</p>
                               </div>
                               <div className="flex flex-1 items-end justify-between text-sm">
                                 <div className="text-gray-500">
                                   <span className='mr-2'>Qty</span>
-                                  <select value={product.quantity} onChange={(e) => handleQuantatiy(e, product)} className='border px-1'>
+                                  <select value={item.quantity} onChange={(e) => handleQuantatiy(e, item)} className='border px-1'>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -352,7 +352,7 @@ function Checkout() {
                                 </div>
 
                                 <div className="flex">
-                                  <button onClick={() => handleRemove(product.id)} type="button" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                  <button onClick={() => handleRemove(item.id)} type="button" className="font-medium text-indigo-600 hover:text-indigo-500">
                                     Remove
                                   </button>
                                 </div>

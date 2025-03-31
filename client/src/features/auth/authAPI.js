@@ -2,9 +2,10 @@ export function createUser(userData) {
     return new Promise(async (resolve) => {
         //TODO: we will not hard-code server URL here
         // console.log(userData)
-        const response = await fetch(`${import.meta.env.VITE_HOST}/users`,
+        const response = await fetch(`${import.meta.env.VITE_HOST}/auth/signup`,
             {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'content-type': 'application/json',
                 },
@@ -18,23 +19,41 @@ export function createUser(userData) {
 }
 export function checkUser(loginInfo) {
     return new Promise(async (resolve, reject) => {
-        const email = loginInfo.email;
-        const password = loginInfo.password;
+        // const email = loginInfo.email;
+        // const password = loginInfo.password;
         //TODO: we will not hard-code server URL here
         // console.log(userData)
-        const response = await fetch(`${import.meta.env.VITE_HOST}/users?email=` + email)
-        const data = await response.json();
-        if (data.length) {
-            if (password === data[0].password) {
-                resolve({ data: data[0] })
+
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_HOST}/auth/login`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify(loginInfo)
+            })
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
             }
-            else {
-                reject({ message: 'wrong credentials' })
-            }
+            const data = await response.json();
+            resolve({ data });
+        } catch (error) {
+            reject(error);
         }
-        else {
-            reject({ message: 'user not found' })
-        }
+        // if (data.length) {
+        //     if (password === data[0].password) {
+        //         resolve({ data: data[0] })
+        //     }
+        //     else {
+        //         reject({ message: 'invalid credentials' })
+        //     }
+        // }
+        // else {
+        //     reject({ message: 'user not found' })
+        // }
         // console.log("createUser", data)
         // resolve({ data })
     })

@@ -8,6 +8,7 @@ const UserOrders = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
   const orders = useSelector(selectUserOrders);
+
   useEffect(() => {
     dispatch(fetchLoggedInUserOrdersAsync(user.id))
   }, [dispatch, user])

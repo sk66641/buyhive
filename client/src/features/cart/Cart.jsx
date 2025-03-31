@@ -7,10 +7,10 @@ export default function Cart() {
     const items = useSelector(selectItems);
     // console.log(items)
     const dispatch = useDispatch();
-    const totalAmount = items.reduce((amount, item) => item.price * item.quantity + amount, 0);
+    const totalAmount = items.reduce((amount, item) => item.product.price * item.quantity + amount, 0);
     const totalItems = items.reduce((totalCount, item) => item.quantity + totalCount, 0);
     const handleQuantatiy = (e, item) => {
-        dispatch(updateCartAsync({ ...item, quantity: +e.target.value }))
+        dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }))
     }
     const handleRemove = (id) => {
         dispatch(deleteItemFromCartAsync(id));
@@ -31,18 +31,18 @@ export default function Cart() {
                                     {items.map((item) => (
                                         <li key={item.id} className="flex py-6">
                                             <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                                <img alt={item.imageAlt} src={item.imageSrc} className="size-full object-cover" />
+                                                <img alt={item.product.imageAlt} src={item.product.imageSrc} className="size-full object-cover" />
                                             </div>
 
                                             <div className="ml-4 flex flex-1 flex-col">
                                                 <div>
                                                     <div className="flex justify-between text-base font-medium text-gray-900">
                                                         <h3>
-                                                            <a href={item.href}>{item.name}</a>
+                                                            <a href={item.product.href}>{item.product.name}</a>
                                                         </h3>
-                                                        <p className="ml-4">{item.price}</p>
+                                                        <p className="ml-4">{item.product.price}</p>
                                                     </div>
-                                                    <p className="mt-1 text-sm text-gray-500">{item.color}</p>
+                                                    <p className="mt-1 text-sm text-gray-500">{item.product.color}</p>
                                                 </div>
                                                 <div className="flex flex-1 items-end justify-between text-sm">
                                                     <div className="text-gray-500">

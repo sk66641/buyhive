@@ -1,6 +1,6 @@
 export function fetchLoggedInUserOrders(userId) {
     return new Promise(async (resolve) => {
-        const response = await fetch(`${import.meta.env.VITE_HOST}/orders?user.id=` + userId)
+        const response = await fetch(`${import.meta.env.VITE_HOST}/orders/user/` + userId)
         const data = await response.json();
         // console.log("createUser", data)
         resolve({ data })

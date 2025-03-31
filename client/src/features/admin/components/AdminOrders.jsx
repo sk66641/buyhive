@@ -91,11 +91,11 @@ const AdminOrders = () => {
 
                                                     <img
                                                         className="w-6 h-6 rounded-full"
-                                                        src={item.thumbnail}
+                                                        src={item.product.thumbnail}
                                                     />
 
                                                 </div>
-                                                <span>{item.title} x {item.quantity} x ${item.price}</span>
+                                                <span>{item.product.title} x {item.quantity} x ${item.product.price}</span>
                                             </div>))}
                                     </td>
                                     <td className="p-3 text-center">
