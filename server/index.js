@@ -6,10 +6,10 @@ const dotenv = require('dotenv');
 
 const port = 3000;
 
-server.use(cors({
-  origin: 'https://buyhive-get.vercel.app', // Specify your frontend URL
-  credentials: true
-}));
+// server.use(cors({
+//   origin: 'https://buyhive-get.vercel.app', // Specify your frontend URL
+//   credentials: true
+// }));
 server.use(cookieParser())
 
 server.use(express.json());
