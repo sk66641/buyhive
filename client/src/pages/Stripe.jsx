@@ -26,7 +26,7 @@ export default function Stripe() {
         fetch(`${import.meta.env.VITE_HOST}/create-payment-intent`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ totalAmount: currentOrder.totalAmount }),
+            body: JSON.stringify({ totalAmount: currentOrder.totalAmount, orderId: currentOrder.id }),
         })
             .then((res) => res.json())
             .then((data) => setClientSecret(data.clientSecret));
