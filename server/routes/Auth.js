@@ -5,10 +5,6 @@ const router = express.Router();
 const jwt = require('jsonwebtoken')
 
 router.post('/signup', createUser).get('/logout', logout).post('/login', loginUser).get('/', async (req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "https://buyhive-get.vercel.app"); // ✅ Allow frontend
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
     const token = req.cookies.token;
     if (!token) {
         return res.status(401).json({ message: 'No token, authorization denied' });

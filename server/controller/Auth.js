@@ -32,10 +32,6 @@ exports.createUser = async (req, res) => {
 
 
 exports.loginUser = async (req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "https://buyhive-get.vercel.app"); // ✅ Allow frontend
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
