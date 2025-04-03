@@ -13,7 +13,7 @@ server.use(cors({
   credentials: true, // Allow cookies and credentials
 }));
 server.use(cookieParser())
-server.use(express.raw({ type: 'application/json' }))
+// server.use(express.raw({ type: 'application/json' }))
 server.use(express.json());
 dotenv.config();
 
