@@ -111,11 +111,6 @@ server.get('/', (req, res) => {
 
 
 server.post("/create-payment-intent", async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://buyhive-get.vercel.app"); // ✅ Allow frontend
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
   const { totalAmount, orderId } = req.body;
 
   try {
