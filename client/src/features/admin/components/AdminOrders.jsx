@@ -23,6 +23,8 @@ const AdminOrders = () => {
                 return 'bg-yellow-200 text-yellow-600';
             case 'delivered':
                 return 'bg-green-200 text-green-600';
+            case 'received':
+                return 'bg-green-200 text-green-600';
             case 'cancelled':
                 return 'bg-red-200 text-red-600';
         }
@@ -40,6 +42,11 @@ const AdminOrders = () => {
     const handleUpdate = (e, order) => {
         const updatedOrder = { ...order, status: e.target.value };
         dispatch(updateOrderAsync(updatedOrder));
+        setEditableOrderId(-1);
+    }
+    const handlePaymentStatus = (e, order) => {
+        const updatePaymentStatus = { ...order, paymentStatus: e.target.value };
+        dispatch(updateOrderAsync(updatePaymentStatus));
         setEditableOrderId(-1);
     }
     const handleSort = (sortOption) => {
@@ -73,6 +80,8 @@ const AdminOrders = () => {
                                     ))}</th>
                                 <th className="p-3 text-center">Shipping Address</th>
                                 <th className="p-3 text-center">Status</th>
+                                <th className="p-3 text-center">Payment Method</th>
+                                <th className="p-3 text-center">Payment Status</th>
                                 <th className="p-3 text-center">Actions</th>
                             </tr>
                         </thead>
@@ -124,6 +133,25 @@ const AdminOrders = () => {
                                                 )} py-1 px-3 rounded-full text-xs`}
                                             >
                                                 {order.status}
+                                            </span>
+                                        )}
+                                    </td>
+                                    <td className="p-3 text-center">
+                                        {order.paymentMethod}
+                                    </td>
+                                    <td className="p-3 text-center">
+                                        {order.id === editableOrderId ? (
+                                            <select onChange={(e) => handlePaymentStatus(e, order)}>
+                                                <option value="pending">Pending</option>
+                                                <option value="received">Received</option>
+                                            </select>
+                                        ) : (
+                                            <span
+                                                className={`${chooseColor(
+                                                    order.paymentStatus
+                                                )} py-1 px-3 rounded-full text-xs`}
+                                            >
+                                                {order.paymentStatus}
                                             </span>
                                         )}
                                     </td>
