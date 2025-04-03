@@ -3,6 +3,7 @@ const server = express();
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
+const Order = require('./model/Order');
 
 const port = 3000;
 
@@ -11,7 +12,7 @@ const port = 3000;
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 
-server.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
+server.post('/webhook', express.raw({ type: 'application/json' }), async (request, response) => {
   let event = request.body;
   // Only verify the event if you have an endpoint secret defined.
   // Otherwise use the basic event deserialized with JSON.parse
@@ -36,6 +37,7 @@ server.post('/webhook', express.raw({ type: 'application/json' }), (request, res
       console.log(event.data)
       const paymentIntent = event.data.object;
       console.log(`PaymentIntent for ${paymentIntent.id} was successful!`);
+      await Order.findByIdAndUpdate(paymentIntent.metadata.orderId, { paymentStatus: 'received' });
       // Then define and call a method to handle the successful payment intent.
       // handlePaymentIntentSucceeded(paymentIntent);
       break;
@@ -74,6 +76,7 @@ const userRoutes = require('./routes/User')
 const authRoutes = require('./routes/Auth')
 const cartRoutes = require('./routes/Cart')
 const orderRoutes = require('./routes/Order');
+const { Order } = require('./model/Order');
 // This is your test secret API key.
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
