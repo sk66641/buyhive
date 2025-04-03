@@ -12,44 +12,7 @@ server.use(cors({
   },
   credentials: true, // Allow cookies and credentials
 }));
-server.use(cookieParser())
-// server.use(express.raw({ type: 'application/json' }))
-server.use(express.json());
-dotenv.config();
 
-const mongoose = require('mongoose');
-const { createProduct } = require('./controller/Product')
-const productsRoutes = require('./routes/Products')
-const brandsRoutes = require('./routes/Brands')
-const categoriesRoutes = require('./routes/Categories')
-const userRoutes = require('./routes/User')
-const authRoutes = require('./routes/Auth')
-const cartRoutes = require('./routes/Cart')
-const orderRoutes = require('./routes/Order');
-// This is your test secret API key.
-const stripe = require("stripe")('sk_test_51R9S2SLLmRJN1CvucORG6pfISj5JCg7VswKrQ4kuPPlBoRA1JN4qMUuje47OkVYiV7QGKlo4oClK618xouY5X8R500gXSQ1YFg');
-
-
-
-main().catch(err => console.log(err));
-
-async function main() {
-  await mongoose.connect(`${process.env.MONGO_DB}`);
-  console.log("Connected to database");
-}
-
-server.get('/', (req, res) => {
-  res.send({ status: "success" });
-})
-
-
-
-//
-
-// Replace this endpoint secret with your endpoint's unique secret
-// If you are testing with the CLI, find the secret by running 'stripe listen'
-// If you are using an endpoint defined with the API or dashboard, look in your webhook settings
-// at https://dashboard.stripe.com/webhooks
 const endpointSecret = 'whsec_tvT9YqfSDAFQJ67HnCkBtKs1z61a0qos';
 
 
@@ -93,6 +56,47 @@ server.post('/webhook', express.raw({ type: 'application/json' }), (request, res
   // Return a 200 response to acknowledge receipt of the event
   response.send();
 });
+
+
+
+server.use(cookieParser())
+// server.use(express.raw({ type: 'application/json' }))
+server.use(express.json());
+dotenv.config();
+
+const mongoose = require('mongoose');
+const { createProduct } = require('./controller/Product')
+const productsRoutes = require('./routes/Products')
+const brandsRoutes = require('./routes/Brands')
+const categoriesRoutes = require('./routes/Categories')
+const userRoutes = require('./routes/User')
+const authRoutes = require('./routes/Auth')
+const cartRoutes = require('./routes/Cart')
+const orderRoutes = require('./routes/Order');
+// This is your test secret API key.
+const stripe = require("stripe")('sk_test_51R9S2SLLmRJN1CvucORG6pfISj5JCg7VswKrQ4kuPPlBoRA1JN4qMUuje47OkVYiV7QGKlo4oClK618xouY5X8R500gXSQ1YFg');
+
+
+
+main().catch(err => console.log(err));
+
+async function main() {
+  await mongoose.connect(`${process.env.MONGO_DB}`);
+  console.log("Connected to database");
+}
+
+server.get('/', (req, res) => {
+  res.send({ status: "success" });
+})
+
+
+
+//
+
+// Replace this endpoint secret with your endpoint's unique secret
+// If you are testing with the CLI, find the secret by running 'stripe listen'
+// If you are using an endpoint defined with the API or dashboard, look in your webhook settings
+// at https://dashboard.stripe.com/webhooks
 
 //
 
