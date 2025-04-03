@@ -8,7 +8,7 @@ import Checkout from './pages/CheckOut'
 import ProductDetailsPage from './pages/ProductDetailsPage'
 import Protected from './features/auth/component/Protected'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectLoggedInUser } from './features/auth/authSlice'
+import { checkTokenAsync, selectLoggedInUser } from './features/auth/authSlice'
 import { fetchItemsByUserIdAsync } from './features/cart/CartSlice'
 import PageNotFound from './pages/404'
 import OrderSuccess from './pages/OrderSuccess'
@@ -25,6 +25,8 @@ import AdminProductDetailsPage from './pages/AdminProductDetailsPage'
 import ProductForm from './features/admin/components/AdminProductForm'
 import AdminProductFormPage from './pages/AdminProductFormPage'
 import AdminOrdersPage from './pages/AdminOrdersPage'
+import Stripe from './pages/Stripe'
+import StripeCompletePage from './pages/StripeCompletePage'
 
 const router = createBrowserRouter([
   {
@@ -73,7 +75,8 @@ const router = createBrowserRouter([
   },
   {
     path: '/order-success/:id',
-    element: <Protected><OrderSuccess></OrderSuccess></Protected>
+    // element: <Protected><OrderSuccess></OrderSuccess></Protected>
+    element: <OrderSuccess></OrderSuccess>
   },
   {
     path: '/orders',
@@ -82,6 +85,14 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: <Protected><UserProfilePage></UserProfilePage></Protected>
+  },
+  {
+    path: '/stripe-checkout',
+    element: <Protected><Stripe></Stripe></Protected>
+  },
+  {
+    path: '/complete',
+    element: <Protected><StripeCompletePage></StripeCompletePage></Protected>
   },
   {
     path: '/logout',
@@ -99,6 +110,12 @@ const router = createBrowserRouter([
 
 const App = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkTokenAsync());
+  }, [dispatch])
+
+
   const user = useSelector(selectLoggedInUser);
   // console.log("app.jsx",user)
   useEffect(() => {

@@ -49,6 +49,7 @@ export default function Login() {
               <div className="mt-2">
                 <input
                   id="email"
+                  // value={'admin@gmail.com'}
                   {...register('email', {
                     required: "email is required", pattern: {
                       value: /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
@@ -77,7 +78,7 @@ export default function Login() {
               </div>
               <div className="mt-2">
                 <input
-                  // value={"User@12345"}
+                  value={"User@12345"}
                   id="password"
                   {...register('password', {
                     required: "password is required",

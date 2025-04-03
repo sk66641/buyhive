@@ -12,17 +12,15 @@ exports.createUser = async (req, res) => {
         const response = await user.save();
         // Generate JWT token
         const token = jwt.sign(
-            { id: user._id, email: user.email, role: user.role, addresses: user.addresses, orders: user.orders },
+            { id: response._id, email: response.email, role: response.role, addresses: response.addresses, orders: response.orders },
             process.env.JWT_SECRET || "your-secret-key",
             { expiresIn: "1h" }
         );
 
         // Send token in response
         res.cookie("token", token, { httpOnly: true });
-        res.status(201).json({
-            user: { id: response.id, email: response.email, role: response.role, addresses: response.addresses, orders: response.orders },
-            token
-        });
+        // res.status(201);
+        res.status(201).json({ id: response._id, email: response.email, role: response.role, addresses: response.addresses, orders: response.orders });
     } catch (error) {
         res.status(400).json(error);
     }
