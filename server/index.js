@@ -3,7 +3,6 @@ const server = express();
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
-const Order = require('./model/Order');
 
 const port = 3000;
 
@@ -37,7 +36,7 @@ server.post('/webhook', express.raw({ type: 'application/json' }), async (reques
       console.log(event.data)
       const paymentIntent = event.data.object;
       console.log(`PaymentIntent for ${paymentIntent.id} was successful!`);
-      // const order = await Order.findByIdAndUpdate(paymentIntent.metadata.orderId, { paymentStatus: 'received' });
+      await Order.findByIdAndUpdate(paymentIntent.metadata.orderId, { paymentStatus: 'received' });
       // Then define and call a method to handle the successful payment intent.
       // handlePaymentIntentSucceeded(paymentIntent);
       break;
