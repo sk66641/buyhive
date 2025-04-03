@@ -2,6 +2,7 @@ const express = require('express');
 const server = express();
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
+const dotenv = require('dotenv');
 
 const port = 3000;
 
@@ -14,6 +15,7 @@ server.use(cors({
 server.use(cookieParser())
 
 server.use(express.json());
+dotenv.config();
 
 const mongoose = require('mongoose');
 const { createProduct } = require('./controller/Product')
@@ -32,7 +34,7 @@ const stripe = require("stripe")('sk_test_51R9S2SLLmRJN1CvucORG6pfISj5JCg7VswKrQ
 main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/e-commerce');
+  await mongoose.connect(`${process.env.MONGO_DB}`);
   console.log("Connected to database");
 }
 
