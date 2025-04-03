@@ -8,7 +8,7 @@ const port = 3000;
 
 
 
-const endpointSecret = 'whsec_Obs7UDOoXtoqmQP3zCk8lIugYncogb0E';
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 
 server.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
@@ -74,7 +74,7 @@ const authRoutes = require('./routes/Auth')
 const cartRoutes = require('./routes/Cart')
 const orderRoutes = require('./routes/Order');
 // This is your test secret API key.
-const stripe = require("stripe")('sk_test_51R9S2SLLmRJN1CvucORG6pfISj5JCg7VswKrQ4kuPPlBoRA1JN4qMUuje47OkVYiV7QGKlo4oClK618xouY5X8R500gXSQ1YFg');
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 
 
@@ -107,25 +107,27 @@ server.get('/', (req, res) => {
 
 
 server.post("/create-payment-intent", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "https://buyhive-get.vercel.app"); // ✅ Allow frontend
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+
   const { totalAmount, orderId } = req.body;
 
-  // Create a PaymentIntent with the order amount and currency
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: totalAmount * 100,
-    currency: "usd",
-    // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
-    automatic_payment_methods: {
-      enabled: true,
-    },
-    metadata: {
-      orderId
-    }
-  });
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalAmount * 100,
+      currency: "usd",
+      automatic_payment_methods: { enabled: true },
+      metadata: { orderId },
+    });
 
-  res.send({
-    clientSecret: paymentIntent.client_secret,
-  });
+    res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
+
 
 
 server.use('/products', productsRoutes.router);
