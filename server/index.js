@@ -6,12 +6,7 @@ const dotenv = require('dotenv');
 
 const port = 3000;
 
-server.use(cors({
-  origin: (origin, callback) => {
-    callback(null, true);
-  },
-  credentials: true, // Allow cookies and credentials
-}));
+
 
 const endpointSecret = 'whsec_Obs7UDOoXtoqmQP3zCk8lIugYncogb0E';
 
@@ -57,7 +52,12 @@ server.post('/webhook', express.raw({ type: 'application/json' }), (request, res
   response.send();
 });
 
-
+server.use(cors({
+  origin: (origin, callback) => {
+    callback(null, true);
+  },
+  credentials: true, // Allow cookies and credentials
+}));
 
 server.use(cookieParser())
 // server.use(express.raw({ type: 'application/json' }))
