@@ -18,7 +18,7 @@ exports.createUser = async (req, res) => {
         );
 
         // Send token in response
-        res.cookie("token", token, { httpOnly: true });
+        res.cookie("token", token);
         // res.status(201);
         res.status(201).json({ id: response._id, email: response.email, role: response.role, addresses: response.addresses, orders: response.orders });
     } catch (error) {
@@ -41,7 +41,7 @@ exports.loginUser = async (req, res) => {
             process.env.JWT_SECRET || 'your-secret-key',
             { expiresIn: '1h' }
         );
-        res.cookie("token", token, { httpOnly: true });
+        res.cookie("token", token);
         res.status(201).json({ id: user._id, email: user.email, role: user.role, addresses: user.addresses, orders: user.orders });
     } catch (error) {
         res.status(400).json(error);
