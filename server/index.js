@@ -55,12 +55,22 @@ server.post('/webhook', express.raw({ type: 'application/json' }), async (reques
   response.send();
 });
 
-server.use(cors({
-  origin: (origin, callback) => {
-    callback(null, true);
-  },
-  credentials: true, // Allow cookies and credentials
-}));
+const corsOptions = {
+  origin: "https://buyhive-get.vercel.app", // ✅ Allow requests from your frontend
+  credentials: true, // ✅ Allow cookies and authentication
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: "Content-Type,Authorization"
+};
+
+server.use(cors(corsOptions));
+
+
+// server.use(cors({
+//   origin: (origin, callback) => {
+//     callback(null, true);
+//   },
+//   credentials: true, // Allow cookies and credentials
+// }));
 
 server.use(cookieParser())
 // server.use(express.raw({ type: 'application/json' }))
