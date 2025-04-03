@@ -30,7 +30,7 @@ export default function StripeCheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: `http://localhost:5173/order-success/${currentOrder.id}`,
+        return_url: `https://buyhive-get.vercel.app/order-success/${currentOrder.id}`,
       },
     });
 
