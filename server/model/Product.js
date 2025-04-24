@@ -19,8 +19,8 @@ virtual.get(function () {
     return this._id;
 })
 productSchema.set('toJSON', {
+    versionKe: false,
     virtuals: true,
-    versionKey: false,
     transform: function (doc, ret) { delete ret._id }
 })
 
