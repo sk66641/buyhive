@@ -7,21 +7,7 @@ import { useParams } from 'react-router-dom'
 import { addToCartAsync } from '../../cart/CartSlice'
 import { selectLoggedInUser } from '../../auth/authSlice'
 
-const colors = [
-  { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-  { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-  { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
-]
-const sizes = [
-  { name: 'XXS', inStock: false },
-  { name: 'XS', inStock: true },
-  { name: 'S', inStock: true },
-  { name: 'M', inStock: true },
-  { name: 'L', inStock: true },
-  { name: 'XL', inStock: true },
-  { name: '2XL', inStock: true },
-  { name: '3XL', inStock: true },
-]
+
 const highlights = [
   'Hand cut and sewn locally',
   'Dyed with our proprietary colors',
@@ -149,84 +135,86 @@ export default function AdminProductDetails() {
 
               <form className="mt-10">
                 {/* Colors */}
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">Color</h3>
+                {product.colors.length > 0 &&
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
-                  <fieldset aria-label="Choose a color" className="mt-4">
-                    <RadioGroup value={selectedColor} onChange={setSelectedColor} className="flex items-center gap-x-3">
-                      {colors.map((color) => (
-                        <Radio
-                          key={color.name}
-                          value={color}
-                          aria-label={color.name}
-                          className={classNames(
-                            color.selectedClass,
-                            'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden data-checked:ring-2 data-focus:data-checked:ring-3 data-focus:data-checked:ring-offset-1',
-                          )}
-                        >
-                          <span
-                            aria-hidden="true"
-                            className={classNames(color.class, 'size-8 rounded-full border border-black/10')}
-                          />
-                        </Radio>
-                      ))}
-                    </RadioGroup>
-                  </fieldset>
-                </div>
+                    <fieldset aria-label="Choose a color" className="mt-4">
+                      <RadioGroup value={selectedColor} onChange={setSelectedColor} className="flex items-center gap-x-3">
+                        {product.colors.map((color) => (
+                          <Radio
+                            key={color.name}
+                            value={color}
+                            aria-label={color.name}
+                            className={classNames(
+                              color.selectedClass,
+                              'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden data-checked:ring-2 data-focus:data-checked:ring-3 data-focus:data-checked:ring-offset-1',
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(color.class, 'size-8 rounded-full border border-black/10')}
+                            />
+                          </Radio>
+                        ))}
+                      </RadioGroup>
+                    </fieldset>
+                  </div>}
 
                 {/* Sizes */}
-                <div className="mt-10">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                    <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                      Size guide
-                    </a>
-                  </div>
+                {product.sizes.length > 0 &&
+                  <div className="mt-10">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-medium text-gray-900">Size</h3>
+                      <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                        Size guide
+                      </a>
+                    </div>
 
-                  <fieldset aria-label="Choose a size" className="mt-4">
-                    <RadioGroup
-                      value={selectedSize}
-                      onChange={setSelectedSize}
-                      className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4"
-                    >
-                      {sizes.map((size) => (
-                        <Radio
-                          key={size.name}
-                          value={size}
-                          disabled={!size.inStock}
-                          className={classNames(
-                            size.inStock
-                              ? 'cursor-pointer bg-white text-gray-900 shadow-xs'
-                              : 'cursor-not-allowed bg-gray-50 text-gray-200',
-                            'group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-hidden data-focus:ring-2 data-focus:ring-indigo-500 sm:flex-1 sm:py-6',
-                          )}
-                        >
-                          <span>{size.name}</span>
-                          {size.inStock ? (
-                            <span
-                              aria-hidden="true"
-                              className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-checked:border-indigo-500 group-data-focus:border"
-                            />
-                          ) : (
-                            <span
-                              aria-hidden="true"
-                              className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                            >
-                              <svg
-                                stroke="currentColor"
-                                viewBox="0 0 100 100"
-                                preserveAspectRatio="none"
-                                className="absolute inset-0 size-full stroke-2 text-gray-200"
+                    <fieldset aria-label="Choose a size" className="mt-4">
+                      <RadioGroup
+                        value={selectedSize}
+                        onChange={setSelectedSize}
+                        className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4"
+                      >
+                        {product.sizes.map((size) => (
+                          <Radio
+                            key={size.name}
+                            value={size}
+                            disabled={!size.inStock}
+                            className={classNames(
+                              size.inStock
+                                ? 'cursor-pointer bg-white text-gray-900 shadow-xs'
+                                : 'cursor-not-allowed bg-gray-50 text-gray-200',
+                              'group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-hidden data-focus:ring-2 data-focus:ring-indigo-500 sm:flex-1 sm:py-6',
+                            )}
+                          >
+                            <span>{size.name}</span>
+                            {size.inStock ? (
+                              <span
+                                aria-hidden="true"
+                                className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-checked:border-indigo-500 group-data-focus:border"
+                              />
+                            ) : (
+                              <span
+                                aria-hidden="true"
+                                className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
                               >
-                                <line x1={0} x2={100} y1={100} y2={0} vectorEffect="non-scaling-stroke" />
-                              </svg>
-                            </span>
-                          )}
-                        </Radio>
-                      ))}
-                    </RadioGroup>
-                  </fieldset>
-                </div>
+                                <svg
+                                  stroke="currentColor"
+                                  viewBox="0 0 100 100"
+                                  preserveAspectRatio="none"
+                                  className="absolute inset-0 size-full stroke-2 text-gray-200"
+                                >
+                                  <line x1={0} x2={100} y1={100} y2={0} vectorEffect="non-scaling-stroke" />
+                                </svg>
+                              </span>
+                            )}
+                          </Radio>
+                        ))}
+                      </RadioGroup>
+                    </fieldset>
+                  </div>}
 
                 <button
                   onClick={handleCart}

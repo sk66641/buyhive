@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { checkUser, createUser, signOut, checkToken } from './authAPI'
+import { checkUser, createUser, signOut, checkToken, resetPasswordRequest, resetPassword } from './authAPI'
 import { updateUser } from '../user/userAPI'
 
 const initialState = {
@@ -46,6 +46,22 @@ export const signOutAsync = createAsyncThunk(
     'user/signOut',
     async () => {
         const response = await signOut();
+        return response.data;
+    }
+);
+
+export const resetPasswordRequestAsync = createAsyncThunk(
+    'user/resetPasswordRequest',
+    async (email) => {
+        const response = await resetPasswordRequest(email);
+        return response.data;
+    }
+);
+
+export const resetPasswordAsync = createAsyncThunk(
+    'user/resetPasswordRequest',
+    async ({token, email, password}) => {
+        const response = await resetPassword(email, token, password);
         return response.data;
     }
 );

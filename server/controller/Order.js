@@ -1,4 +1,8 @@
-const { Order } = require('../model/Order')
+const SendmailTransport = require('nodemailer/lib/sendmail-transport');
+const { Order } = require('../model/Order');
+const { User } = require('../model/User');
+const { sendMail, invoiceTemplate } = require('../services/common');
+const { Product } = require('../model/Product');
 
 exports.fetchOrdersByUser = async (req, res) => {
     const { id } = req.params;
@@ -11,13 +15,26 @@ exports.fetchOrdersByUser = async (req, res) => {
 }
 
 exports.createOrder = async (req, res) => {
-    const order = new Order(req.body);
     try {
+        const order = new Order(req.body);
+        console.log(order);
+
+        for (let item of order.items) {
+            await Product.findByIdAndUpdate(item.product.id, { $inc: { stock: -1 * item.quantity } });
+        }
+        // console.log(order);
         const getOrder = await order.save();
+        const user = await User.findById(getOrder.user);
+        // console.log(user)
+        const subject = "Order Confirmation";
+        const html = invoiceTemplate(getOrder);
+        // console.log(user);
+        sendMail(user.email, subject, html);
+        // console.log(html);
         // const finalOrder = await getCart.populate('product');
         res.status(201).json(getOrder);
     } catch (error) {
-        res.status(400).json(error);
+        res.status(400).json(error); 
     }
 }
 

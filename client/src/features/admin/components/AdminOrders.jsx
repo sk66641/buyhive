@@ -82,6 +82,25 @@ const AdminOrders = () => {
                                 <th className="p-3 text-center">Status</th>
                                 <th className="p-3 text-center">Payment Method</th>
                                 <th className="p-3 text-center">Payment Status</th>
+                                <th className="p-3 text-center" onClick={() => handleSort({
+                                    sort: sort?._sort === 'createdAt' ? '-createdAt' : 'createdAt'
+                                })}>    Created At
+                                    {sort &&
+                                        (sort._sort === 'createdAt' ? (
+                                            <ArrowUpIcon className="w-4 h-4 inline"></ArrowUpIcon>
+                                        ) : (
+                                            <ArrowDownIcon className="w-4 h-4 inline"></ArrowDownIcon>
+                                        ))}</th>
+                                <th className="p-3 text-center" onClick={() => handleSort({
+                                    sort: sort?._sort === 'updatedAt' ? '-updatedAt' : 'updatedAt'
+                                })}>   Updated At
+                                    {sort &&
+                                        (sort._sort === 'updatedAt' ? (
+                                            <ArrowUpIcon className="w-4 h-4 inline"></ArrowUpIcon>
+                                        ) : (
+                                            <ArrowDownIcon className="w-4 h-4 inline"></ArrowDownIcon>
+                                        ))}</th>
+
                                 <th className="p-3 text-center">Actions</th>
                             </tr>
                         </thead>
@@ -155,6 +174,27 @@ const AdminOrders = () => {
                                             </span>
                                         )}
                                     </td>
+                                    <td className="p-3 text-center">
+                                        {order.createdAt ? (
+                                            <>
+                                                <div>{new Date(order.createdAt).toLocaleDateString()}</div>
+                                                <div className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleTimeString()}</div>
+                                            </>
+                                        ) : (
+                                            'N/A'
+                                        )}
+                                    </td>
+                                    <td className="p-3 text-center">
+                                        {order.updatedAt ? (
+                                            <>
+                                                <div>{new Date(order.updatedAt).toLocaleDateString()}</div>
+                                                <div className="text-sm text-gray-500">{new Date(order.updatedAt).toLocaleTimeString()}</div>
+                                            </>
+                                        ) : (
+                                            'N/A'
+                                        )}
+                                    </td>
+
                                     <td className="p-3 text-center">
                                         <div className="flex item-center justify-center">
                                             <div onClick={() => handleShow(order)} className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">

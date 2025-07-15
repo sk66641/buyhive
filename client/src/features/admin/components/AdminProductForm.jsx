@@ -6,6 +6,23 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { fetchProductsById } from '../../product/productAPI';
 import { useEffect } from 'react';
 
+
+const colors = [
+    { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400', id: 'white' },
+    { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400', id: 'gray' },
+    { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900', id: 'black' },
+]
+const sizes = [
+    { name: 'XXS', inStock: false, id: 'xxs' },
+    { name: 'XS', inStock: true, id: 'xs' },
+    { name: 'S', inStock: true, id: 's' },
+    { name: 'M', inStock: true, id: 'm' },
+    { name: 'L', inStock: true, id: 'l' },
+    { name: 'XL', inStock: true, id: 'xl' },
+    { name: '2XL', inStock: true, id: '2xl' },
+    { name: '3XL', inStock: true, id: '3xl' },
+]
+
 export default function AdminProductForm() {
     // const temp = {
     //     "id": "2",
@@ -94,7 +111,10 @@ export default function AdminProductForm() {
             setValue('brand', selectedProduct.brand);
             setValue('category', selectedProduct.category);
             setValue('images', selectedProduct.images[0]);
-            setValue('category', selectedProduct.category);
+            setValue('details', selectedProduct.details);
+            setValue('colors', selectedProduct.colors.map(color => color.id));
+            setValue('sizes', selectedProduct.sizes.map(size => size.id));
+            // setValue('highlights', selectedProduct.highlights);
         }
     }, [selectedProduct])
 
@@ -107,8 +127,16 @@ export default function AdminProductForm() {
 
         <form noValidate onSubmit={handleSubmit((data) => {
             // dispatch(createUserAsync({ email: data.email, addresses: [], password: data.password, role: 'user' }));
-            const product = { ...data, images: [data.images], rating: 4.5, stock: +data.stock, discountPercentage: +data.discountPercentage }
-            console.log(product)
+            const product = {
+                ...data,
+                images: [data.images],
+                rating: 4.5,
+                stock: +data.stock,
+                discountPercentage: +data.discountPercentage,
+            }
+            product.colors = data.colors ? data.colors.map(color => colors.find(c => c.id === color)) : [];
+            product.sizes = data.sizes ? data.sizes.map(size => sizes.find(s => s.id === size)) : [];
+            // console.log(product)
             if (params.id) {
                 dispatch(updateProductAsync({ ...product, id: params.id, rating: selectedProduct.rating }))
                 reset();
@@ -133,7 +161,6 @@ export default function AdminProductForm() {
                             </label>
                             <div className="mt-2">
                                 <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                    {/* <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">workcation.com/</div> */}
                                     <input
                                         id="title"
                                         type="text"
@@ -163,7 +190,82 @@ export default function AdminProductForm() {
                             </div>
                             <p className="mt-3 text-sm/6 text-gray-600">Write a few sentences about the product.</p>
                         </div>
-                        {/* categories and brands */}
+
+                        {/* Details Section */}
+                        <div className="col-span-full">
+                            <label htmlFor="details" className="block text-sm/6 font-medium text-gray-900">
+                                Details
+                            </label>
+                            <div className="mt-2">
+                                <textarea
+                                    id="details"
+                                    rows={3}
+                                    {...register('details', {
+                                        required: 'details is required',
+                                    })}
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    defaultValue={''}
+                                />
+                            </div>
+                            <p className="mt-3 text-sm/6 text-gray-600">Write details about the product.</p>
+                        </div>
+
+                        {/* Colors, Sizes, and Highlights Section */}
+                        <div className="col-span-full">
+                            <label className="block text-sm/6 font-medium text-gray-900">
+                                Colors
+                            </label>
+                            <div className="mt-2 flex flex-wrap gap-4">
+                                {colors.map((color) => (
+                                    <label key={color.id} className="flex items-center space-x-2">
+                                        <input
+                                            type="checkbox"
+                                            value={color.id}
+                                            {...register('colors')}
+                                            className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                        />
+                                        <span className={`inline-block w-6 h-6 rounded-full ${color.class} border`} />
+                                        <span>{color.name}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="col-span-full">
+                            <label className="block text-sm/6 font-medium text-gray-900">
+                                Sizes
+                            </label>
+                            <div className="mt-2 flex flex-wrap gap-4">
+                                {sizes.map((size) => (
+                                    <label key={size.id} className="flex items-center space-x-2">
+                                        <input
+                                            type="checkbox"
+                                            value={size.id}
+                                            disabled={!size.inStock}
+                                            {...register('sizes')}
+                                            className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                        />
+                                        <span>{size.name}</span>
+                                        {!size.inStock && <span className="text-xs text-gray-400">(Out of stock)</span>}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="col-span-full">
+                            <label className="block text-sm/6 font-medium text-gray-900">
+                                Highlights
+                            </label>
+                            <div className="mt-2">
+                                <textarea
+                                    // {...register('highlights', {
+                                    //     required: 'highlights are required',
+                                    // })}
+                                    rows={3}
+                                    placeholder="Enter highlights, one per line"
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                />
+                                <p className="mt-1 text-xs text-gray-500">Enter each highlight on a new line.</p>
+                            </div>
+                        </div>
                         <div className="sm:col-span-3">
                             <div
                                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -210,7 +312,6 @@ export default function AdminProductForm() {
                             </label>
                             <div className="mt-2">
                                 <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                    {/* <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">workcation.com/</div> */}
                                     <input
                                         id="price"
                                         type="number"

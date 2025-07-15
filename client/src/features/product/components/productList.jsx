@@ -26,6 +26,8 @@ const sortOptions = [
     { name: 'Price: Low to High', sort: 'price', current: false },
     { name: 'Price: High to Low', sort: '-price', current: false },
 ]
+
+// TODO: add discount and discounted price, also add sorting by discounted price
 export const filters =
     [
         {
@@ -104,6 +106,7 @@ const ProductList = () => {
         // dispatch(fetchAllProductsAsync());
         dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }))
     }, [dispatch, filter, sort, page]);
+
 
     const handleFilter = (e, section, option) => {
         const newFilter = { ...filter };

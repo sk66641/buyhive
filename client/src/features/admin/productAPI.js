@@ -20,15 +20,17 @@ export function fetchProductsByFilters(filter, sort, pagination) {
     // sort ={_sort: "price", _order: "desc/asc"}
     // pagination = {_page: 1, _per_page:10}
     // TODO : on server we will support multi values
+    console.log(filter)
     let queryString = '';
     for (let key in filter) {
         const categoryValues = filter[key];
         if (categoryValues.length > 0) {
-            const lastCategoryValue = categoryValues[categoryValues.length - 1];
-            queryString += `${key}=${lastCategoryValue}&`
+            // const lastCategoryValue = categoryValues[categoryValues.length - 1];
+            queryString += `${key}=${categoryValues}&`
             console.log("filter query", { queryString });
         }
     }
+    console.log("filter query", { queryString });
     for (let key in sort) {
         queryString += `${key}=${sort[key]}&`
         // console.log("sort query", { queryString });

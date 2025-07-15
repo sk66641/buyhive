@@ -1,15 +1,20 @@
 import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form";
-import { useSelector } from 'react-redux';
-import { selectError } from "../authSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { resetPasswordRequestAsync, selectError } from "../authSlice";
 
 export default function ForgotPassword() {
+
+    const dispatch = useDispatch();
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
     const error = useSelector(selectError);
+
+
+
     return (
         <>
             {/* {user && <Navigate to={'/'} replace={true}></Navigate>} */}
@@ -29,7 +34,7 @@ export default function ForgotPassword() {
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form noValidate onSubmit={handleSubmit((data) => {
-                        console.log(data);
+                        dispatch(resetPasswordRequestAsync(data.email));
                     })} className="space-y-6">
                         <div>
                             <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">

@@ -3,11 +3,12 @@ const server = express();
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
-const nodemailer = require('nodemailer');
+const morgan = require('morgan');
+
 
 const port = 3000;
 
-
+server.use(morgan('dev')); // Logging middleware
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -96,28 +97,7 @@ server.get('/', (req, res) => {
 })
 
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // true for port 465, false for other ports
-  auth: {
-    user: "mrmathematics7@gmail.com",
-    pass: "fcep zjiz vhjv cdgq",
-  },
-});
-server.post('/mail', async (req, res) => {
-  const { to } = req.body;
-  const info = await transporter.sendMail({
-    from: '"Maddison Foo Koch 👻" <maddison53@ethereal.email>', // sender address
-    to: to, // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
-  });
 
-  res.json(info);
-})
-//
 
 // Replace this endpoint secret with your endpoint's unique secret
 // If you are testing with the CLI, find the secret by running 'stripe listen'

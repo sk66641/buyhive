@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
     role: { type: String, required: true, default: 'user' },
     addresses: { type: [Schema.Types.Mixed] },
     orders: { type: [Schema.Types.Mixed] },
+    resetPasswordToken: { type: String, default: null },
 })
 
 userSchema.pre('save', async function (next) {

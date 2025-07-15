@@ -46,7 +46,7 @@ const AdminProductList = () => {
         // dispatch(fetchAllProductsAsync());
         dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }))
     }, [dispatch, filter, sort, page]);
-
+    
     const handleFilter = (e, section, option) => {
         const newFilter = { ...filter };
         // TODO: on server we'll support multiple categories

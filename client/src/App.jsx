@@ -27,6 +27,7 @@ import AdminProductFormPage from './pages/AdminProductFormPage'
 import AdminOrdersPage from './pages/AdminOrdersPage'
 import Stripe from './pages/Stripe'
 import StripeCompletePage from './pages/StripeCompletePage'
+import ResetPassword from './features/auth/component/ResetPassword'
 
 const router = createBrowserRouter([
   {
@@ -101,6 +102,10 @@ const router = createBrowserRouter([
   {
     path: '/forgot-password',
     element: <ForgotPasswordPage></ForgotPasswordPage>
+  },
+  {
+    path: '/reset-password',
+    element: <ResetPassword></ResetPassword>
   },
   {
     path: '*',
