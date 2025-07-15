@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
-import { resetPasswordRequestAsync, selectError } from "../authSlice";
+import { resetPasswordRequestAsync, selectIsSendingResetPasswordRequest } from "../authSlice";
 
 export default function ForgotPassword() {
 
@@ -11,36 +11,37 @@ export default function ForgotPassword() {
         handleSubmit,
         formState: { errors },
     } = useForm();
-    const error = useSelector(selectError);
-
-
+    const isSendingResetPasswordRequest = useSelector(selectIsSendingResetPasswordRequest);
 
     return (
         <>
-            {/* {user && <Navigate to={'/'} replace={true}></Navigate>} */}
-            {/* Without replace, the navigation would be added to the history stack, and the user could go back to the previous page. */}
-            <div className=" flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <img
-                        alt="Your Company"
-                        src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                        className="mx-auto h-10 w-auto"
-                    />
-                    <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-                        Enter email to reset password
-                    </h2>
-                    {error && <p className="text-red-500 text-center">{error.message}</p>}
-                </div>
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 px-4 py-12">
+                <div className="w-full max-w-md rounded-3xl bg-white/90 shadow-2xl ring-1 ring-indigo-100 p-8 sm:p-10">
+                    <div className="flex flex-col items-center">
+                        <div className="bg-indigo-100 rounded-full p-3 shadow-lg mb-4">
+                            <img
+                                alt="Your Company"
+                                src="buyhive.png"
+                                className="h-12 w-12"
+                            />
+                        </div>
+                        <h2 className="text-3xl font-extrabold text-indigo-700 text-center tracking-tight mb-2">
+                            Forgot your password?
+                        </h2>
+                        <p className="text-gray-500 text-center mb-6">
+                            Enter your email address and we'll send you a link to reset your password.
+                        </p>
+                        {/* {error && <p className="text-red-500 text-center">{error.message}</p>} */}
+                    </div>
 
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form noValidate onSubmit={handleSubmit((data) => {
                         dispatch(resetPasswordRequestAsync(data.email));
-                    })} className="space-y-6">
+                    })} className="space-y-7">
                         <div>
-                            <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="email" className="block text-sm font-semibold text-indigo-700 mb-1">
                                 Email address
                             </label>
-                            <div className="mt-2">
+                            <div className="relative mt-1">
                                 <input
                                     id="email"
                                     {...register('email', {
@@ -50,33 +51,36 @@ export default function ForgotPassword() {
                                         }
                                     })}
                                     type="email"
-                                    // required
                                     autoComplete="email"
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    className={`block w-full rounded-xl border-2 px-4 py-2 text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-200 ${errors.email ? 'border-pink-400 ring-pink-200' : 'border-gray-200'
+                                        }`}
+                                    placeholder="you@example.com"
                                 />
-                                {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+                                {errors.email && <p className="text-pink-600 text-xs mt-2">{errors.email.message}</p>}
                             </div>
                         </div>
-
-
 
                         <div>
                             <button
                                 type="submit"
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                disabled={isSendingResetPasswordRequest}
+                                className={`flex w-full justify-center rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-4 py-2 text-lg font-bold text-white shadow-lg hover:from-indigo-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-200 ${isSendingResetPasswordRequest ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
                             >
-                                Send Email
+                                {isSendingResetPasswordRequest ? "Sending..." : "Send Reset Link"}
                             </button>
                         </div>
                     </form>
 
-                    <p className="mt-10 text-center text-sm/6 text-gray-500">
-                        Back to {' '}
-                        <Link to="/login" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                            Login {' '}
-                        </Link>
-                        Page
-                    </p>
+                    <div className="mt-8 flex flex-col items-center">
+                        <div className="w-full border-t border-gray-200 mb-4"></div>
+                        <p className="text-center text-sm text-gray-500">
+                            Back to{' '}
+                            <Link to="/login" className="font-semibold text-indigo-600 hover:text-pink-500 transition-colors">
+                                Login
+                            </Link>
+                            {' '}Page
+                        </p>
+                    </div>
                 </div>
             </div>
         </>

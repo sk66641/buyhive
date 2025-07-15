@@ -4,15 +4,20 @@ import { updateUser } from '../user/userAPI'
 
 const initialState = {
     loggedInUser: null,
-    status: 'idle',
-    error: null,
+    status: {
+        isCreatingUser: false,
+        isCheckingUser: false,
+        isUpdatingUser: false,
+        isSigningOut: false,
+        isSendingResetPasswordRequest: false,
+        isResettingPassword: false,
+    },
 }
 
 export const createUserAsync = createAsyncThunk(
     'user/createUser',
     async (userData) => {
         const response = await createUser(userData);
-        // console.log("createAsyncThunk", response)
         return response.data;
     })
 
@@ -20,7 +25,7 @@ export const checkUserAsync = createAsyncThunk(
     'user/checkUser',
     async (loginInfo) => {
         const response = await checkUser(loginInfo);
-        // console.log("createAsyncThunk", response)
+        console.log("checkUserAsync response", response);
         return response.data;
     })
 
@@ -28,8 +33,6 @@ export const checkTokenAsync = createAsyncThunk(
     'user/checkToken',
     async () => {
         const response = await checkToken();
-        // console.log(response, "again")
-        // console.log("createAsyncThunk", response)
         return response.data;
     })
 
@@ -37,7 +40,6 @@ export const updateUserAsync = createAsyncThunk(
     'user/updateUser',
     async (update) => {
         const response = await updateUser(update);
-        // The value we return becomes the `fulfilled` action payload
         return response.data;
     }
 );
@@ -59,8 +61,8 @@ export const resetPasswordRequestAsync = createAsyncThunk(
 );
 
 export const resetPasswordAsync = createAsyncThunk(
-    'user/resetPasswordRequest',
-    async ({token, email, password}) => {
+    'user/resetPassword',
+    async ({ token, email, password }) => {
         const response = await resetPassword(email, token, password);
         return response.data;
     }
@@ -71,56 +73,89 @@ export const authSlice = createSlice({
     initialState,
     extraReducers: (builder) => {
         builder
+            // createUserAsync
             .addCase(createUserAsync.pending, (state) => {
-                state.status = 'loading';
+                state.status.isCreatingUser = true;
             })
             .addCase(createUserAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
+                state.status.isCreatingUser = false;
                 state.loggedInUser = action.payload;
             })
+            .addCase(createUserAsync.rejected, (state, action) => {
+                state.status.isCreatingUser = false;
+            })
+
+            // checkUserAsync
             .addCase(checkUserAsync.pending, (state) => {
-                state.status = 'loading';
+                state.status.isCheckingUser = true;
             })
             .addCase(checkUserAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
+                state.status.isCheckingUser = true;
                 state.loggedInUser = action.payload;
             })
             .addCase(checkUserAsync.rejected, (state, action) => {
-                state.status = 'error';
-                // console.log(action)
-                state.error = action.error;
+                state.status.isCheckingUser = false;
             })
-            .addCase(checkTokenAsync.pending, (state) => {
-                state.status = 'loading';
-            })
+
+            // checkTokenAsync
             .addCase(checkTokenAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
                 state.loggedInUser = action.payload;
             })
-            .addCase(checkTokenAsync.rejected, (state, action) => {
-                state.status = 'error';
-                // console.log(action)
-                state.error = action.error;
-            })
+
+            // updateUserAsync
             .addCase(updateUserAsync.pending, (state) => {
-                state.status = 'loading';
+                state.status.isUpdatingUser = true;
             })
             .addCase(updateUserAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
+                state.status.isUpdatingUser = false;
                 state.loggedInUser = action.payload;
             })
+            .addCase(updateUserAsync.rejected, (state, action) => {
+                state.status.isUpdatingUser = false;
+            })
+
+            // signOutAsync
             .addCase(signOutAsync.pending, (state) => {
-                state.status = 'loading';
+                state.status.isSigningOut = true;
             })
             .addCase(signOutAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
+                state.status.isSigningOut = false;
                 state.loggedInUser = null;
+            })
+            .addCase(signOutAsync.rejected, (state, action) => {
+                state.status.isSigningOut = false;
+            })
+
+            // resetPasswordRequestAsync
+            .addCase(resetPasswordRequestAsync.pending, (state) => {
+                state.status.isSendingResetPasswordRequest = true;
+            })
+            .addCase(resetPasswordRequestAsync.fulfilled, (state, action) => {
+                state.status.isSendingResetPasswordRequest = false;
+            })
+            .addCase(resetPasswordRequestAsync.rejected, (state, action) => {
+                state.status.isSendingResetPasswordRequest = false;
+            })
+
+            // resetPasswordAsync
+            .addCase(resetPasswordAsync.pending, (state) => {
+                state.status.isResettingPassword = true;
+            })
+            .addCase(resetPasswordAsync.fulfilled, (state, action) => { 
+                state.status.isResettingPassword = false;
+            })
+            .addCase(resetPasswordAsync.rejected, (state, action) => {
+                state.status.isResettingPassword = false;
             })
     }
 })
 
 export const selectLoggedInUser = (state) => state.auth.loggedInUser;
-export const selectError = (state) => state.auth.error;
-// export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const selectIsCreatingUser = (state) => state.auth.status.isCreatingUser;
+export const selectIsCheckingUser = (state) => state.auth.status.isCheckingUser;
+export const selectIsUpdatingUser = (state) => state.auth.status.isUpdatingUser;
+export const selectIsSigningOut = (state) => state.auth.status.isSigningOut;
+export const selectIsSendingResetPasswordRequest = (state) => state.auth.status.isSendingResetPasswordRequest;
+export const selectIsResettingPassword = (state) => state.auth.status.isResettingPassword
 
 export default authSlice.reducer

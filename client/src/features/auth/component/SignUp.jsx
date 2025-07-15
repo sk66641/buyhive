@@ -1,8 +1,7 @@
 import { Link, Navigate } from "react-router-dom"
 import { useForm } from 'react-hook-form'
-import { selectLoggedInUser, createUserAsync } from "../authSlice";
+import { selectLoggedInUser, createUserAsync, selectIsCreatingUser } from "../authSlice";
 import { useDispatch, useSelector } from "react-redux";
-// import { createUser } from "../authAPI";
 
 export default function SignUp() {
   const {
@@ -11,42 +10,38 @@ export default function SignUp() {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
-  const user = useSelector(selectLoggedInUser)
+  const user = useSelector(selectLoggedInUser);
+  const isCreatingUser = useSelector(selectIsCreatingUser);
 
   return (
     <>
-      {/*
-          This example requires updating your template:
-  
-          ```
-          <html class="h-full bg-white">
-          <body class="h-full">
-          ```
-        */}
       {user && <Navigate to={'/'} replace={true}></Navigate>}
-      {/* {user && user.email ? user.email : "not"} */}
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            alt="Your Company"
-            src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-            className="mx-auto h-10 w-auto"
-          />
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            Create a new account
-          </h2>
-        </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 px-4 py-8">
+        <div className="bg-white/90 shadow-2xl rounded-3xl p-10 max-w-lg w-full border border-gray-200 backdrop-blur-md">
+          <div className="flex flex-col items-center mb-6">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <img
+                alt="buyhive"
+                src="buyhive.png"
+                className="h-14 w-14 drop-shadow-xl rounded-full"
+              />
+              <span className="text-2xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-lg tracking-wide">buyhive</span>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mt-2 mb-1 tracking-tight">
+              Create a new account
+            </h2>
+            {/* {error && <p className="text-red-500 text-center mt-2">{error.message}</p>} */}
+          </div>
+
           <form noValidate onSubmit={handleSubmit((data) => {
             dispatch(createUserAsync({ email: data.email, addresses: [], orders: [], password: data.password, role: 'user' }));
-            console.log(data)
-          })} className="space-y-6">
+          })} className="space-y-7 mt-4">
             <div>
-              <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
+              <label htmlFor="email" className="block text-base font-semibold text-indigo-700 mb-1">
                 Email address
               </label>
-              <div className="mt-2">
+              <div className="relative mt-1">
                 <input
                   id="email"
                   {...register('email', {
@@ -56,23 +51,22 @@ export default function SignUp() {
                     }
                   })}
                   type="email"
-                  // required
                   autoComplete="email"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  className={`block w-full rounded-xl bg-white/80 px-5 py-3 text-base text-gray-900 border ${errors.email ? 'border-pink-400' : 'border-indigo-200'} placeholder:text-gray-400 focus:ring-2 focus:ring-pink-200 focus:border-pink-400 transition shadow-sm`}
+                  placeholder="e.g. example@gmail.com"
                 />
-                {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+                {errors.email && <p className="text-pink-600 text-xs mt-1">{errors.email.message}</p>}
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
+                <label htmlFor="password" className="block text-base font-semibold text-indigo-700 mb-1">
                   Password
                 </label>
               </div>
-              <div className="mt-2">
+              <div className="relative mt-1">
                 <input
-                  value={"User@12345"}
                   id="password"
                   {...register('password', {
                     required: "password is required", pattern: {
@@ -83,51 +77,57 @@ export default function SignUp() {
                     }
                   })}
                   type="password"
-                  // required
                   autoComplete="new-password"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  className={`block w-full rounded-xl bg-white/80 px-5 py-3 text-base text-gray-900 border ${errors.password ? 'border-pink-400' : 'border-indigo-200'} placeholder:text-gray-400 focus:ring-2 focus:ring-pink-200 focus:border-pink-400 transition shadow-sm`}
+                  placeholder="Password"
                 />
-                {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+                {errors.password && <p className="text-pink-600 text-xs mt-1 whitespace-pre-line">{errors.password.message}</p>}
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
+                <label htmlFor="password" className="block text-base font-semibold text-indigo-700 mb-1">
                   Confirm Password
                 </label>
               </div>
-              <div className="mt-2">
+              <div className="relative mt-1">
                 <input
-                  value={"User@12345"}
                   id="confirm-password"
                   {...register('confirmPassword', {
                     required: "confirm password is required",
                     validate: (value, formValues) => value === formValues.password || "password not matching"
                   })}
                   type="password"
-                  // required
                   autoComplete="off"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  className={`block w-full rounded-xl bg-white/80 px-5 py-3 text-base text-gray-900 border ${errors.confirmPassword ? 'border-pink-400' : 'border-indigo-200'} placeholder:text-gray-400 focus:ring-2 focus:ring-pink-200 focus:border-pink-400 transition shadow-sm`}
+                  placeholder="Confirm Password"
                 />
-                {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>}
+                {errors.confirmPassword && <p className="text-pink-600 text-xs mt-1">{errors.confirmPassword.message}</p>}
               </div>
             </div>
 
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sign in
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={isCreatingUser}
+              className={`flex w-full justify-center rounded-xl bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 px-5 py-3 text-lg font-bold text-white shadow-lg hover:from-indigo-700 hover:to-pink-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pink-200 ${isCreatingUser ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
+            >
+              {isCreatingUser ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                  </svg>
+                  Creating Account...
+                </span>
+              ) : "Create Account"}
+            </button>
           </form>
 
-          <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Already a member?{' '}
-            <Link to="/login" className="font-semibold text-indigo-600 hover:text-indigo-500">
-              Log In
+          <p className="mt-8 text-center text-base text-gray-600">
+            Already have an account?{' '}
+            <Link to="/login" className="font-semibold text-indigo-600 hover:text-pink-500 transition underline underline-offset-2">
+              Log in
             </Link>
           </p>
         </div>

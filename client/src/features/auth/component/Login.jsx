@@ -1,7 +1,7 @@
 import { Link, Navigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
-import { checkUserAsync, selectError, selectLoggedInUser } from "../authSlice";
+import { checkUserAsync, selectIsCheckingUser, selectLoggedInUser } from "../authSlice";
 
 export default function Login() {
   const {
@@ -10,46 +10,48 @@ export default function Login() {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
-  const error = useSelector(selectError);
   const user = useSelector(selectLoggedInUser);
+  const isCheckingUser = useSelector(selectIsCheckingUser);
+
   return (
     <>
-      {/*
-          This example requires updating your template:
-  
-          ```
-          <html class="h-full bg-white">
-          <body class="h-full">
-          ```
-          */}
-      {user && <Navigate to={'/'} replace={true}></Navigate>}
       {/* Without replace, the navigation would be added to the history stack, and the user could go back to the previous page. */}
-      <div className=" flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            alt="Your Company"
-            src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-            className="mx-auto h-10 w-auto"
-          />
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            Log in to your account
-          </h2>
-          {error && <p className="text-red-500 text-center">{error.message}</p>}
-        </div>
+      {user && <Navigate to={'/'} replace={true}></Navigate>}
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#f8fafc] via-[#e0c3fc] to-[#8ec5fc] px-4 py-8 relative overflow-hidden">
+        {/* Decorative blurred circles */}
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-pink-300 opacity-30 rounded-full filter blur-3xl z-0 animate-pulse"></div>
+        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-indigo-300 opacity-30 rounded-full filter blur-3xl z-0 animate-pulse"></div>
+        <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-purple-200 opacity-20 rounded-full filter blur-2xl z-0 animate-spin-slow"></div>
+
+        <div className="relative z-10 bg-white/80 shadow-2xl rounded-3xl p-12 max-w-md w-full border border-gray-200 backdrop-blur-2xl">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <img
+                alt="buyhive"
+                src="buyhive.png"
+                className="h-14 w-14 drop-shadow-xl rounded-full"
+              />
+              <span className="text-2xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-lg tracking-wide">buyhive</span>
+            </div>
+            <h2 className="text-4xl font-extrabold text-gray-900 mb-2 tracking-tight drop-shadow-sm">
+              Welcome Back!
+            </h2>
+            {/* {error && <p className="text-red-500 text-center mt-2">{error.message}</p>} */}
+          </div>
+
           <form noValidate onSubmit={handleSubmit((data) => {
             dispatch(checkUserAsync({ email: data.email, password: data.password }));
-            console.log(data)
-          })} className="space-y-6">
+          })} className="space-y-8 mt-8">
             <div>
-              <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
+              <label htmlFor="email" className="block text-base font-semibold text-gray-700 mb-1">
                 Email address
               </label>
-              <div className="mt-2">
+              <div className="relative mt-1">
                 <input
                   id="email"
-                  // value={'admin@gmail.com'}
+                  // value={}
+                  placeholder="e.g. example@gmail.com"
                   {...register('email', {
                     required: "email is required", pattern: {
                       value: /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
@@ -57,55 +59,63 @@ export default function Login() {
                     }
                   })}
                   type="email"
-                  // required
                   autoComplete="email"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  className="block w-full rounded-2xl border border-gray-300 bg-white/90 px-5 py-3 text-base text-gray-900 shadow-lg placeholder:text-gray-400 focus:ring-4 focus:ring-pink-200 focus:border-indigo-500 transition"
                 />
-                {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+                {errors.email && <p className="text-red-500 mt-1">{errors.email.message}</p>}
               </div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="password" className="block text-base font-semibold text-gray-700">
                   Password
                 </label>
                 <div className="text-sm">
-                  <Link to={'/forgot-password'} className="font-semibold text-indigo-600 hover:text-indigo-500">
+                  <Link to={'/forgot-password'} className="font-semibold text-indigo-600 hover:text-pink-500 transition">
                     Forgot password?
                   </Link>
                 </div>
               </div>
-              <div className="mt-2">
+              <div className="relative mt-1">
                 <input
-                  value={"User@12345"}
+                  // value={}
+                  placeholder="Enter your password"
                   id="password"
                   {...register('password', {
                     required: "password is required",
                   })}
                   type="password"
-                  // required
                   autoComplete="new-password"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  className="block w-full rounded-2xl border border-gray-300 bg-white/90 px-5 py-3 text-base text-gray-900 shadow-lg placeholder:text-gray-400 focus:ring-4 focus:ring-indigo-200 focus:border-pink-500 transition"
                 />
-                {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+                {errors.password && <p className="text-red-500 mt-1">{errors.password.message}</p>}
               </div>
             </div>
 
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                disabled={isCheckingUser}
+                className={`flex w-full justify-center rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-3 text-lg font-bold text-white shadow-xl hover:from-pink-600 hover:to-indigo-600 focus:outline-none focus:ring-4 focus:ring-pink-200 transition-all duration-200 ${isCheckingUser ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
               >
-                Log in
+                {isCheckingUser ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                    </svg>
+                    Logging in...
+                  </span>
+                ) : "Log in"}
               </button>
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Not a member?{' '}
-            <Link to="/signup" className="font-semibold text-indigo-600 hover:text-indigo-500">
-              Create a new account
+          <p className="mt-8 text-center text-base text-gray-600">
+            Don't have an account?{' '}
+            <Link to="/signup" className="font-semibold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent hover:text-pink-500 transition">
+              Create
             </Link>
           </p>
         </div>

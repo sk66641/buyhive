@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
-import { resetPasswordAsync, resetPasswordRequestAsync, selectError } from "../authSlice";
+import { resetPasswordAsync, selectIsResettingPassword } from "../authSlice";
 
 export default function ResetPassword() {
 
@@ -10,48 +10,47 @@ export default function ResetPassword() {
         register,
         handleSubmit,
         formState: { errors },
+        watch,
     } = useForm();
-    const error = useSelector(selectError);
-    // get query from url token and email
+
     const query = new URLSearchParams(window.location.search);
     const token = query.get('token');
     const email = query.get('email');
 
+    const isResettingPassword = useSelector(selectIsResettingPassword);
 
     return (
         <>
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 px-4 py-12">
+                <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-8 sm:p-12 max-w-md w-full border border-indigo-100">
+                    <div className="flex flex-col items-center">
+                        <div className="bg-gradient-to-tr from-indigo-100 to-pink-100 rounded-full p-2 shadow-lg mb-4">
+                            <img
+                                alt="Your Company"
+                                src="buyhive.png"
+                                className="h-14 w-14 object-contain rounded-full"
+                            />
+                        </div>
+                        <h2 className="text-3xl font-extrabold text-indigo-700 text-center mb-2 drop-shadow">
+                            Reset Your Password
+                        </h2>
+                        <p className="text-md text-gray-600 text-center mb-6">
+                            Enter your new password below to regain access to your account.
+                        </p>
+                        {/* {error && <p className="text-red-500 text-center">{error.message}</p>} */}
+                    </div>
 
-            {/* {user && <Navigate to={'/'} replace={true}></Navigate>} */}
-            {/* Without replace, the navigation would be added to the history stack, and the user could go back to the previous page. */}
-            <div className=" flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <img
-                        alt="Your Company"
-                        src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                        className="mx-auto h-10 w-auto"
-                    />
-                    <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-                        Enter email to reset password
-                    </h2>
-                    {error && <p className="text-red-500 text-center">{error.message}</p>}
-                </div>
-
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form noValidate onSubmit={handleSubmit((data) => {
-                        // dispatch(resetPasswordRequestAsync(data.email));
                         dispatch(resetPasswordAsync({ token, email, password: data.password }));
-                        // console.log(data)
-                    })} className="space-y-6">
+                    })} className="space-y-7">
 
                         <div>
-                            <div className="flex items-center justify-between">
-                                <label htmlFor="new-password" className="block text-sm/6 font-medium text-gray-900">
-                                    New Password
-                                </label>
-                            </div>
-                            <div className="mt-2">
+                            <label htmlFor="new-password" className="block text-base font-semibold text-gray-800 mb-1">
+                                New Password
+                            </label>
+                            <div className="relative">
                                 <input
-                                    value={"User@12345"}
+                                    // value={}
                                     id="new-password"
                                     {...register('password', {
                                         required: "password is required", pattern: {
@@ -62,54 +61,45 @@ export default function ResetPassword() {
                                         }
                                     })}
                                     type="password"
-                                    // required
+                                    placeholder="Enter your new password"
                                     autoComplete="new-password"
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    className="block w-full rounded-xl border border-indigo-200 bg-white px-4 py-3 text-base text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-pink-400 focus:outline-none shadow-sm transition"
                                 />
-                                {errors.password && <p className="text-red-500">{errors.password.message}</p>}
                             </div>
+                            {errors.password && <p className="text-pink-600 text-sm mt-1">{errors.password.message}</p>}
                         </div>
 
                         <div>
-                            <div className="flex items-center justify-between">
-                                <label htmlFor="confirm-new-password" className="block text-sm/6 font-medium text-gray-900">
-                                    Confirm New Password
-                                </label>
-                            </div>
-                            <div className="mt-2">
+                            <label htmlFor="confirm-new-password" className="block text-base font-semibold text-gray-800 mb-1">
+                                Confirm New Password
+                            </label>
+                            <div className="relative">
                                 <input
-                                    value={"User@12345"}
+                                    // value={}
                                     id="confirm-new-password"
                                     {...register('confirmPassword', {
                                         required: "confirm password is required",
                                         validate: (value, formValues) => value === formValues.password || "password not matching"
                                     })}
                                     type="password"
-                                    // required
+                                    placeholder="Re-enter your password"
                                     autoComplete="off"
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    className="block w-full rounded-xl border border-indigo-200 bg-white px-4 py-3 text-base text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-pink-400 focus:outline-none shadow-sm transition"
                                 />
-                                {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>}
                             </div>
+                            {errors.confirmPassword && <p className="text-pink-600 text-sm mt-1">{errors.confirmPassword.message}</p>}
                         </div>
 
                         <div>
                             <button
                                 type="submit"
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                disabled={isResettingPassword}
+                                className={`flex w-full justify-center rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-4 py-3 text-lg font-bold text-white shadow-lg hover:scale-105 hover:from-pink-500 hover:to-indigo-500 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-pink-300 ${isResettingPassword ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
                             >
-                                Reset Password
+                                {isResettingPassword ? "Resetting..." : "Reset Password"}
                             </button>
                         </div>
                     </form>
-
-                    <p className="mt-10 text-center text-sm/6 text-gray-500">
-                        Back to {' '}
-                        <Link to="/login" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                            Login {' '}
-                        </Link>
-                        Page
-                    </p>
                 </div>
             </div>
         </>

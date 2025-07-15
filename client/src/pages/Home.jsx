@@ -8,7 +8,6 @@ const Home = () => {
         <>
             <Navbar>
                 <ProductList></ProductList>
-                <Link to={'/admin'}>Admin</Link>
             </Navbar>
         </>
     )
