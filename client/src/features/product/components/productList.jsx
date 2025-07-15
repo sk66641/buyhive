@@ -96,21 +96,19 @@ const ProductList = () => {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
     const products = useSelector(selectAllProducts)
     const totalItems = useSelector(selectTotalItems)
-    // console.log("products",products)
     const dispatch = useDispatch()
     const [filter, setFilter] = useState({})
     const [sort, setSort] = useState({})
     const [page, setPage] = useState(1)
+
     useEffect(() => {
         const pagination = { _page: page, _per_page: ITEMS_PER_PAGE }
-        // dispatch(fetchAllProductsAsync());
         dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }))
     }, [dispatch, filter, sort, page]);
 
 
     const handleFilter = (e, section, option) => {
         const newFilter = { ...filter };
-        // TODO: on server we'll support multiple categories
         if (e.target.checked) {
             if (newFilter[section.id]) {
                 newFilter[section.id].push(option.value)
@@ -123,15 +121,11 @@ const ProductList = () => {
             newFilter[section.id].splice(index, 1);
         }
         setFilter(newFilter);
-        // console.log(newFilter)
-        // console.log("handleFilter",section, option)
     }
 
     const handleSort = (option) => {
         const sort = { _sort: option.sort };
         setSort(sort);
-        // console.log(sort)
-        // console.log("handleSort", option)
     }
 
     const handlePage = (page) => {
@@ -148,7 +142,7 @@ const ProductList = () => {
             <div className="bg-white">
                 <div>
                     {/* Mobile filter dialog */}
-                    <MobileFilter handleFilter={handleFilter} mobileFiltersOpen={mobileFiltersOpen} setMobileFiltersOpen={setMobileFiltersOpen}></MobileFilter>
+                    <MobileFilter handleFilter={handleFilter} mobileFiltersOpen={mobileFiltersOpen} setMobileFiltersOpen={setMobileFiltersOpen} filter={filter}></MobileFilter>
 
                     <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex items-baseline justify-between border-b border-gray-200 pt-24 pb-6">
@@ -210,7 +204,7 @@ const ProductList = () => {
 
                             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                                 {/* Filters */}
-                                <DesktopFilter handleFilter={handleFilter}></DesktopFilter>
+                                <DesktopFilter handleFilter={handleFilter} filter={filter}></DesktopFilter>
 
 
                                 {/* Product grid */}
@@ -230,7 +224,7 @@ const ProductList = () => {
 export default ProductList
 
 
-function MobileFilter({ handleFilter, mobileFiltersOpen, setMobileFiltersOpen }) {
+function MobileFilter({ handleFilter, mobileFiltersOpen, setMobileFiltersOpen, filter }) {
 
     return (
         <Dialog open={mobileFiltersOpen} onClose={setMobileFiltersOpen} className="relative z-40 lg:hidden">
@@ -277,7 +271,8 @@ function MobileFilter({ handleFilter, mobileFiltersOpen, setMobileFiltersOpen })
                                                 <div className="flex h-5 shrink-0 items-center">
                                                     <div className="group grid size-4 grid-cols-1">
                                                         <input
-                                                            defaultValue={option.value}
+                                                            value={option.value}
+                                                            checked={filter[section.id]?.includes(option.value)}
                                                             id={`filter-mobile-${section.id}-${optionIdx}`}
                                                             name={`${section.id}[]`}
                                                             type="checkbox"
@@ -324,7 +319,7 @@ function MobileFilter({ handleFilter, mobileFiltersOpen, setMobileFiltersOpen })
         </Dialog>
     )
 }
-function DesktopFilter({ handleFilter }) {
+function DesktopFilter({ handleFilter, filter }) {
     return (
         <form className="hidden lg:block">
 
@@ -346,8 +341,8 @@ function DesktopFilter({ handleFilter }) {
                                     <div className="flex h-5 shrink-0 items-center">
                                         <div className="group grid size-4 grid-cols-1">
                                             <input
-                                                defaultValue={option.value}
-                                                defaultChecked={option.checked}
+                                                value={option.value}
+                                                checked={filter[section.id]?.includes(option.value)}
                                                 id={`filter-${section.id}-${optionIdx}`}
                                                 name={`${section.id}[]`}
                                                 type="checkbox"
@@ -410,7 +405,6 @@ function ProductGrid({ products }) {
                                                 {product.title}
                                             </h3>
                                             <p className="mt-1 text-sm text-gray-500">{product.rating}</p>
-                                            {/* <p className="mt-1 text-sm text-gray-500">{product.reviews.length}</p> */}
                                         </div>
                                         <p className="text-sm font-medium text-gray-900">{product.price}</p>
                                     </div>

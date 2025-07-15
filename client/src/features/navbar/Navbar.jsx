@@ -15,8 +15,6 @@ const navigation = [
     { name: 'Home', href: '/', current: true },
     { name: 'My Profile', href: '/profile', current: false },
     { name: 'Orders', href: '/orders', current: false },
-    // { name: 'Calendar', href: '#', current: false },
-    // { name: 'Reports', href: '#', current: false },
 ]
 const userNavigation = [
     { name: 'My Profile', link: '/profile' },
@@ -37,19 +35,9 @@ function classNames(...classes) {
 export default function Navbar({ children }) {
 
     const getUser = useSelector(selectLoggedInUser);
-    // console.log("user",user)
     const items = useSelector(selectItems)
-    // console.log("items",items.length)
     return (
         <>
-            {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full">
-        ```
-      */}
             <div className="min-h-full">
                 <Disclosure as="nav" className="bg-gray-800">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -57,8 +45,8 @@ export default function Navbar({ children }) {
                             <div className="flex items-center">
                                 <div className="shrink-0">
                                     <img
-                                        alt="Your Company"
-                                        src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                                        alt="buyhive"
+                                        src="buyhive.png"
                                         className="size-8"
                                     />
                                 </div>
