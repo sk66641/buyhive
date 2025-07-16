@@ -2,32 +2,32 @@ const nodemailer = require('nodemailer');
 
 exports.sendMail = async (email, subject, html) => {
 
-    const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false, // true for port 465, false for other ports
-        auth: {
-            user: "mrmathematics7@gmail.com",
-            pass: "fcep zjiz vhjv cdgq",
-        },
-    });
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true for port 465, false for other ports
+    auth: {
+      user: "mrmathematics7@gmail.com",
+      pass: "fcep zjiz vhjv cdgq",
+    },
+  });
 
-    const info = await transporter.sendMail({
-        from: '"E-Commerce" <mrmathematics7@gmail.com>', // sender address
-        to: email, // list of receivers
-        subject: subject, // Subject line
-        text: "Hello", // plain text body
-        html: html, // html body
-    });
+  const info = await transporter.sendMail({
+    from: '"E-Commerce" <mrmathematics7@gmail.com>', // sender address
+    to: email, // list of receivers
+    subject: subject, // Subject line
+    text: "Hello", // plain text body
+    html: html, // html body
+  });
 
-    return info;
+  return info;
 }
 
 
 
 exports.invoiceTemplate = function (order) {
-    return (
-        `<!DOCTYPE html>
+  return (
+    `<!DOCTYPE html>
 <html>
 <head>
 
@@ -225,7 +225,7 @@ exports.invoiceTemplate = function (order) {
                   <td align="left" width="20%" style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">$${Math.round(item.product.price * (1 - item.product.discountPercentage / 100), 2)}</td>
                 </tr>`)
 
-        }
+    }
                
                
                 <tr>
@@ -340,5 +340,5 @@ exports.invoiceTemplate = function (order) {
 
 </body>
 </html>`
-    )
+  )
 }

@@ -22,9 +22,8 @@ exports.addToCart = async (req, res) => {
 }
 
 exports.deleteFromCart = async (req, res) => {
-    console.log(req.params)
     const { id } = req.params;
-    console.log(id)
+    
     try {
         const cart = await Cart.findByIdAndDelete(id);
         // const finalResponse = await response.populate('product');
@@ -38,7 +37,6 @@ exports.updateCart = async (req, res) => {
     const { id } = req.params;
     try {
         const cart = await Cart.findByIdAndUpdate(id, req.body, { new: true }).populate('product user');
-        // const finalResponse = await response.populate('product');
         res.status(201).json(cart);
     } catch (error) {
         res.status(400).json(error);

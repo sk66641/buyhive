@@ -22,16 +22,14 @@ exports.createOrder = async (req, res) => {
         for (let item of order.items) {
             await Product.findByIdAndUpdate(item.product.id, { $inc: { stock: -1 * item.quantity } });
         }
-        // console.log(order);
+       
         const getOrder = await order.save();
         const user = await User.findById(getOrder.user);
-        // console.log(user)
+       
         const subject = "Order Confirmation";
         const html = invoiceTemplate(getOrder);
-        // console.log(user);
-        sendMail(user.email, subject, html);
-        // console.log(html);
-        // const finalOrder = await getCart.populate('product');
+        
+        sendMail(user.email, subject, html);      
         res.status(201).json(getOrder);
     } catch (error) {
         res.status(400).json(error); 
@@ -42,7 +40,6 @@ exports.deleteOrder = async (req, res) => {
     const { id } = req.params;
     try {
         const order = await Order.findByIdAndDelete(id);
-        // const finalResponse = await response.populate('product');
         res.status(200).json(order);
     } catch (error) {
         res.status(400).json(error);
@@ -53,7 +50,6 @@ exports.updateOrder = async (req, res) => {
     const { id } = req.params;
     try {
         const order = await Order.findByIdAndUpdate(id, req.body, { new: true });
-        // const finalResponse = await response.populate('product');
         res.status(201).json(order);
     } catch (error) {
         res.status(400).json(error);

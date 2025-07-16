@@ -11,8 +11,13 @@ exports.createProduct = async (req, res) => {
 }
 
 exports.fetchAllProducts = async (req, res) => {
-    let query = Product.find({ deleted: { $ne: true } });
-    console.log(req.user,"logging")
+    const { role } = req.user;
+    let query;
+    if (role === 'admin') {
+        query = Product.find();
+    } else if (role === 'user') {
+        query = Product.find({ deleted: { $ne: true } });
+    }
 
     if (req.query._sort) {
         const sortBy = req.query._sort[0] === "-" ? req.query._sort.slice(1) : req.query._sort;
@@ -20,7 +25,7 @@ exports.fetchAllProducts = async (req, res) => {
         console.log(sortBy, order)
         query = query.sort({ [sortBy]: order });
     }
-    // console.log(req.query.category.split(','));
+
     if (req.query.brand) {
         query = query.find({ brand: { $in: req.query.brand.split(',') } });
     }
@@ -37,7 +42,6 @@ exports.fetchAllProducts = async (req, res) => {
     }
     try {
         const products = await query.exec();
-
         res.status(200).send({ items: totalDocs, data: products });
     } catch (error) {
         res.status(400).json(error);

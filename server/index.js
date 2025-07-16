@@ -64,12 +64,10 @@ server.use(cors({
 }));
 
 server.use(cookieParser())
-// server.use(express.raw({ type: 'application/json' }))
 server.use(express.json());
 dotenv.config();
 
 const mongoose = require('mongoose');
-const { createProduct } = require('./controller/Product')
 const productsRoutes = require('./routes/Products')
 const brandsRoutes = require('./routes/Brands')
 const categoriesRoutes = require('./routes/Categories')
@@ -82,10 +80,6 @@ const { authMiddleware } = require('./Middleware/authMiddleware');
 // This is your test secret API key.
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-
-
-
-
 main().catch(err => console.log(err));
 
 async function main() {
@@ -94,23 +88,8 @@ async function main() {
 }
 
 server.get('/', (req, res) => {
-  res.json({ status: "success" });
+  res.json({ status: "buyhive server is running" });
 })
-
-
-
-
-// Replace this endpoint secret with your endpoint's unique secret
-// If you are testing with the CLI, find the secret by running 'stripe listen'
-// If you are using an endpoint defined with the API or dashboard, look in your webhook settings
-// at https://dashboard.stripe.com/webhooks
-
-//
-
-// payment
-// app.use(express.static("public"));
-// app.use(express.json());
-
 
 
 server.post("/create-payment-intent", async (req, res) => {

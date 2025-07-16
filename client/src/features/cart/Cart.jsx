@@ -40,7 +40,7 @@ export default function Cart() {
                                                         <h3>
                                                             <a href={item.product.href}>{item.product.title}</a>
                                                         </h3>
-                                                        <p className="ml-4">$ {item.product.discountedPrice}</p>
+                                                        <p className="ml-4">${item.product.discountedPrice}</p>
                                                     </div>
                                                     {item.color &&
                                                         // item.color = {name, id, class, selectedClass}

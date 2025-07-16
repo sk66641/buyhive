@@ -25,7 +25,7 @@ exports.createUser = async (req, res) => {
             secure: true,
             sameSite: 'None',
         });
-        // res.status(201);
+        
         res.status(201).json({ id: response._id, email: response.email, role: response.role, addresses: response.addresses, orders: response.orders });
     } catch (error) {
         res.status(400).json(error);
@@ -65,10 +65,9 @@ exports.logout = (req, res) => {
 
 // TODO: what about expiry?
 
-
 exports.resetPasswordRequest = async (req, res) => {
     const { email } = req.body;
-    // console.log(email);
+
     const user = await User.findOne({ email });
     if (!user) {
         return res.status(404).json({ message: 'User not found' });
@@ -79,10 +78,9 @@ exports.resetPasswordRequest = async (req, res) => {
     await user.save();
 
     const resetPasswordLink = `${process.env.CLIENT_URL}/reset-password?token=${token}&email=${email}`;
-    // console.log(resetPasswordLink);
     const subject = "Reset password request";
     const html = `<a href="${resetPasswordLink}">Click to reset password</a>`
-    // console.log(html);
+
     res.json(sendMail(email, subject, html));
 }
 
