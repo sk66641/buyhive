@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema({
     images: { type: [String], required: true },
     colors: { type: [mongoose.Schema.Types.Mixed] },
     sizes: { type: [mongoose.Schema.Types.Mixed] },
-    highlights: { type: [String] },
+    highlights: { type: [String], required: true },
     deleted: { type: Boolean, default: false },
 })
 

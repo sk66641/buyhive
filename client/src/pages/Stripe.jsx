@@ -8,7 +8,6 @@ import {
 } from 'react-router-dom';
 
 import StripeCheckoutForm from "./StripeCheckoutForm";
-import StripeCompletePage from "./StripeCompletePage";
 import "../Stripe.css";
 import { useSelector } from "react-redux";
 import { selectCurrentOrder } from "../features/order/orderSlice";
@@ -25,6 +24,7 @@ export default function Stripe() {
         // Create PaymentIntent as soon as the page loads
         fetch(`${import.meta.env.VITE_HOST}/create-payment-intent`, {
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ totalAmount: currentOrder.totalAmount, orderId: currentOrder.id }),
         })

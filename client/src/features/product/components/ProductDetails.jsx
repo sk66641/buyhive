@@ -6,16 +6,7 @@ import { fetchProductsByIdAsync, selectedProductById } from '../productSlice'
 import { Link, useParams } from 'react-router-dom'
 import { addToCartAsync, selectItems } from '../../cart/CartSlice'
 import { selectUserInfo } from '../../user/userSlice'
-// import { selectLoggedInUser } from '../../auth/authSlice'
 
-// also show actual price with line-through and discountPercentage
-
-const highlights = [
-  'Hand cut and sewn locally',
-  'Dyed with our proprietary colors',
-  'Pre-washed & pre-shrunk',
-  'Ultra-soft 100% cotton',
-]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -90,24 +81,24 @@ export default function ProductDetails() {
           <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
             <img
               alt={product.title}
-              src={product.images}
+              src={product.images[0] || product.thumbnail}
               className="hidden size-full rounded-lg object-cover lg:block"
             />
             <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
               <img
                 alt={product.title}
-                src={product.images}
+                src={product.images[1] || product.thumbnail}
                 className="aspect-3/2 w-full rounded-lg object-cover"
               />
               <img
                 alt={product.title}
-                src={product.images}
+                src={product.images[2] || product.thumbnail}
                 className="aspect-3/2 w-full rounded-lg object-cover"
               />
             </div>
             <img
               alt={product.title}
-              src={product.images}
+              src={product.images[3] || product.thumbnail}
               className="aspect-4/5 size-full object-cover sm:rounded-lg lg:aspect-auto"
             />
           </div>
@@ -237,11 +228,11 @@ export default function ProductDetails() {
 
                 <button
                   onClick={handleCart}
-                  disabled={isAddedToCart}
+                  disabled={product.deleted || !(product.stock > 0) || isAddedToCart}
                   type="submit"
-                  className={`mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden ${isAddedToCart ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
+                  className={`mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden ${product.deleted || !(product.stock > 0) || isAddedToCart ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
                 >
-                  {isAddedToCart ? "Added to Cart" : "Add to Cart"}
+                  {product.deleted ? "Deleted" : product.stock > 0 ? isAddedToCart ? "Added to Cart" : "Add to Cart" : "Out of Stock"}
                 </button>
               </form>
             </div>
@@ -261,7 +252,7 @@ export default function ProductDetails() {
 
                 <div className="mt-4">
                   <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                    {highlights.map((highlight) => (
+                    {product.highlights.map((highlight) => (
                       <li key={highlight} className="text-gray-400">
                         <span className="text-gray-600">{highlight}</span>
                       </li>

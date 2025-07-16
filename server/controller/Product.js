@@ -11,11 +11,11 @@ exports.createProduct = async (req, res) => {
 }
 
 exports.fetchAllProducts = async (req, res) => {
-    const { role } = req.user;
     let query;
-    if (role === 'admin') {
+    if (req?.user?.role === 'admin') {
         query = Product.find();
-    } else if (role === 'user') {
+        console.log("i ran")
+    } else {
         query = Product.find({ deleted: { $ne: true } });
     }
 
@@ -51,7 +51,13 @@ exports.fetchAllProducts = async (req, res) => {
 exports.fetchProductById = async (req, res) => {
     const { id } = req.params;
     try {
-        const product = await Product.findById(id);
+        let query;
+        if (req?.user?.role === 'admin') {
+            query = Product.findById(id);
+        } else {
+            query = Product.findOne({ _id: id, deleted: { $ne: true } });
+        }
+        const product = await query.exec();
         res.status(200).json(product);
     } catch (error) {
         res.status(400).json(error);

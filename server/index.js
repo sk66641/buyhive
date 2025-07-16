@@ -92,7 +92,7 @@ server.get('/', (req, res) => {
 })
 
 
-server.post("/create-payment-intent", async (req, res) => {
+server.post("/create-payment-intent", authMiddleware, async (req, res) => {
   const { totalAmount, orderId } = req.body;
 
   try {
@@ -111,7 +111,7 @@ server.post("/create-payment-intent", async (req, res) => {
 
 
 
-server.use('/products', authMiddleware, productsRoutes.router);
+server.use('/products', productsRoutes.router);
 server.use('/brands', authMiddleware, brandsRoutes.router);
 server.use('/categories', authMiddleware, categoriesRoutes.router);
 server.use('/users', authMiddleware, userRoutes.router);

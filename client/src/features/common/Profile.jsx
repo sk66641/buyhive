@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectUserInfo, updateUserAsync } from '../userSlice';
+import { selectUserInfo, updateUserAsync } from '../user/userSlice';
 import { useForm } from 'react-hook-form';
 
-const UserProfile = () => {
+const Profile = () => {
     const dispatch = useDispatch();
     const user = useSelector(selectUserInfo);
     const [selectedEditIndex, setSelectedEditIndex] = useState(-1);
@@ -456,4 +456,4 @@ const UserProfile = () => {
     )
 }
 
-export default UserProfile
+export default Profile

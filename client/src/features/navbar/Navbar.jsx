@@ -24,7 +24,8 @@ const userNavigation = [
 
 const adminNavigation = [
     { name: 'Home', link: '/' },
-    { name: 'Admin', link: '/admin' },
+    { name: 'My Profile', link: '/profile' },
+    { name: 'My Orders', link: '/orders' },
     { name: 'Orders', link: '/admin/orders' },
 ]
 
@@ -63,7 +64,7 @@ export default function Navbar({ children }) {
                                 </div>
                                 <div className="hidden md:block">
                                     <div className="ml-10 flex items-baseline space-x-4">
-                                        {getUser.role !== 'admin' ? navigation.map((item) => (
+                                        {getUser?.role !== 'admin' ? navigation.map((item) => (
                                             <NavLink
                                                 key={item.name}
                                                 to={item.href}
@@ -109,37 +110,44 @@ export default function Navbar({ children }) {
                                     </span>}
 
                                     {/* Profile dropdown */}
-                                    <Menu as="div" className="relative ml-3">
-                                        <div>
-                                            <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
-                                                <span className="absolute -inset-1.5" />
-                                                <span className="sr-only">Open user menu</span>
-                                                <img alt="img" src={user.imageUrl} className="size-8 rounded-full z-0 cursor-pointer" />
-                                            </MenuButton>
-                                        </div>
-                                        <MenuItems
-                                            transition
-                                            className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-                                        >
-                                            {userNavigation.map((item) => (
-                                                <MenuItem key={item.name}>
-                                                    <Link
-                                                        to={item.link}
-                                                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                                    {getUser ?
+                                        <Menu as="div" className="relative ml-3">
+                                            <div>
+                                                <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
+                                                    <span className="absolute -inset-1.5" />
+                                                    <span className="sr-only">Open user menu</span>
+                                                    <img alt="img" src={user.imageUrl} className="size-8 rounded-full z-0 cursor-pointer" />
+                                                </MenuButton>
+                                            </div>
+                                            <MenuItems
+                                                transition
+                                                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                                            >
+                                                {userNavigation.map((item) => (
+                                                    <MenuItem key={item.name}>
+                                                        <Link
+                                                            to={item.link}
+                                                            className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                                                        >
+                                                            {item.name}
+                                                        </Link>
+                                                    </MenuItem>
+                                                ))}
+                                                <MenuItem>
+                                                    <button type='button' onClick={handleSignOut}
+                                                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden text-left cursor-pointer w-full"
                                                     >
-                                                        {item.name}
-                                                    </Link>
+                                                        Sign Out
+                                                    </button>
                                                 </MenuItem>
-                                            ))}
-                                            <MenuItem>
-                                                <button type='button' onClick={handleSignOut}
-                                                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden text-left cursor-pointer w-full"
-                                                >
-                                                    Sign Out
-                                                </button>
-                                            </MenuItem>
-                                        </MenuItems>
-                                    </Menu>
+                                            </MenuItems>
+                                        </Menu> :
+                                        <Link
+                                            to="/login"
+                                            className="ml-4 px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition"
+                                        >
+                                            Log in
+                                        </Link>}
                                 </div>
                             </div>
                             <div className="-mr-2 flex md:hidden">

@@ -7,22 +7,15 @@ import CartPage from './pages/CartPage'
 import Checkout from './pages/CheckOutPage'
 import ProductDetailsPage from './pages/ProductDetailsPage'
 import Protected from './features/auth/component/Protected'
-import { useDispatch, useSelector } from 'react-redux'
-// import { sele } from './features/auth/authSlice'
+import { useDispatch } from 'react-redux'
 import { fetchItemsByUserIdAsync } from './features/cart/CartSlice'
 import PageNotFound from './pages/404'
 import OrderSuccess from './pages/OrderSuccess'
-import UserOrders from './features/user/components/UserOrders'
 import UserOrdersPage from './pages/UserOrdersPage'
-import UserProfilePage from './pages/UserProfilePage'
+import ProfilePage from './pages/ProfilePage'
 import { fetchLoggedInUserAsync } from './features/user/userSlice'
-import Logout from './features/user/components/Logout'
-import ForgotPassword from './features/auth/component/ForgotPassword'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ProtectedAdmin from './features/auth/component/ProtectedAdmin'
-import AdminHome from './pages/AdminHome'
-// import AdminProductDetailsPage from './pages/AdminProductDetailsPage'
-import ProductForm from './features/admin/components/AdminProductForm'
 import AdminProductFormPage from './pages/AdminProductFormPage'
 import AdminOrdersPage from './pages/AdminOrdersPage'
 import Stripe from './pages/Stripe'
@@ -32,11 +25,7 @@ import ResetPassword from './features/auth/component/ResetPassword'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Protected><Home></Home></Protected>
-  },
-  {
-    path: '/admin',
-    element: <ProtectedAdmin><AdminHome></AdminHome></ProtectedAdmin>
+    element: <Home></Home>
   },
   {
     path: '/login',
@@ -56,7 +45,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/product-details/:id',
-    element: <Protected><ProductDetailsPage></ProductDetailsPage></Protected>
+    element: <ProductDetailsPage></ProductDetailsPage>
   },
   {
     path: '/admin/product-form',
@@ -72,7 +61,6 @@ const router = createBrowserRouter([
   },
   {
     path: '/order-success/:id',
-    // element: <Protected><OrderSuccess></OrderSuccess></Protected>
     element: <OrderSuccess></OrderSuccess>
   },
   {
@@ -81,7 +69,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/profile',
-    element: <Protected><UserProfilePage></UserProfilePage></Protected>
+    element: <Protected><ProfilePage></ProfilePage></Protected>
   },
   {
     path: '/stripe-checkout',
@@ -90,10 +78,6 @@ const router = createBrowserRouter([
   {
     path: '/complete',
     element: <Protected><StripeCompletePage></StripeCompletePage></Protected>
-  },
-  {
-    path: '/logout',
-    element: <Logout></Logout>
   },
   {
     path: '/forgot-password',
@@ -112,16 +96,9 @@ const router = createBrowserRouter([
 const App = () => {
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(checkTokenAsync());
-  // }, [dispatch])
-
-
-  // const user = useSelector(selectLoggedInUser);
-  // console.log("app.jsx",user)
   useEffect(() => {
-      dispatch(fetchItemsByUserIdAsync());
-      dispatch(fetchLoggedInUserAsync())
+    dispatch(fetchItemsByUserIdAsync());
+    dispatch(fetchLoggedInUserAsync())
   }, [dispatch])
 
   return (

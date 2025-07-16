@@ -17,22 +17,36 @@ exports.fetchOrdersByUser = async (req, res) => {
 exports.createOrder = async (req, res) => {
     try {
         const order = new Order(req.body);
-        console.log(order);
 
+        // Checking stock before updating
+        for (let item of order.items) {
+            const product = await Product.findById(item.product.id);
+            if (product.deleted) {
+                return res.status(400).json({ error: `Product deleted: ${item.product.id}` });
+            }
+            if (!(product.stock > 0)) {
+                return res.status(400).json({ error: `Product out of stock: ${item.product.id}` });
+            }
+            if (product.stock < item.quantity) {
+                return res.status(400).json({ error: `Insufficient stock for product: ${item.product.id}` });
+            }
+        }
+
+        // Updating stock after validation
         for (let item of order.items) {
             await Product.findByIdAndUpdate(item.product.id, { $inc: { stock: -1 * item.quantity } });
         }
-       
+
         const getOrder = await order.save();
         const user = await User.findById(getOrder.user);
-       
+
         const subject = "Order Confirmation";
         const html = invoiceTemplate(getOrder);
-        
-        sendMail(user.email, subject, html);      
+
+        sendMail(user.email, subject, html);
         res.status(201).json(getOrder);
     } catch (error) {
-        res.status(400).json(error); 
+        res.status(400).json(error);
     }
 }
 

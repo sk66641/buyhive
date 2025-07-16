@@ -1,11 +1,13 @@
 const express = require('express');
 const { createProduct, fetchAllProducts, fetchProductById, updateProduct } = require('../controller/Product');
 const { adminMiddleware } = require('../Middleware/adminMiddleware');
+const { productMiddleware } = require('../Middleware/productMiddleware');
+const { authMiddleware } = require('../Middleware/authMiddleware');
 const router = express.Router();
 
-router.post('/', adminMiddleware, createProduct)
-    .get('/', fetchAllProducts)
-    .get('/:id', fetchProductById)
-    .patch('/:id', adminMiddleware, updateProduct);
+router.post('/', authMiddleware, adminMiddleware, createProduct)
+    .get('/', productMiddleware, fetchAllProducts)
+    .get('/:id', productMiddleware, fetchProductById)
+    .patch('/:id', authMiddleware, adminMiddleware, updateProduct);
 
 exports.router = router;

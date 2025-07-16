@@ -49,11 +49,11 @@ export default function AdminProductForm() {
             setValue('stock', selectedProduct.stock);
             setValue('brand', selectedProduct.brand);
             setValue('category', selectedProduct.category);
-            setValue('images', selectedProduct.images[0]);
             setValue('details', selectedProduct.details);
             setValue('colors', selectedProduct.colors.map(color => color.id));
             setValue('sizes', selectedProduct.sizes.map(size => size.id));
-            selectedProduct.highlights.forEach((highlight, i) => setValue(`highlights${i + 1}`, highlight));
+            selectedProduct.highlights.forEach((highlight, i) => setValue(`highlight${i + 1}`, highlight));
+            selectedProduct.images.forEach((image, i) => setValue(`image${i + 1}`, image));
         }
     }, [selectedProduct])
 
@@ -64,26 +64,28 @@ export default function AdminProductForm() {
     return (
 
         <form noValidate onSubmit={handleSubmit((data) => {
+
+            const { highlight1, highlight2, highlight3, highlight4, image1, image2, image3, image4, ...rest } = data;
+
             const product = {
-                ...data,
-                images: [data.images],
-                highlights: [data.highlight1, data.highlight2, data.highlight3, data.highlight4],
+                ...rest,
+                images: [image1, image2, image3, image4],
+                highlights: [highlight1, highlight2, highlight3, highlight4],
                 rating: 4.5,
                 stock: +data.stock,
                 discountPercentage: +data.discountPercentage,
+                colors: data.colors ? data.colors.map(color => colors.find(c => c.id === color)) : [],
+                sizes: data.sizes ? data.sizes.map(size => sizes.find(s => s.id === size)) : [],
             }
-            product.colors = data.colors ? data.colors.map(color => colors.find(c => c.id === color)) : [];
-            product.sizes = data.sizes ? data.sizes.map(size => sizes.find(s => s.id === size)) : [];
-            console.log(product);
-            return;
+
             if (params.id) {
                 dispatch(updateProductAsync({ ...product, id: params.id, rating: selectedProduct.rating })).unwrap()
-                    .then(() => navigate('/admin', { replace: true }))
+                    .then(() => navigate('/', { replace: true }))
                     .catch((error) => console.error('Failed to update the product: ', error));
             }
             else {
                 dispatch(createProductAsync(product)).unwrap()
-                    .then(() => navigate('/admin', { replace: true }))
+                    .then(() => navigate('/', { replace: true }))
                     .catch((error) => console.error('Failed to save the product: ', error));
             }
 
@@ -321,12 +323,27 @@ export default function AdminProductForm() {
                             </div>
                         </div>
                         <div className="sm:col-span-6">
-                            <label htmlFor="images" className="block text-sm/6 font-medium text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Images
+                            </label>
+                            <p className="mt-1 text-xs text-gray-500">Add 4 images.</p>
+                            {[1, 2, 3, 4].map((index) => (
+                                <div key={index} className="mt-2">
+                                    <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                        <input
+                                            type="text"
+                                            {...register(`image${index}`, { required: `image ${index} is required` })}
+                                            placeholder={`Image ${index}`}
+                                            className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                            {/* <label htmlFor="images" className="block text-sm/6 font-medium text-gray-900">
                                 Image
                             </label>
                             <div className="mt-2">
                                 <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                    {/* <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">workcation.com/</div> */}
                                     <input
                                         id="images"
                                         type="text"
@@ -336,14 +353,14 @@ export default function AdminProductForm() {
                                         className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
             </div>
 
             <div className="mt-6 flex items-center justify-end gap-x-6">
-                <Link to={'/admin'} className="text-sm/6 font-semibold text-gray-900">
+                <Link to={'/'} className="text-sm/6 font-semibold text-gray-900">
                     Cancel
                 </Link>
                 {params.id && selectedProduct &&
