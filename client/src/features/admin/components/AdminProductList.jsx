@@ -46,7 +46,7 @@ const AdminProductList = () => {
         // dispatch(fetchAllProductsAsync());
         dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }))
     }, [dispatch, filter, sort, page]);
-    
+
     const handleFilter = (e, section, option) => {
         const newFilter = { ...filter };
         // TODO: on server we'll support multiple categories
@@ -399,11 +399,13 @@ function ProductGrid({ products }) {
 
             <div className="bg-white">
                 <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
-                    <Link to={'/admin/product-form'}
-                        className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-                    >
-                        Add Product
-                    </Link>
+                    <div className='flex gap-1.5 flex-wrap'>
+                        <Link to={'/admin/product-form'}
+                            className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                        >
+                            Add Product
+                        </Link>
+                    </div>
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
 
                         {products.map((product) => (
@@ -411,17 +413,14 @@ function ProductGrid({ products }) {
                                 <Link className='border rounded-md p-2 h-full' to={`/product-details/${product.id}`}>
                                     <div className="group relative">
                                         <img
-                                            alt={product.imageAlt}
-                                            src={product.images}
+                                            alt="img"
+                                            src={product.thumbnail}
                                             className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
                                         />
                                         <div className="mt-4 flex justify-between">
                                             <div>
                                                 <h3 className="text-sm">
-                                                    {/* <a href={product.href}>
-                                                        <span aria-hidden="true" className="absolute inset-0" /> */}
                                                     {product.title}
-                                                    {/* </a> */}
                                                 </h3>
                                                 <p className="mt-1 text-sm text-gray-500">{product.rating}</p>
                                                 {/* <p className="mt-1 text-sm text-gray-500">{product.reviews.length}</p> */}

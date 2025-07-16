@@ -2,8 +2,7 @@ import { filters } from '../../product/components/productList'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { createProductAsync, fetchProductsByIdAsync, selectedProductById, updateProductAsync } from '../../product/productSlice';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { fetchProductsById } from '../../product/productAPI';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
 
@@ -24,66 +23,6 @@ const sizes = [
 ]
 
 export default function AdminProductForm() {
-    // const temp = {
-    //     "id": "2",
-    //     "title": "Eyeshadow Palette with Mirror",
-    //     "description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
-    //     "category": "beauty",
-    //     "price": 19.99,
-    //     "discountPercentage": 5.5,
-    //     "rating": 3.28,
-    //     "stock": 44,
-    //     "tags": [
-    //         "beauty",
-    //         "eyeshadow"
-    //     ],
-    //     "brand": "Glamour Beauty",
-    //     "sku": "MVCFH27F",
-    //     "weight": 3,
-    //     "dimensions": {
-    //         "width": 12.42,
-    //         "height": 8.63,
-    //         "depth": 29.13
-    //     },
-    //     "warrantyInformation": "1 year warranty",
-    //     "shippingInformation": "Ships in 2 weeks",
-    //     "availabilityStatus": "In Stock",
-    //     "reviews": [
-    //         {
-    //             "rating": 4,
-    //             "comment": "Very satisfied!",
-    //             "date": "2024-05-23T08:56:21.618Z",
-    //             "reviewerName": "Liam Garcia",
-    //             "reviewerEmail": "liam.garcia@x.dummyjson.com"
-    //         },
-    //         {
-    //             "rating": 1,
-    //             "comment": "Very disappointed!",
-    //             "date": "2024-05-23T08:56:21.618Z",
-    //             "reviewerName": "Nora Russell",
-    //             "reviewerEmail": "nora.russell@x.dummyjson.com"
-    //         },
-    //         {
-    //             "rating": 5,
-    //             "comment": "Highly impressed!",
-    //             "date": "2024-05-23T08:56:21.618Z",
-    //             "reviewerName": "Elena Baker",
-    //             "reviewerEmail": "elena.baker@x.dummyjson.com"
-    //         }
-    //     ],
-    //     "returnPolicy": "30 days return policy",
-    //     "minimumOrderQuantity": 32,
-    //     "meta": {
-    //         "createdAt": "2024-05-23T08:56:21.618Z",
-    //         "updatedAt": "2024-05-23T08:56:21.618Z",
-    //         "barcode": "2817839095220",
-    //         "qrCode": "https://assets.dummyjson.com/public/qr-code.png"
-    //     },
-    //     "images": [
-    //         "https://cdn.dummyjson.com/products/images/beauty/Eyeshadow%20Palette%20with%20Mirror/1.png"
-    //     ],
-    //     "thumbnail": "https://cdn.dummyjson.com/products/images/beauty/Eyeshadow%20Palette%20with%20Mirror/thumbnail.png"
-    // }
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {
@@ -114,46 +53,44 @@ export default function AdminProductForm() {
             setValue('details', selectedProduct.details);
             setValue('colors', selectedProduct.colors.map(color => color.id));
             setValue('sizes', selectedProduct.sizes.map(size => size.id));
-            // setValue('highlights', selectedProduct.highlights);
+            selectedProduct.highlights.forEach((highlight, i) => setValue(`highlights${i + 1}`, highlight));
         }
     }, [selectedProduct])
 
     const handleDelete = () => {
         dispatch(updateProductAsync({ ...selectedProduct, deleted: true }));
-        navigate('/admin');
     }
 
     return (
 
         <form noValidate onSubmit={handleSubmit((data) => {
-            // dispatch(createUserAsync({ email: data.email, addresses: [], password: data.password, role: 'user' }));
             const product = {
                 ...data,
                 images: [data.images],
+                highlights: [data.highlight1, data.highlight2, data.highlight3, data.highlight4],
                 rating: 4.5,
                 stock: +data.stock,
                 discountPercentage: +data.discountPercentage,
             }
             product.colors = data.colors ? data.colors.map(color => colors.find(c => c.id === color)) : [];
             product.sizes = data.sizes ? data.sizes.map(size => sizes.find(s => s.id === size)) : [];
-            // console.log(product)
+            console.log(product);
+            return;
             if (params.id) {
-                dispatch(updateProductAsync({ ...product, id: params.id, rating: selectedProduct.rating }))
-                reset();
+                dispatch(updateProductAsync({ ...product, id: params.id, rating: selectedProduct.rating })).unwrap()
+                    .then(() => navigate('/admin', { replace: true }))
+                    .catch((error) => console.error('Failed to update the product: ', error));
             }
             else {
-                dispatch(createProductAsync(product));
-                reset();
+                dispatch(createProductAsync(product)).unwrap()
+                    .then(() => navigate('/admin', { replace: true }))
+                    .catch((error) => console.error('Failed to save the product: ', error));
             }
 
         })}>
             <div className="space-y-12">
                 <div className="border-b border-gray-900/10 pb-12">
                     <h2 className="text-base/7 font-semibold text-gray-900">Add Product</h2>
-                    {/* <p className="mt-1 text-sm/6 text-gray-600">
-                        This information will be displayed publicly so be careful what you share.
-                    </p> */}
-
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="sm:col-span-6">
                             <label htmlFor="title" className="block text-sm/6 font-medium text-gray-900">
@@ -177,6 +114,7 @@ export default function AdminProductForm() {
                             <label htmlFor="description" className="block text-sm/6 font-medium text-gray-900">
                                 Description
                             </label>
+                            <p className="mt-3 text-sm/6 text-gray-600">Write a few sentences about the product.</p>
                             <div className="mt-2">
                                 <textarea
                                     id="description"
@@ -188,7 +126,6 @@ export default function AdminProductForm() {
                                     defaultValue={''}
                                 />
                             </div>
-                            <p className="mt-3 text-sm/6 text-gray-600">Write a few sentences about the product.</p>
                         </div>
 
                         {/* Details Section */}
@@ -196,6 +133,7 @@ export default function AdminProductForm() {
                             <label htmlFor="details" className="block text-sm/6 font-medium text-gray-900">
                                 Details
                             </label>
+                            <p className="mt-3 text-sm/6 text-gray-600">Write details about the product.</p>
                             <div className="mt-2">
                                 <textarea
                                     id="details"
@@ -207,7 +145,6 @@ export default function AdminProductForm() {
                                     defaultValue={''}
                                 />
                             </div>
-                            <p className="mt-3 text-sm/6 text-gray-600">Write details about the product.</p>
                         </div>
 
                         {/* Colors, Sizes, and Highlights Section */}
@@ -240,31 +177,31 @@ export default function AdminProductForm() {
                                         <input
                                             type="checkbox"
                                             value={size.id}
-                                            disabled={!size.inStock}
                                             {...register('sizes')}
                                             className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
                                         />
                                         <span>{size.name}</span>
-                                        {!size.inStock && <span className="text-xs text-gray-400">(Out of stock)</span>}
                                     </label>
                                 ))}
                             </div>
                         </div>
                         <div className="col-span-full">
-                            <label className="block text-sm/6 font-medium text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
                                 Highlights
                             </label>
-                            <div className="mt-2">
-                                <textarea
-                                    // {...register('highlights', {
-                                    //     required: 'highlights are required',
-                                    // })}
-                                    rows={3}
-                                    placeholder="Enter highlights, one per line"
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                />
-                                <p className="mt-1 text-xs text-gray-500">Enter each highlight on a new line.</p>
-                            </div>
+                            <p className="mt-1 text-xs text-gray-500">Add 4 highlights.</p>
+                            {[1, 2, 3, 4].map((index) => (
+                                <div key={index} className="mt-2">
+                                    <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                        <input
+                                            type="text"
+                                            {...register(`highlight${index}`, { required: `highlight ${index} is required` })}
+                                            placeholder={`Highlight ${index}`}
+                                            className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                         <div className="sm:col-span-3">
                             <div
@@ -409,16 +346,17 @@ export default function AdminProductForm() {
                 <Link to={'/admin'} className="text-sm/6 font-semibold text-gray-900">
                     Cancel
                 </Link>
-                {params.id &&
+                {params.id && selectedProduct &&
                     <button onClick={handleDelete}
                         type="submit"
-                        className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        disabled={selectedProduct.deleted}
+                        className={`rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ${selectedProduct.deleted ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                     >
-                        Delete
+                        {selectedProduct.deleted ? 'Deleted' : 'Delete'}
                     </button>}
                 <button
                     type="submit"
-                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
                 >
                     Save
                 </button>

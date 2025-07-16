@@ -10,6 +10,7 @@ const orderSchema = new mongoose.Schema(
         status: { type: String, default: "pending", required: true },
         paymentStatus: { type: String, default: "pending" },
         selectedAddress: { type: Object, required: true },
+        deleted: { type: Boolean, default: false },
     },
     {
         timestamps: true,
