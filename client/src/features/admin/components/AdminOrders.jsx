@@ -127,7 +127,7 @@ const AdminOrders = () => {
                                             </div>))}
                                     </td>
                                     <td className="p-3 text-center">
-                                        <span>$ {order.totalAmount}</span>
+                                        <span>${order.totalAmount}</span>
                                     </td>
                                     <td className="p-3 text-center flex flex-col">
                                         <strong>{order.selectedAddress.name}, </strong>

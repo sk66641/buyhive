@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectLoggedInUser } from '../../auth/authSlice';
-import { fetchLoggedInUserOrdersAsync, selectUserOrders } from '../userSlice';
+// import { selectLoggedInUser } from '../../auth/authSlice';
+import { fetchLoggedInUserOrdersAsync, selectUserInfo, selectUserOrders } from '../userSlice';
 
 const UserOrders = () => {
 
   const dispatch = useDispatch();
-  const user = useSelector(selectLoggedInUser);
+  const user = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
 
   useEffect(() => {
@@ -33,18 +33,19 @@ const UserOrders = () => {
                         {order.items.map((item) => (
                           <li key={item.id} className="flex py-6">
                             <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
-                              <img alt={item.imageAlt} src={item.imageSrc} className="size-full object-cover" />
+                              <img alt="img" src={item.product.thumbnail} className="size-full object-cover" />
                             </div>
 
                             <div className="ml-4 flex flex-1 flex-col">
                               <div>
                                 <div className="flex justify-between text-base font-medium text-gray-900">
                                   <h3>
-                                    <a href={item.href}>item.name</a>
+                                    <a href={item.href}>{item.product.title}</a>
                                   </h3>
-                                  <p className="ml-4">{item.price}</p>
+                                  <p className="ml-4">${item.product.price}</p>
                                 </div>
-                                <p className="mt-1 text-sm text-gray-500">item.color</p>
+                                {item.color && <p className="mt-1 text-sm text-gray-500">{item.color.name}</p>}
+
                               </div>
                               <div className="flex flex-1 items-end justify-between text-sm">
                                 <div className="text-gray-500">
@@ -62,12 +63,12 @@ const UserOrders = () => {
                 <div className="border-t border-gray-200 px-4 py-6 space-y-1 sm:px-6">
                   <div className="flex justify-between text-base font-medium text-gray-900">
                     <p>Subtotal</p>
-                    <p>$ {order.totalAmount}</p>
+                    <p>${order.totalAmount}</p>
                   </div>
-                  <div className="flex justify-between text-base font-medium text-gray-900">
+                  {/* <div className="flex justify-between text-base font-medium text-gray-900">
                     <p>Total Items in Cart</p>
                     <p>{order.totalItems} items</p>
-                  </div>
+                  </div> */}
                   <p className="mt-0.5 text-sm text-gray-500">Shipping Address: </p>
                   <ul role='list'>
                     <li

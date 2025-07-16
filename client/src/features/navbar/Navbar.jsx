@@ -1,9 +1,10 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink } from 'react-router-dom'
 import { selectItems } from '../cart/CartSlice'
-import { selectLoggedInUser } from '../auth/authSlice'
+import { selectUserInfo } from '../user/userSlice'
+import { signOutAsync } from '../auth/authSlice'
 
 const user = {
     name: 'Tom Cook',
@@ -19,7 +20,6 @@ const navigation = [
 const userNavigation = [
     { name: 'My Profile', link: '/profile' },
     { name: 'My Orders', link: '/orders' },
-    { name: 'Sign out', link: '/logout' },
 ]
 
 const adminNavigation = [
@@ -34,8 +34,19 @@ function classNames(...classes) {
 
 export default function Navbar({ children }) {
 
-    const getUser = useSelector(selectLoggedInUser);
+    const dispatch = useDispatch();
+    const getUser = useSelector(selectUserInfo);
     const items = useSelector(selectItems)
+    const handleSignOut = () => {
+        dispatch(signOutAsync()).
+            unwrap().then(() => {
+                window.location.replace('/');
+            })
+            .catch((err) => {
+                console.error('Sign out failed:', err);
+            });
+    }
+
     return (
         <>
             <div className="min-h-full">
@@ -103,7 +114,7 @@ export default function Navbar({ children }) {
                                             <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                                                 <span className="absolute -inset-1.5" />
                                                 <span className="sr-only">Open user menu</span>
-                                                <img alt="" src={user.imageUrl} className="size-8 rounded-full" />
+                                                <img alt="img" src={user.imageUrl} className="size-8 rounded-full z-0 cursor-pointer" />
                                             </MenuButton>
                                         </div>
                                         <MenuItems
@@ -120,6 +131,13 @@ export default function Navbar({ children }) {
                                                     </Link>
                                                 </MenuItem>
                                             ))}
+                                            <MenuItem>
+                                                <button type='button' onClick={handleSignOut}
+                                                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden text-left cursor-pointer w-full"
+                                                >
+                                                    Sign Out
+                                                </button>
+                                            </MenuItem>
                                         </MenuItems>
                                     </Menu>
                                 </div>
@@ -191,11 +209,6 @@ export default function Navbar({ children }) {
                     </DisclosurePanel>
                 </Disclosure>
 
-                <header className="bg-white shadow-sm">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-                    </div>
-                </header>
                 <main>
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                         {children}

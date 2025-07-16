@@ -72,7 +72,7 @@ export default function Cart() {
                     <div className="border-t border-gray-200 px-4 py-6 space-y-1 sm:px-6">
                         <div className="flex justify-between text-base font-medium text-gray-900">
                             <p>Subtotal</p>
-                            <p>$ {totalAmount}</p>
+                            <p>${totalAmount}</p>
                         </div>
                         <div className="flex justify-between text-base font-medium text-gray-900">
                             <p>Total Items in Cart</p>

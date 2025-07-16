@@ -4,8 +4,11 @@ import { Radio, RadioGroup } from '@headlessui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchProductsByIdAsync, selectedProductById } from '../productSlice'
 import { Link, useParams } from 'react-router-dom'
-import { addToCartAsync } from '../../cart/CartSlice'
-import { selectLoggedInUser } from '../../auth/authSlice'
+import { addToCartAsync, selectItems } from '../../cart/CartSlice'
+import { selectUserInfo } from '../../user/userSlice'
+// import { selectLoggedInUser } from '../../auth/authSlice'
+
+// also show actual price with line-through and discountPercentage
 
 const highlights = [
   'Hand cut and sewn locally',
@@ -23,15 +26,18 @@ export default function ProductDetails() {
   const [selectedSize, setSelectedSize] = useState()
   const product = useSelector(selectedProductById);
 
-  // console.log(product)
+
 
   const dispatch = useDispatch();
   const params = useParams();
-  const user = useSelector(selectLoggedInUser);
-  // console.log("user", user)
+  const user = useSelector(selectUserInfo);
+  const cartItems = useSelector(selectItems);
+  const isAddedToCart = cartItems.some(item => item.product.id === params.id);
+
   useEffect(() => {
     dispatch(fetchProductsByIdAsync(params.id));
   }, [dispatch, params.id])
+
   const handleCart = (e) => {
     e.preventDefault();
     const item = { product: product.id, quantity: 1, user: user.id };
@@ -44,8 +50,7 @@ export default function ProductDetails() {
     }
 
     const userId = user.id;
-    // console.log(item,userId)
-    dispatch(addToCartAsync({ item, userId }))
+    dispatch(addToCartAsync({ item, userId }));
   }
 
   return (
@@ -116,7 +121,13 @@ export default function ProductDetails() {
             {/* Options */}
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight text-gray-900">{product.price}</p>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl font-bold text-indigo-700">${product.discountedPrice}</span>
+                <span className="text-lg text-gray-400 line-through">${product.price}</span>
+                <span className="text-sm font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-lg">
+                  {product.discountPercentage}% OFF
+                </span>
+              </div>
 
               {/* Reviews */}
               <div className="mt-6">
@@ -128,20 +139,20 @@ export default function ProductDetails() {
                         key={rating}
                         aria-hidden="true"
                         className={classNames(
-                          product.rating > rating ? 'text-gray-900' : 'text-gray-200',
+                          product.rating > rating ? 'text-yellow-400' : 'text-gray-200',
                           'size-5 shrink-0',
                         )}
                       />
                     ))}
                   </div>
-                  <p className="sr-only">{product.rating} out of 5 stars</p>
+                  <p className="ml-2 text-sm">{product.rating} out of 5 stars</p>
                   {/* <a href={reviews.href} className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
                   {reviews.totalCount} reviews
                 </a> */}
                 </div>
               </div>
 
-              <form className="mt-10">
+              <form className="mt-6">
                 {/* Colors */}
                 {product.colors.length > 0 &&
                   <div>
@@ -226,10 +237,11 @@ export default function ProductDetails() {
 
                 <button
                   onClick={handleCart}
+                  disabled={isAddedToCart}
                   type="submit"
-                  className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
+                  className={`mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden ${isAddedToCart ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
                 >
-                  Add to cart
+                  {isAddedToCart ? "Added to Cart" : "Add to Cart"}
                 </button>
               </form>
             </div>

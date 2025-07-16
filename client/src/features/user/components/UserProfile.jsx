@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 const UserProfile = () => {
     const dispatch = useDispatch();
     const user = useSelector(selectUserInfo);
-    // console.log("useprofile", user)
     const [selectedEditIndex, setSelectedEditIndex] = useState(-1);
     const [showAddAddressForm, setShowAddAddressForm] = useState(false);
 
@@ -24,7 +23,6 @@ const UserProfile = () => {
         };
         dispatch(updateUserAsync(newUser));
         setShowAddAddressForm(false);
-        // console.log(data, index)
     }
 
     const handleEdit = (data, index) => {
@@ -34,7 +32,6 @@ const UserProfile = () => {
         newUser.addresses.splice(index, 1, data);
         dispatch(updateUserAsync(newUser));
         setSelectedEditIndex(-1);
-        // console.log(data, index)
     }
 
     const handleRemove = (index) => {
@@ -45,6 +42,7 @@ const UserProfile = () => {
     }
 
     const handleEditForm = (index) => {
+        setShowAddAddressForm(false);
         setSelectedEditIndex(index);
         const address = user.addresses[index];
         setValue('name', address.name)
@@ -62,7 +60,7 @@ const UserProfile = () => {
                 <div className="flex h-full flex-col bg-white shadow-xl">
                     <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                         <div className="flex items-start justify-between">
-                            <div className="text-lg font-medium text-gray-900">Name: user.name</div>
+                            <div className="text-lg font-medium text-gray-900">Name: {user.email.split('@')[0]}</div>
                         </div>
                         <div>Email Address: {user.email}</div>
                         {user.role === 'admin' && <div>Role: {user.role}</div>}
@@ -76,7 +74,6 @@ const UserProfile = () => {
                                 handleSubmit((data) => {
                                     handleAddAddress(data);
                                     reset();
-                                    // console.log(data)
                                 })} className="bg-white px-5 py-12 border-solid border-2 border-gray-200 mb-12">
                                 <div className="space-y-12">
                                     <div className="border-b border-gray-900/10 pb-12">
@@ -218,7 +215,7 @@ const UserProfile = () => {
 
                                     <div className="mt-6 flex items-center justify-end gap-x-6">
                                         <button
-                                            onClick={() => setShowAddAddressForm(false)}
+                                            onClick={() => { setShowAddAddressForm(false); reset(); }}
                                             type="button"
                                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                         >
@@ -235,8 +232,9 @@ const UserProfile = () => {
                             </form> :
                             <button
                                 onClick={() => {
-                                    setShowAddAddressForm(true);
+                                    reset();
                                     setSelectedEditIndex(-1);
+                                    setShowAddAddressForm(true);
                                 }}
                                 className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-3.5"
                             >
@@ -289,7 +287,7 @@ const UserProfile = () => {
                                             <form noValidate onSubmit={
                                                 handleSubmit((data) => {
                                                     handleEdit(data, index);
-                                                    // console.log(data)
+                                                    reset();
                                                 })} className="bg-white px-5 py-12 border-solid border-2 border-gray-200 mb-12">
                                                 <div className="space-y-12">
                                                     <div className="border-b border-gray-900/10 pb-12">
@@ -431,7 +429,7 @@ const UserProfile = () => {
 
                                                     <div className="mt-6 flex items-center justify-end gap-x-6">
                                                         <button
-                                                            onClick={() => setSelectedEditIndex(-1)}
+                                                            onClick={() => { setSelectedEditIndex(-1); reset(); }}
                                                             type="button"
                                                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                                         >

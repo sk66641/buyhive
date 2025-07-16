@@ -2,14 +2,15 @@ import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { resetCartAsync } from "../features/cart/CartSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLoggedInUser } from "../features/auth/authSlice";
+// import { selectLoggedInUser } from "../features/auth/authSlice";
 import { DialogPanel } from "@headlessui/react";
 import { resetCurrentOrder } from "../features/order/orderSlice";
+import { selectUserInfo } from "../features/user/userSlice";
 
 export default function OrderSuccess() {
     const params = useParams();
     const dispatch = useDispatch();
-    const user = useSelector(selectLoggedInUser);
+    const user = useSelector(selectUserInfo);
     // console.log(user)
     useEffect(() => {
         if (user) {

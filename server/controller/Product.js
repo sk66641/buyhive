@@ -12,6 +12,7 @@ exports.createProduct = async (req, res) => {
 
 exports.fetchAllProducts = async (req, res) => {
     let query = Product.find({ deleted: { $ne: true } });
+    console.log(req.user,"logging")
 
     if (req.query._sort) {
         const sortBy = req.query._sort[0] === "-" ? req.query._sort.slice(1) : req.query._sort;

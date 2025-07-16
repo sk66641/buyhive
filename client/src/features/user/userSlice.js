@@ -16,8 +16,8 @@ export const fetchLoggedInUserOrdersAsync = createAsyncThunk(
 
 export const fetchLoggedInUserAsync = createAsyncThunk(
     'user/fetchLoggedInUser',
-    async (id) => {
-        const response = await fetchLoggedInUser(id);
+    async () => {
+        const response = await fetchLoggedInUser();
         // The value we return becomes the `fulfilled` action payload
         return response.data;
     }
@@ -34,6 +34,11 @@ export const updateUserAsync = createAsyncThunk(
 export const userSlice = createSlice({
     name: 'user',
     initialState,
+    reducers: {
+        setUserInfo: (state, action) => {
+            state.userInfo = action.payload;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchLoggedInUserOrdersAsync.pending, (state) => {
@@ -55,7 +60,6 @@ export const userSlice = createSlice({
             })
             .addCase(fetchLoggedInUserAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
-                // this info can be differenct or more from logged in user info
                 state.userInfo = action.payload;
             })
     }
@@ -63,6 +67,7 @@ export const userSlice = createSlice({
 
 export const selectUserOrders = (state) => state.user.userOrders;
 export const selectUserInfo = (state) => state.user.userInfo;
-// export const { increment, decrement, incrementByAmount } = counterSlice.actions
+
+export const { setUserInfo } = userSlice.actions;
 
 export default userSlice.reducer

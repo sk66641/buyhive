@@ -5,7 +5,7 @@ const { sendMail, invoiceTemplate } = require('../services/common');
 const { Product } = require('../model/Product');
 
 exports.fetchOrdersByUser = async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.user;
     try {
         const order = await Order.find({ user: id });
         res.status(201).json(order);

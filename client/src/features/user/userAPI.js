@@ -1,37 +1,58 @@
 export function fetchLoggedInUserOrders(userId) {
-    return new Promise(async (resolve) => {
-        const response = await fetch(`${import.meta.env.VITE_HOST}/orders/user/` + userId)
-        const data = await response.json();
-        // console.log("createUser", data)
-        resolve({ data })
-    })
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_HOST}/orders/user`, {
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
+            }
+            const data = await response.json();
+            resolve({ data });
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
+
 export function updateUser(update) {
-    return new Promise(async (resolve) => {
-        //TODO: we will not hard-code server URL here
-        // console.log(update)
-        // console.log(update,update.id)
-        const response = await fetch(`${import.meta.env.VITE_HOST}/users/` + update.id,
-            {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_HOST}/users`, {
                 method: 'PATCH',
+                credentials: 'include',
                 headers: {
                     'content-type': 'application/json',
                 },
                 body: JSON.stringify(update)
+            });
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
             }
-        )
-        const data = await response.json();
-        // console.log(data)
-        // console.log("createUser", data)
-        resolve({ data })
-    })
+            const data = await response.json();
+            resolve({ data });
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
 
-export function fetchLoggedInUser(userId) {
-    return new Promise(async (resolve) => {
-        const response = await fetch(`${import.meta.env.VITE_HOST}/users/` + userId)
-        const data = await response.json()
-        resolve({ data })
-    }
-    );
+export function fetchLoggedInUser() {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_HOST}/users`, {
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
+            }
+            const data = await response.json();
+            resolve({ data });
+        } catch (error) {
+            reject(error);
+        }
+    });
 }

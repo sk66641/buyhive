@@ -1,31 +1,33 @@
-export function createUser(userData) {
-    return new Promise(async (resolve) => {
-        //TODO: we will not hard-code server URL here
-        // console.log(userData)
-        const response = await fetch(`${import.meta.env.VITE_HOST}/auth/signup`,
-            {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify(userData)
+import { setUserInfo } from "../user/userSlice";
+
+export function createUser(userData, dispatch) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_HOST}/auth/signup`,
+                {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                }
+            )
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
             }
-        )
-        const data = await response.json();
-        // console.log("createUser", data)
-        resolve({ data })
+            const data = await response.json();
+            dispatch(setUserInfo(data));
+            resolve({ data });
+        } catch (error) {
+            reject(error);
+        }
     })
 }
 
-export function checkUser(loginInfo) {
+export function checkUser(loginInfo, dispatch) {
     return new Promise(async (resolve, reject) => {
-        // const email = loginInfo.email;
-        // const password = loginInfo.password;
-        //TODO: we will not hard-code server URL here
-        // console.log(userData)
-
-
         try {
             const response = await fetch(`${import.meta.env.VITE_HOST}/auth/login`, {
                 method: 'POST',
@@ -40,71 +42,18 @@ export function checkUser(loginInfo) {
                 throw err;
             }
             const data = await response.json();
+            dispatch(setUserInfo(data));
             resolve({ data });
         } catch (error) {
             reject(error);
         }
-        // if (data.length) {
-        //     if (password === data[0].password) {
-        //         resolve({ data: data[0] })
-        //     }
-        //     else {
-        //         reject({ message: 'invalid credentials' })
-        //     }
-        // }
-        // else {
-        //     reject({ message: 'user not found' })
-        // }
-        // console.log("createUser", data)
-        // resolve({ data })
-    })
-}
-
-export function checkToken() {
-    return new Promise(async (resolve, reject) => {
-        // const email = loginInfo.email;
-        // const password = loginInfo.password;
-        //TODO: we will not hard-code server URL here
-        // console.log(userData)
-
-
-        try {
-            const response = await fetch(`${import.meta.env.VITE_HOST}/auth`, {
-                method: 'GET',
-                credentials: 'include',
-            })
-            if (!response.ok) {
-                const err = await response.json();
-                throw err;
-            }
-            const data = await response.json();
-            // console.log("client here", data);
-            resolve({ data });
-        } catch (error) {
-            reject(error);
-        }
-        // if (data.length) {
-        //     if (password === data[0].password) {
-        //         resolve({ data: data[0] })
-        //     }
-        //     else {
-        //         reject({ message: 'invalid credentials' })
-        //     }
-        // }
-        // else {
-        //     reject({ message: 'user not found' })
-        // }
-        // console.log("createUser", data)
-        // resolve({ data })
     })
 }
 
 export function signOut() {
-    return new Promise(async (resolve) => {
-
+    return new Promise(async (resolve, reject) => {
         try {
             const response = await fetch(`${import.meta.env.VITE_HOST}/auth/logout`, {
-                method: 'GET',
                 credentials: 'include',
             })
             if (!response.ok) {
@@ -151,7 +100,7 @@ export function resetPassword(email, token, password) {
                 headers: {
                     'content-type': 'application/json',
                 },
-                body: JSON.stringify({ email, token, password})
+                body: JSON.stringify({ email, token, password })
             })
             if (!response.ok) {
                 const err = await response.json();

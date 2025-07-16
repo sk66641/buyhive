@@ -15,13 +15,12 @@ import {
     MenuItems,
 } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import { Link } from 'react-router-dom'
 import { ITEMS_PER_PAGE } from '../../../app/constants'
 import Pagination from '../../common/Pagination'
 
 const sortOptions = [
-    // { name: 'Most Popular', sort: 'reviews.length', current: true },
     { name: 'Best Rating', sort: '-rating', current: false },
     { name: 'Price: Low to High', sort: 'price', current: false },
     { name: 'Price: High to Low', sort: '-price', current: false },
@@ -387,32 +386,84 @@ function DesktopFilter({ handleFilter, filter }) {
 function ProductGrid({ products }) {
     return (
         <div className="lg:col-span-3">
-
             <div className="bg-white">
                 <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
-                    <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                        {products.map((product) => (
-                            <Link key={product.id} className='border rounded-md p-2 h-full' to={`/product-details/${product.id}`}>
-                                <div className="group relative">
-                                    <img
-                                        alt={product.imageAlt}
-                                        src={product.images}
-                                        className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
-                                    />
-                                    <div className="mt-4 flex justify-between">
+                    <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-10">
+                        {products.map((product) => {
+
+                            const hasDiscount = product.discountPercentage && product.discountPercentage > 0;
+
+                            return (
+                                <Link
+                                    key={product.id}
+                                    className="group relative flex flex-col border rounded-xl shadow-lg overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 hover:shadow-2xl transition-shadow duration-300 h-full"
+                                    to={`/product-details/${product.id}`}
+                                >
+                                    <div className="relative">
+                                        <img
+                                            alt={product.imageAlt}
+                                            src={product.images}
+                                            className="aspect-square w-full object-cover rounded-t-xl bg-gray-100 transition-transform duration-300 group-hover:scale-105"
+                                        />
+                                        {hasDiscount && (
+                                            <span className="absolute top-3 left-3 bg-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+                                                {product.discountPercentage}%
+                                            </span>
+                                        )}
+                                        {product.stock === 0 && (
+                                            <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+                                                Out of Stock
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className="flex-1 flex flex-col justify-between p-4">
                                         <div>
-                                            <h3 className="text-sm">
+                                            <h3 className="text-base font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-2 min-h-[3rem]">
                                                 {product.title}
                                             </h3>
-                                            <p className="mt-1 text-sm text-gray-500">{product.rating}</p>
+                                            <div className="flex items-center gap-2 mt-2">
+                                                <span className="flex items-center text-yellow-400">
+                                                    {/* Star icons for rating */}
+                                                    {Array.from({ length: 5 }).map((_, i) => (
+                                                        <svg
+                                                            key={i}
+                                                            className={`h-4 w-4 ${i < Math.round(product.rating) ? 'fill-yellow-400' : 'fill-gray-200'}`}
+                                                            viewBox="0 0 20 20"
+                                                        >
+                                                            <polygon points="9.9,1.1 12.3,6.9 18.6,7.6 13.8,11.8 15.2,18 9.9,14.7 4.6,18 6,11.8 1.2,7.6 7.5,6.9 " />
+                                                        </svg>
+                                                    ))}
+                                                </span>
+                                                <span className="text-xs text-gray-500 ml-1">{product.rating}</span>
+                                            </div>
                                         </div>
-                                        <p className="text-sm font-medium text-gray-900">{product.price}</p>
+                                        <div className="mt-4 flex items-end justify-between">
+                                            <div>
+                                                {hasDiscount ? (
+                                                    <div className="flex flex-col">
+                                                        <span className="text-lg font-bold text-pink-600">
+                                                            ${product.discountedPrice}
+                                                        </span>
+                                                        <span className="text-sm line-through text-gray-400">
+                                                            ${product.price}
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-lg font-bold text-gray-900">
+                                                        ${product.price}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            {product.deleted && (
+                                                <span className="text-xs font-semibold text-red-500 ml-2">
+                                                    Deleted
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                    {product.deleted && <p className='text-red-500'>Product is deleted</p>}
-                                    {product.stock === 0 && <p className='text-red-500'>Product out of stock</p>}
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

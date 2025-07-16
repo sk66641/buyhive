@@ -78,6 +78,7 @@ const authRoutes = require('./routes/Auth')
 const cartRoutes = require('./routes/Cart')
 const orderRoutes = require('./routes/Order');
 const { Order } = require('./model/Order');
+const { authMiddleware } = require('./Middleware/authMiddleware');
 // This is your test secret API key.
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -93,7 +94,7 @@ async function main() {
 }
 
 server.get('/', (req, res) => {
-  res.send({ status: "success" });
+  res.json({ status: "success" });
 })
 
 
@@ -131,13 +132,13 @@ server.post("/create-payment-intent", async (req, res) => {
 
 
 
-server.use('/products', productsRoutes.router);
-server.use('/brands', brandsRoutes.router);
-server.use('/categories', categoriesRoutes.router);
-server.use('/users', userRoutes.router);
+server.use('/products', authMiddleware, productsRoutes.router);
+server.use('/brands', authMiddleware, brandsRoutes.router);
+server.use('/categories', authMiddleware, categoriesRoutes.router);
+server.use('/users', authMiddleware, userRoutes.router);
 server.use('/auth', authRoutes.router);
-server.use('/cart', cartRoutes.router);
-server.use('/orders', orderRoutes.router);
+server.use('/cart', authMiddleware, cartRoutes.router);
+server.use('/orders', authMiddleware, orderRoutes.router);
 
 server.listen(port, () => {
   console.log(`server running at http://localhost:${port}`);

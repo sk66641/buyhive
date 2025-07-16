@@ -5,7 +5,8 @@ const productSchema = new mongoose.Schema({
     description: { type: String, required: true },
     details: { type: String, required: true },
     price: { type: Number, min: [1, 'price can\'t be less than 1'] },
-    discountPercentage: { type: Number, min: [0, 'discount can\'t be less than 0'], max: [100, 'discount can\'t be more than 100'] },
+    discountPercentage: { type: Number, min: [0, 'discount can\'t be less than 0'], max: [100, 'discount can\'t be more than 100'], default: 0 },
+    discountedPrice: { type: Number },
     rating: { type: Number, min: [1, 'rating can\'t be less than 1'], max: [5, 'rating can\'t be more than 5'] },
     stock: { type: Number, min: [0, 'stock can\'t be less than 0'], default: 0 },
     brand: { type: String, required: true },
@@ -27,6 +28,10 @@ productSchema.set('toJSON', {
     virtuals: true,
     transform: function (doc, ret) { delete ret._id }
 })
+
+productSchema.pre('save', () => {
+    this.discountedPrice = this.price - (this.price * this.discountPercentage / 100);
+});
 
 exports.Product = mongoose.model('Product', productSchema);
 

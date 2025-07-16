@@ -1,51 +1,67 @@
 export function fetchAllProducts() {
-    return new Promise(async (resolve) => {
-        //TODO: we will not hard-code server URL here
-        const response = await fetch(`${import.meta.env.VITE_HOST}/products`)
-        const data = await response.json();
-        resolve({ data })
-    })
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_HOST}/products`,{
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
+            }
+            const data = await response.json();
+            resolve({ data });
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
+
 export function fetchProductsById(id) {
-    return new Promise(async (resolve) => {
-        //TODO: we will not hard-code server URL here
-        const response = await fetch(`${import.meta.env.VITE_HOST}/products/${id}`)
-        const data = await response.json();
-        resolve({ data })
-    })
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_HOST}/products/${id}`,{
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
+            }
+            const data = await response.json();
+            resolve({ data });
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
+
 export function fetchProductsByFilters(filter, sort, pagination) {
-    // console.log("fetchProductsByFilters", filter)
-    // filter = {"category":["smartphone","laptops"]}
-    // sort ={_sort: "price", _order: "desc/asc"}
-    // pagination = {_page: 1, _per_page:10}
-    // TODO : on server we will support multi values
-    console.log(filter)
     let queryString = '';
     for (let key in filter) {
         const categoryValues = filter[key];
         if (categoryValues.length > 0) {
-            // const lastCategoryValue = categoryValues[categoryValues.length - 1];
-            queryString += `${key}=${categoryValues}&`
-            console.log("filter query", { queryString });
+            queryString += `${key}=${categoryValues}&`;
         }
     }
-    console.log("filter query", { queryString });
     for (let key in sort) {
-        queryString += `${key}=${sort[key]}&`
-        // console.log("sort query", { queryString });
+        queryString += `${key}=${sort[key]}&`;
     }
     for (let key in pagination) {
         queryString += `${key}=${pagination[key]}&`;
-        // console.log("pagination query", { pagination })
     }
 
-    return new Promise(async (resolve) => {
-        //TODO: we will not hard-code server URL here
-        const response = await fetch(`${import.meta.env.VITE_HOST}/products?` + queryString)
-        const data = await response.json()
-        resolve({ data: { products: data, totalItems: data.items } })
-        // resolve({ data });
-    }
-    );
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_HOST}/products?` + queryString, {
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
+            }
+            const data = await response.json();
+            resolve({ data: { products: data, totalItems: data.items } });
+        } catch (error) {
+            reject(error);
+        }
+    });
 }

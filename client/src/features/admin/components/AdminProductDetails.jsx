@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchProductsByIdAsync, selectedProductById } from '../../product/productSlice'
 import { useParams } from 'react-router-dom'
 import { addToCartAsync } from '../../cart/CartSlice'
-import { selectLoggedInUser } from '../../auth/authSlice'
+import { selectUserInfo } from '../../user/userSlice'
+// import { selectLoggedInUser } from '../../auth/authSlice'
 
 
 const highlights = [
@@ -28,7 +29,7 @@ export default function AdminProductDetails() {
 
   const dispatch = useDispatch();
   const params = useParams();
-  const user = useSelector(selectLoggedInUser);
+  const user = useSelector(selectUserInfo);
   // console.log("user", user)
   useEffect(() => {
     dispatch(fetchProductsByIdAsync(params.id));

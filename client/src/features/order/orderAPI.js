@@ -1,61 +1,68 @@
 export function createOrder(orderData) {
-    return new Promise(async (resolve) => {
-        const response = await fetch(`${import.meta.env.VITE_HOST}/orders`,
-            {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_HOST}/orders`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'content-type': 'application/json',
                 },
                 body: JSON.stringify(orderData)
+            });
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
             }
-        )
-        const data = await response.json();
-        resolve({ data })
-    })
+            const data = await response.json();
+            resolve({ data });
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
 
-
 export function fetchAllOrders(sort, pagination) {
-    // console.log("fetchProductsByFilters", filter)
-    // filter = {"category":["smartphone","laptops"]}
-    // sort ={_sort: "price", _order: "desc/asc"}
-    // pagination = {_page: 1, _per_page:10}
-    // TODO : on server we will support multi values
     let queryString = '';
-    // for (let key in filter) {
-    //     const categoryValues = filter[key];
-    //     if (categoryValues.length > 0) {
-    //         const lastCategoryValue = categoryValues[categoryValues.length - 1];
-    //         queryString += `${key}=${lastCategoryValue}&`
-    //         console.log("filter query", { queryString });
-    //     }
-    // }
     for (let key in sort) {
-        queryString += `${key}=${sort[key]}&`
-        // console.log("sort query", { queryString });
+        queryString += `${key}=${sort[key]}&`;
     }
     for (let key in pagination) {
         queryString += `${key}=${pagination[key]}&`;
-        // console.log("pagination query", { pagination })
     }
-    return new Promise(async (resolve) => {
-        //TODO: we will not hard-code server URL here
-        const response = await fetch(`${import.meta.env.VITE_HOST}/orders?` + queryString)
-        const data = await response.json()
-        resolve({ data: { orders: data, totalOrders: data.items } })
-        // resolve({ data });
-    }
-    );
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_HOST}/orders?` + queryString, {
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
+            }
+            const data = await response.json();
+            resolve({ data: { orders: data, totalOrders: data.items } });
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
 
 export function updateOrder(order) {
-    return new Promise(async (resolve) => {
-        const response = await fetch(`${import.meta.env.VITE_HOST}/orders/` + order.id, {
-            method: 'PATCH',
-            body: JSON.stringify(order),
-            headers: { 'content-type': 'application/json' },
-        });
-        const data = await response.json();
-        resolve({ data });
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_HOST}/orders/` + order.id, {
+                method: 'PATCH',
+                credentials: 'include',
+                body: JSON.stringify(order),
+                headers: { 'content-type': 'application/json' },
+            });
+            if (!response.ok) {
+                const err = await response.json();
+                throw err;
+            }
+            const data = await response.json();
+            resolve({ data });
+        } catch (error) {
+            reject(error);
+        }
     });
 }

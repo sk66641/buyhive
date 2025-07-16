@@ -4,11 +4,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
 import CartPage from './pages/CartPage'
-import Checkout from './pages/CheckOut'
+import Checkout from './pages/CheckOutPage'
 import ProductDetailsPage from './pages/ProductDetailsPage'
 import Protected from './features/auth/component/Protected'
 import { useDispatch, useSelector } from 'react-redux'
-import { checkTokenAsync, selectLoggedInUser } from './features/auth/authSlice'
+// import { sele } from './features/auth/authSlice'
 import { fetchItemsByUserIdAsync } from './features/cart/CartSlice'
 import PageNotFound from './pages/404'
 import OrderSuccess from './pages/OrderSuccess'
@@ -116,19 +116,17 @@ const router = createBrowserRouter([
 const App = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(checkTokenAsync());
-  }, [dispatch])
+  // useEffect(() => {
+  //   dispatch(checkTokenAsync());
+  // }, [dispatch])
 
 
-  const user = useSelector(selectLoggedInUser);
+  // const user = useSelector(selectLoggedInUser);
   // console.log("app.jsx",user)
   useEffect(() => {
-    if (user) {
-      dispatch(fetchItemsByUserIdAsync(user.id));
-      dispatch(fetchLoggedInUserAsync(user.id))
-    }
-  }, [dispatch, user])
+      dispatch(fetchItemsByUserIdAsync());
+      dispatch(fetchLoggedInUserAsync())
+  }, [dispatch])
 
   return (
     <RouterProvider router={router} />
