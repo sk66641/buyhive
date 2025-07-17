@@ -6,15 +6,15 @@ const initialState = {
         isCreatingUser: false,
         isCheckingUser: false,
         isSigningOut: false,
-        isSendingResetPasswordRequest: false, // not used yet
-        isResettingPassword: false, // not used yet
+        isSendingResetPasswordRequest: false,
+        isResettingPassword: false,
     },
-    errors:{
+    errors: {
         ErrorCreatingUser: null,
         ErrorCheckingUser: null,
         ErrorSigningOut: null,
-        ErrorSendingResetPasswordRequest: null, // not used yet
-        ErrorResettingPassword: null, // not used yet
+        ErrorSendingResetPasswordRequest: null,
+        ErrorResettingPassword: null,
     }
 }
 
@@ -96,6 +96,7 @@ export const authSlice = createSlice({
 
             // signOutAsync
             .addCase(signOutAsync.pending, (state) => {
+                state.errors.ErrorSigningOut = null;
                 state.status.isSigningOut = true;
             })
             .addCase(signOutAsync.fulfilled, (state, action) => {
@@ -108,6 +109,7 @@ export const authSlice = createSlice({
 
             // resetPasswordRequestAsync
             .addCase(resetPasswordRequestAsync.pending, (state) => {
+                state.errors.ErrorSendingResetPasswordRequest = null;
                 state.status.isSendingResetPasswordRequest = true;
             })
             .addCase(resetPasswordRequestAsync.fulfilled, (state, action) => {
@@ -120,6 +122,7 @@ export const authSlice = createSlice({
 
             // resetPasswordAsync
             .addCase(resetPasswordAsync.pending, (state) => {
+                state.errors.ErrorResettingPassword = null;
                 state.status.isResettingPassword = true;
             })
             .addCase(resetPasswordAsync.fulfilled, (state, action) => {

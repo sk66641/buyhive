@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { selectUserInfo, updateUserAsync } from '../user/userSlice';
 import { useEffect, useState } from 'react';
 import { createOrderAsync, resetOrderErrors, selectCurrentOrder, selectErrorCreatingOrder, selectIsCreatingOrder } from '../order/orderSlice';
+import toast, { Toaster } from 'react-hot-toast';
 
 function Checkout() {
   const {
@@ -423,6 +424,7 @@ function Checkout() {
           </div>
         </div>
       </div>
+      <Toaster />
     </>
   );
 }

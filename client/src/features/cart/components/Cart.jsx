@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { deleteItemFromCartAsync, resetCartErrors, selectErrorDeletingItem, selectErrorUpdatingCart, selectIsDeletingItem, selectIsUpdatingCart, selectItems, updateCartAsync } from '../CartSlice'
 import { useEffect, useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast'
 
 export default function Cart() {
 
@@ -88,7 +89,7 @@ export default function Cart() {
                                                                     type="button"
                                                                     disabled={isDeletingItem && deletingItemId === item.id}
                                                                     className={`font-medium text-indigo-600 hover:text-indigo-500 ${isDeletingItem && deletingItemId === item.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                                                                    >
+                                                                >
                                                                     {isDeletingItem && deletingItemId === item.id ? "Removing..." : "Remove"}
                                                                 </button>
                                                             </div>
@@ -141,6 +142,7 @@ export default function Cart() {
                         </div>
                     </div>
                 </div>}
+            <Toaster />
         </>
     )
 }

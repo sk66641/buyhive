@@ -2,10 +2,11 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink } from 'react-router-dom'
-import { selectItems } from '../cart/CartSlice'
-import { selectIsFetchingLoggedInUser, selectUserInfo } from '../user/userSlice'
+import { resetCartErrors, selectItems } from '../cart/CartSlice'
+import { selectUserInfo } from '../user/userSlice'
 import { selectErrorSigningOut, selectIsSigningOut, signOutAsync } from '../auth/authSlice'
 import toast, { Toaster } from 'react-hot-toast'
+import { useEffect } from 'react';
 
 const user = {
     name: 'Tom Cook',
@@ -20,6 +21,7 @@ const navigation = [
     { name: 'Orders', href: '/orders', current: false },
 ]
 const userNavigation = [
+    { name: 'Home', link: '/' },
     { name: 'My Profile', link: '/profile' },
     { name: 'My Orders', link: '/orders' },
 ]
@@ -53,10 +55,12 @@ export default function Navbar({ children }) {
             });
     }
 
-    if (ErrorSigningOut) {
-        toast.error(ErrorSigningOut);
-        // dispatch(resetAuthErrors());
-    }
+    useEffect(() => {
+        if (ErrorSigningOut) {
+            toast.error(ErrorSigningOut);
+        }
+        dispatch(resetCartErrors());
+    }, [ErrorSigningOut, dispatch]);
 
     return (
         <>
@@ -173,7 +177,7 @@ export default function Navbar({ children }) {
                     </div>
 
                     <DisclosurePanel className="md:hidden">
-                        <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+                        {/* <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
                             {navigation.map((item) => (
                                 <DisclosureButton
                                     key={item.name}
@@ -188,7 +192,7 @@ export default function Navbar({ children }) {
                                     {item.name}
                                 </DisclosureButton>
                             ))}
-                        </div>
+                        </div> */}
                         <div className="border-t border-gray-700 pt-4 pb-3">
                             <div className="flex items-center px-5">
                                 <div className="shrink-0">
@@ -216,7 +220,7 @@ export default function Navbar({ children }) {
                                     <DisclosureButton
                                         key={item.name}
                                         as="a"
-                                        href={item.href}
+                                        href={item.link}
                                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                                     >
                                         {item.name}

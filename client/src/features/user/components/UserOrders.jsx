@@ -1,17 +1,26 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchUserOrdersAsync, selectIsFetchingUserOrders, selectUserInfo, selectUserOrders } from '../userSlice';
+import { fetchUserOrdersAsync, selectErrorFetchingUserOrders, selectIsFetchingUserOrders, selectUserInfo, selectUserOrders } from '../userSlice';
+import toast, { Toaster } from 'react-hot-toast';
+import { resetAuthErrors } from '../../auth/authSlice';
 
 const UserOrders = () => {
 
   const dispatch = useDispatch();
-  const user = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
   const isFetchingUserOrders = useSelector(selectIsFetchingUserOrders);
+  const ErrorFetchingUserOrders = useSelector(selectErrorFetchingUserOrders);
 
   useEffect(() => {
-    dispatch(fetchUserOrdersAsync(user.id))
-  }, [dispatch, user])
+    dispatch(fetchUserOrdersAsync())
+  }, [dispatch])
+
+  useEffect(() => {
+    if (ErrorFetchingUserOrders) {
+      toast.error(ErrorFetchingUserOrders);
+    }
+    dispatch(resetAuthErrors());
+  }, [ErrorFetchingUserOrders, dispatch]);
 
   if (isFetchingUserOrders) {
     return (
@@ -20,7 +29,7 @@ const UserOrders = () => {
       </div>
     );
   }
-
+  // if you use useEffect after this, you'll get an error: "Rendered fewer hooks than expected. This may be caused by an accidental early return statement."
 
   return (
     <>
@@ -113,6 +122,7 @@ const UserOrders = () => {
           </div>
         )
       }) : "No orders found."}
+      <Toaster />
     </>
 
   )

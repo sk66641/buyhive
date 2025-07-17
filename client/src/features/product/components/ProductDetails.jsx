@@ -6,6 +6,7 @@ import { fetchProductsByIdAsync, selectedProductById, selectErrorFetchingProduct
 import { Link, useParams } from 'react-router-dom'
 import { addToCartAsync, resetCartErrors, selectErrorAddingToCart, selectIsAddingToCart, selectItems } from '../../cart/CartSlice'
 import { selectUserInfo } from '../../user/userSlice'
+import toast, { Toaster } from 'react-hot-toast'
 
 
 function classNames(...classes) {
@@ -294,6 +295,7 @@ export default function ProductDetails() {
               </div>
             </div>}
         </div>}
+      <Toaster />
     </>
   )
 }

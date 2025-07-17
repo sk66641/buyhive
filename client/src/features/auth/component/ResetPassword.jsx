@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
-import { resetPasswordAsync, selectIsResettingPassword } from "../authSlice";
+import { resetAuthErrors, resetPasswordAsync, selectErrorResettingPassword, selectIsResettingPassword } from "../authSlice";
+import { useEffect } from "react";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function ResetPassword() {
 
@@ -18,6 +20,14 @@ export default function ResetPassword() {
     const email = query.get('email');
 
     const isResettingPassword = useSelector(selectIsResettingPassword);
+    const ErrorResettingPassword = useSelector(selectErrorResettingPassword);
+
+    useEffect(() => {
+        if (ErrorResettingPassword) {
+            toast.error(ErrorResettingPassword);
+        }
+        dispatch(resetAuthErrors());
+    }, [ErrorResettingPassword, dispatch]);
 
     return (
         <>
@@ -37,7 +47,6 @@ export default function ResetPassword() {
                         <p className="text-md text-gray-600 text-center mb-6">
                             Enter your new password below to regain access to your account.
                         </p>
-                        {/* {error && <p className="text-red-500 text-center">{error.message}</p>} */}
                     </div>
 
                     <form noValidate onSubmit={handleSubmit((data) => {
@@ -101,6 +110,7 @@ export default function ResetPassword() {
                         </div>
                     </form>
                 </div>
+                <Toaster />
             </div>
         </>
     )

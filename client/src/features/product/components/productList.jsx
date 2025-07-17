@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom'
 import { ITEMS_PER_PAGE } from '../../../app/constants'
 import Pagination from '../../common/Pagination'
 import { selectUserInfo } from '../../user/userSlice'
+import toast, { Toaster } from 'react-hot-toast'
 
 const sortOptions = [
     { name: 'Best Rating', sort: '-rating', id: "best-rating" },
@@ -536,6 +537,7 @@ function ProductGrid({ products }) {
                         </div>
                     </div>}
             </div>
+            <Toaster />
         </div>
     )
 }

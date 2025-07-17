@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
-import { resetPasswordRequestAsync, selectIsSendingResetPasswordRequest } from "../authSlice";
+import { resetAuthErrors, resetPasswordRequestAsync, selectErrorSendingResetPasswordRequest, selectIsSendingResetPasswordRequest } from "../authSlice";
+import toast, { Toaster } from 'react-hot-toast';
+import { useEffect } from "react";
 
 export default function ForgotPassword() {
 
@@ -12,6 +14,14 @@ export default function ForgotPassword() {
         formState: { errors },
     } = useForm();
     const isSendingResetPasswordRequest = useSelector(selectIsSendingResetPasswordRequest);
+    const ErrorSendingResetPasswordRequest = useSelector(selectErrorSendingResetPasswordRequest);
+
+    useEffect(() => {
+        if (ErrorSendingResetPasswordRequest) {
+            toast.error(ErrorSendingResetPasswordRequest);
+        }
+        dispatch(resetAuthErrors());
+    }, [ErrorSendingResetPasswordRequest, dispatch]);
 
     return (
         <>
@@ -31,7 +41,6 @@ export default function ForgotPassword() {
                         <p className="text-gray-500 text-center mb-6">
                             Enter your email address and we'll send you a link to reset your password.
                         </p>
-                        {/* {error && <p className="text-red-500 text-center">{error.message}</p>} */}
                     </div>
 
                     <form noValidate onSubmit={handleSubmit((data) => {
@@ -82,6 +91,7 @@ export default function ForgotPassword() {
                         </p>
                     </div>
                 </div>
+                <Toaster />
             </div>
         </>
     )
