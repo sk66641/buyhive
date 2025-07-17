@@ -23,7 +23,7 @@ export default function Cart() {
     }
     const handleRemove = (id) => {
         setDeletingItemId(id);
-        dispatch(deleteItemFromCartAsync(id)).unwrap().finally(() => {
+        dispatch(deleteItemFromCartAsync(id)).unwrap().then(()=>toast.success("Item successfully removed")).finally(() => {
             setDeletingItemId(null)
         });
     }
