@@ -1,2 +1,0 @@
-pagination previous and next
-using same orders for checkout and admin orders

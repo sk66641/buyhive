@@ -5,7 +5,8 @@ exports.fetchAllBrands = async (req, res) => {
         const brands = await Brand.find({});
         res.status(200).json(brands);
     } catch (error) {
-        res.status(400).json(error);
+        console.log("Error fetching brands:", error);
+        res.status(400).json({ message: 'Error fetching brands' });
     }
 }
 
@@ -15,6 +16,7 @@ exports.createBrand = async (req, res) => {
         const response = await brand.save();
         res.status(201).json(response);
     } catch (error) {
-        res.status(400).json(error);
+        console.log("Error creating brand:", error);
+        res.status(400).json({ message: 'Error creating brand' });
     }
 }

@@ -9,7 +9,8 @@ exports.fetchCartByUser = async (req, res) => {
         const filteredCart = cart.filter(item => item.product !== null);
         res.status(201).json(filteredCart);
     } catch (error) {
-        res.status(400).json(error);
+        console.error("Error fetching cart by user:", error);
+        res.status(400).json({ message: 'Error fetching cart' });
     }
 }
 
@@ -20,7 +21,8 @@ exports.addToCart = async (req, res) => {
         const finalCart = await getCart.populate('product');
         res.status(201).json(finalCart);
     } catch (error) {
-        res.status(400).json(error);
+        console.error("Error adding to cart:", error);
+        res.status(400).json({ message: 'Error adding to cart' });
     }
 }
 
@@ -29,10 +31,10 @@ exports.deleteFromCart = async (req, res) => {
 
     try {
         const cart = await Cart.findByIdAndDelete(id);
-        // const finalResponse = await response.populate('product');
         res.status(200).json(cart);
     } catch (error) {
-        res.status(400).json(error);
+        console.error("Error deleting from cart:", error);
+        res.status(400).json({ message: 'Error deleting from cart' });
     }
 }
 
@@ -42,6 +44,7 @@ exports.updateCart = async (req, res) => {
         const cart = await Cart.findByIdAndUpdate(id, req.body, { new: true }).populate('product user');
         res.status(201).json(cart);
     } catch (error) {
-        res.status(400).json(error);
+        console.error("Error updating cart:", error);
+        res.status(400).json({ message: 'Error updating cart' });
     }
 }

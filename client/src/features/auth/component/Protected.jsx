@@ -1,11 +1,12 @@
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { selectUserInfo } from "../../user/userSlice";
+import { Navigate, useLocation } from "react-router-dom";
+import { selectIsFetchingLoggedInUser, selectUserInfo } from "../../user/userSlice";
 
 const Protected = ({ children }) => {
     const user = useSelector(selectUserInfo);
+    const location = useLocation();
     if (!user) {
-        return <Navigate to={'/login'} replace={true}></Navigate>;
+        return <Navigate to="/auth" state={{ from: location }} replace={true} />;
     }
     return children;
 }

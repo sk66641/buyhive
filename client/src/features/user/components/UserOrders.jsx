@@ -1,22 +1,30 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-// import { selectLoggedInUser } from '../../auth/authSlice';
-import { fetchLoggedInUserOrdersAsync, selectUserInfo, selectUserOrders } from '../userSlice';
+import { fetchUserOrdersAsync, selectIsFetchingUserOrders, selectUserInfo, selectUserOrders } from '../userSlice';
 
 const UserOrders = () => {
 
   const dispatch = useDispatch();
   const user = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
+  const isFetchingUserOrders = useSelector(selectIsFetchingUserOrders);
 
   useEffect(() => {
-    dispatch(fetchLoggedInUserOrdersAsync(user.id))
+    dispatch(fetchUserOrdersAsync(user.id))
   }, [dispatch, user])
+
+  if (isFetchingUserOrders) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
 
   return (
     <>
-      {orders.map((order) => {
+      {orders.length > 0 ? orders.map((order) => {
         return (
           <div key={order.id} className="lg:col-span-2">
             <div className="mx-auto mt-12 bg-white max-w-7xl px-0 sm:px-0 lg:px-0">
@@ -104,7 +112,7 @@ const UserOrders = () => {
             </div>
           </div>
         )
-      })}
+      }) : "No orders found."}
     </>
 
   )

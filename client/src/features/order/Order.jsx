@@ -14,9 +14,13 @@ export default function Cart() {
     const handleRemove = (id) => {
         dispatch(deleteItemFromCartAsync(id));
     }
+
+    if (items.length === 0) {
+        return <Navigate to={'/'} replace={true}></Navigate>
+    }
+
     return (
         <>
-            {items.length === 0 && <Navigate to={'/'} replace={true}></Navigate>}
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-full flex-col bg-white shadow-xl">
                     <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">

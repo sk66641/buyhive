@@ -1,23 +1,28 @@
 const mongoose = require('mongoose');
 
-const productSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    details: { type: String, required: true },
-    price: { type: Number, min: [1, 'price can\'t be less than 1'] },
-    discountPercentage: { type: Number, min: [0, 'discount can\'t be less than 0'], max: [100, 'discount can\'t be more than 100'], default: 0 },
-    discountedPrice: { type: Number },
-    rating: { type: Number, min: [1, 'rating can\'t be less than 1'], max: [5, 'rating can\'t be more than 5'] },
-    stock: { type: Number, min: [0, 'stock can\'t be less than 0'], default: 0 },
-    brand: { type: String, required: true },
-    category: { type: String, required: true },
-    thumbnail: { type: String, required: true },
-    images: { type: [String], required: true },
-    colors: { type: [mongoose.Schema.Types.Mixed] },
-    sizes: { type: [mongoose.Schema.Types.Mixed] },
-    highlights: { type: [String], required: true },
-    deleted: { type: Boolean, default: false },
-})
+const productSchema = new mongoose.Schema(
+    {
+        title: { type: String, required: true },
+        description: { type: String, required: true },
+        details: { type: String, required: true },
+        price: { type: Number, min: [1, 'price can\'t be less than 1'] },
+        discountPercentage: { type: Number, min: [0, 'discount can\'t be less than 0'], max: [100, 'discount can\'t be more than 100'], default: 0 },
+        discountedPrice: { type: Number },
+        rating: { type: Number, min: [1, 'rating can\'t be less than 1'], max: [5, 'rating can\'t be more than 5'] },
+        stock: { type: Number, min: [0, 'stock can\'t be less than 0'], default: 0 },
+        brand: { type: String, required: true },
+        category: { type: String, required: true },
+        thumbnail: { type: String, required: true },
+        images: { type: [String], required: true },
+        colors: { type: [mongoose.Schema.Types.Mixed] },
+        sizes: { type: [mongoose.Schema.Types.Mixed] },
+        highlights: { type: [String], required: true },
+        deleted: { type: Boolean, default: false },
+    },
+    {
+        timestamps: true,
+    }
+);
 
 const virtual = productSchema.virtual('id');
 virtual.get(function () {

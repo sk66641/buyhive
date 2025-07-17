@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateCartAsync, deleteItemFromCartAsync, selectItems } from '../cart/CartSlice';
 import { useForm } from 'react-hook-form';
 import { selectUserInfo, updateUserAsync } from '../user/userSlice';
-import { useState } from 'react';
-import { createOrderAsync, selectCurrentOrder } from '../order/orderSlice';
+import { useEffect, useState } from 'react';
+import { createOrderAsync, resetOrderErrors, selectCurrentOrder, selectErrorCreatingOrder, selectIsCreatingOrder } from '../order/orderSlice';
 
 function Checkout() {
   const {
@@ -13,10 +13,14 @@ function Checkout() {
     reset,
     formState: { errors },
   } = useForm();
+  const dispatch = useDispatch();
+
   const user = useSelector(selectUserInfo);
   const items = useSelector(selectItems);
   const currentOrder = useSelector(selectCurrentOrder);
-  const dispatch = useDispatch();
+  const isCreatingOrder = useSelector(selectIsCreatingOrder);
+  const ErrorCreatingOrder = useSelector(selectErrorCreatingOrder);
+
   const totalAmount = items
     .reduce((amount, item) => item.product.discountedPrice * item.quantity + amount, 0)
     .toFixed(2);
@@ -47,6 +51,14 @@ function Checkout() {
     const order = { items, selectedAddress, totalAmount, totalItems, user: user.id, paymentMethod, status: 'pending' };
     dispatch(createOrderAsync(order));
   }
+
+  useEffect(() => {
+    if (ErrorCreatingOrder) {
+      toast.error(ErrorCreatingOrder);
+    }
+    dispatch(resetOrderErrors());
+  }, [ErrorCreatingOrder]);
+
   return (
     <>
       {items.length === 0 && <Navigate to={'/'} replace={true}></Navigate>}
@@ -374,12 +386,22 @@ function Checkout() {
                   </div>
                   <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                   <div className="mt-6">
-                    <div
+                    <button
                       onClick={handleOrder}
-                      className="flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-700"
+                      type='button'
+                      disabled={isCreatingOrder}
+                      className="flex w-full cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-700"
                     >
-                      Order Now
-                    </div>
+                      {isCreatingOrder ? (
+                        <span className="flex items-center gap-2">
+                          <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                          </svg>
+                          Placing Order...
+                        </span>
+                      ) : "Place Order"}
+                    </button>
                   </div>
                   <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                     <p>

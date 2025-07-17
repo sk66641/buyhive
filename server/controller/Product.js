@@ -6,7 +6,8 @@ exports.createProduct = async (req, res) => {
         const response = await product.save();
         res.status(201).json(response);
     } catch (error) {
-        res.status(400).json(error);
+        console.error("Error creating product:", error);
+        res.status(400).json({ message: 'Error creating product' });
     }
 }
 
@@ -14,7 +15,6 @@ exports.fetchAllProducts = async (req, res) => {
     let query;
     if (req?.user?.role === 'admin') {
         query = Product.find();
-        console.log("i ran")
     } else {
         query = Product.find({ deleted: { $ne: true } });
     }
@@ -44,7 +44,8 @@ exports.fetchAllProducts = async (req, res) => {
         const products = await query.exec();
         res.status(200).send({ items: totalDocs, data: products });
     } catch (error) {
-        res.status(400).json(error);
+        console.error("Error fetching all products:", error);
+        res.status(400).json({ message: 'Error fetching all products' });
     }
 }
 
@@ -60,7 +61,8 @@ exports.fetchProductById = async (req, res) => {
         const product = await query.exec();
         res.status(200).json(product);
     } catch (error) {
-        res.status(400).json(error);
+        console.error("Error fetching product by ID:", error);
+        res.status(400).json({ message: 'Error fetching product' });
     }
 }
 
@@ -70,7 +72,8 @@ exports.updateProduct = async (req, res) => {
         const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
         res.status(200).json(updatedProduct);
     } catch (error) {
-        res.status(400).json(error);
+        console.error("Error updating product:", error);
+        res.status(400).json({ message: 'Error updating product' });
     }
 }
 

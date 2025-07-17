@@ -1,4 +1,4 @@
-export function fetchLoggedInUserOrders(userId) {
+export function fetchUserOrders(userId) {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await fetch(`${import.meta.env.VITE_HOST}/orders/user`, {
@@ -42,6 +42,7 @@ export function updateUser(update) {
 export function fetchLoggedInUser() {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log("Fetching logged in user");
             const response = await fetch(`${import.meta.env.VITE_HOST}/users`, {
                 credentials: 'include',
             });

@@ -75,7 +75,7 @@ export default function ForgotPassword() {
                         <div className="w-full border-t border-gray-200 mb-4"></div>
                         <p className="text-center text-sm text-gray-500">
                             Back to{' '}
-                            <Link to="/login" className="font-semibold text-indigo-600 hover:text-pink-500 transition-colors">
+                            <Link to="/auth" className="font-semibold text-indigo-600 hover:text-pink-500 transition-colors">
                                 Login
                             </Link>
                             {' '}Page

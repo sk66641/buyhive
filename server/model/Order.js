@@ -6,7 +6,7 @@ const orderSchema = new mongoose.Schema(
         totalAmount: { type: Number, required: true },
         totalItems: { type: Number, required: true },
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-        paymentMethod: { type: String, required: true, default: "cash", enum: ['cash', 'card']  },
+        paymentMethod: { type: String, required: true, default: "cash", enum: ['cash', 'card'] },
         status: { type: String, default: "pending", required: true },
         paymentStatus: { type: String, default: "pending" },
         selectedAddress: { type: Object, required: true },
@@ -14,7 +14,8 @@ const orderSchema = new mongoose.Schema(
     },
     {
         timestamps: true,
-    });
+    }
+);
 
 const virtual = orderSchema.virtual('id');
 virtual.get(function () {

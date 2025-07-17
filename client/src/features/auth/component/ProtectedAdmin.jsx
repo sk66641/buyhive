@@ -5,7 +5,7 @@ import { selectUserInfo } from "../../user/userSlice";
 const ProtectedAdmin = ({ children }) => {
     const user = useSelector(selectUserInfo);
     if (!user) {
-        return <Navigate to={'/login'} replace={true}></Navigate>;
+        return <Navigate to={'/auth'} replace={true}></Navigate>;
     }
     if (user && user.role === 'user') {
         return <Navigate to={'/'} replace={true}></Navigate>;

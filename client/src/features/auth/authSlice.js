@@ -1,16 +1,21 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { checkUser, createUser, signOut, resetPasswordRequest, resetPassword } from './authAPI'
-import { updateUser } from '../user/userAPI'
 
 const initialState = {
     status: {
         isCreatingUser: false,
         isCheckingUser: false,
-        isUpdatingUser: false,
         isSigningOut: false,
-        isSendingResetPasswordRequest: false,
-        isResettingPassword: false,
+        isSendingResetPasswordRequest: false, // not used yet
+        isResettingPassword: false, // not used yet
     },
+    errors:{
+        ErrorCreatingUser: null,
+        ErrorCheckingUser: null,
+        ErrorSigningOut: null,
+        ErrorSendingResetPasswordRequest: null, // not used yet
+        ErrorResettingPassword: null, // not used yet
+    }
 }
 
 export const createUserAsync = createAsyncThunk(
@@ -26,24 +31,8 @@ export const checkUserAsync = createAsyncThunk(
     async (loginInfo, thunkAPI) => {
         const { dispatch } = thunkAPI;
         const response = await checkUser(loginInfo, dispatch);
-        // console.log("checkUserAsync response", response);
         return response.data;
     })
-
-// export const checkTokenAsync = createAsyncThunk(
-//     'user/checkToken',
-//     async () => {
-//         const response = await checkToken();
-//         return response.data;
-//     })
-
-// export const updateUserAsync = createAsyncThunk(
-//     'user/updateUser',
-//     async (update) => {
-//         const response = await updateUser(update);
-//         return response.data;
-//     }
-// );
 
 export const signOutAsync = createAsyncThunk(
     'user/signOut',
@@ -72,46 +61,38 @@ export const resetPasswordAsync = createAsyncThunk(
 export const authSlice = createSlice({
     name: 'user',
     initialState,
+    reducers: {
+        resetAuthErrors: (state) => {
+            state.errors = initialState.errors;
+        }
+    },
     extraReducers: (builder) => {
         builder
             // createUserAsync
             .addCase(createUserAsync.pending, (state) => {
+                state.errors.ErrorCreatingUser = null;
                 state.status.isCreatingUser = true;
             })
             .addCase(createUserAsync.fulfilled, (state, action) => {
                 state.status.isCreatingUser = false;
             })
             .addCase(createUserAsync.rejected, (state, action) => {
+                state.errors.ErrorCreatingUser = action.error.message;
                 state.status.isCreatingUser = false;
             })
 
             // checkUserAsync
             .addCase(checkUserAsync.pending, (state) => {
+                state.errors.ErrorCheckingUser = null;
                 state.status.isCheckingUser = true;
             })
             .addCase(checkUserAsync.fulfilled, (state, action) => {
                 state.status.isCheckingUser = true;
             })
             .addCase(checkUserAsync.rejected, (state, action) => {
+                state.errors.ErrorCheckingUser = action.error.message;
                 state.status.isCheckingUser = false;
             })
-
-            // checkTokenAsync
-            // .addCase(checkTokenAsync.fulfilled, (state, action) => {
-            //     state.loggedInUser = action.payload;
-            // })
-
-            // updateUserAsync
-            // .addCase(updateUserAsync.pending, (state) => {
-            //     state.status.isUpdatingUser = true;
-            // })
-            // .addCase(updateUserAsync.fulfilled, (state, action) => {
-            //     state.status.isUpdatingUser = false;
-            //     state.loggedInUser = action.payload;
-            // })
-            // .addCase(updateUserAsync.rejected, (state, action) => {
-            //     state.status.isUpdatingUser = false;
-            // })
 
             // signOutAsync
             .addCase(signOutAsync.pending, (state) => {
@@ -121,6 +102,7 @@ export const authSlice = createSlice({
                 state.status.isSigningOut = false;
             })
             .addCase(signOutAsync.rejected, (state, action) => {
+                state.errors.ErrorSigningOut = action.error.message;
                 state.status.isSigningOut = false;
             })
 
@@ -132,6 +114,7 @@ export const authSlice = createSlice({
                 state.status.isSendingResetPasswordRequest = false;
             })
             .addCase(resetPasswordRequestAsync.rejected, (state, action) => {
+                state.errors.ErrorSendingResetPasswordRequest = action.error.message;
                 state.status.isSendingResetPasswordRequest = false;
             })
 
@@ -143,17 +126,24 @@ export const authSlice = createSlice({
                 state.status.isResettingPassword = false;
             })
             .addCase(resetPasswordAsync.rejected, (state, action) => {
+                state.errors.ErrorResettingPassword = action.error.message;
                 state.status.isResettingPassword = false;
             })
     }
 })
 
-// export const selectLoggedInUser = (state) => state.auth.loggedInUser;
 export const selectIsCreatingUser = (state) => state.auth.status.isCreatingUser;
 export const selectIsCheckingUser = (state) => state.auth.status.isCheckingUser;
-export const selectIsUpdatingUser = (state) => state.auth.status.isUpdatingUser;
 export const selectIsSigningOut = (state) => state.auth.status.isSigningOut;
 export const selectIsSendingResetPasswordRequest = (state) => state.auth.status.isSendingResetPasswordRequest;
 export const selectIsResettingPassword = (state) => state.auth.status.isResettingPassword
+
+export const selectErrorCreatingUser = (state) => state.auth.errors.ErrorCreatingUser;
+export const selectErrorCheckingUser = (state) => state.auth.errors.ErrorCheckingUser;
+export const selectErrorSigningOut = (state) => state.auth.errors.ErrorSigningOut;
+export const selectErrorSendingResetPasswordRequest = (state) => state.auth.errors.ErrorSendingResetPasswordRequest;
+export const selectErrorResettingPassword = (state) => state.auth.errors.ErrorReset
+
+export const { resetAuthErrors } = authSlice.actions;
 
 export default authSlice.reducer

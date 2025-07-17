@@ -1,24 +1,33 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { fetchLoggedInUserOrders, updateUser, fetchLoggedInUser } from './userAPI';
+import { updateUser, fetchLoggedInUser, fetchUserOrders } from './userAPI';
 
 const initialState = {
-    state: 'idle',
+    status: {
+        isFetchingLoggedInUser: false,
+        isUpdatingUser: false,
+        isFetchingUserOrders: false,
+    },
     userOrders: [],
     userInfo: null,
-    error: null,
+    errors: {
+        ErrorFetchingLoggedInUser: null, // TODO: not used till now
+        ErrorUpdatingUser: null, // TODO: not used till now
+        ErrorFetchingUserOrders: null,
+    },
 }
-export const fetchLoggedInUserOrdersAsync = createAsyncThunk(
-    'user/fetchLoggedInUserOrders',
+
+export const fetchUserOrdersAsync = createAsyncThunk(
+    'user/fetchUserOrders',
     async (userId) => {
-        const response = await fetchLoggedInUserOrders(userId);
+        const response = await fetchUserOrders(userId);
         return response.data;
     })
 
 export const fetchLoggedInUserAsync = createAsyncThunk(
     'user/fetchLoggedInUser',
     async () => {
+        console.log("Fetching logged in user");
         const response = await fetchLoggedInUser();
-        // The value we return becomes the `fulfilled` action payload
         return response.data;
     }
 );
@@ -27,7 +36,6 @@ export const updateUserAsync = createAsyncThunk(
     'user/updateUser',
     async (update) => {
         const response = await updateUser(update);
-        // console.log("createAsyncThunk", response)
         return response.data;
     })
 
@@ -41,32 +49,60 @@ export const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchLoggedInUserOrdersAsync.pending, (state) => {
-                state.status = 'loading';
+            // fetchUserOrdersAsync
+            .addCase(fetchUserOrdersAsync.pending, (state) => {
+                state.errors.ErrorFetchingUserOrders = null;
+                state.status.isFetchingUserOrders = true;
             })
-            .addCase(fetchLoggedInUserOrdersAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
+            .addCase(fetchUserOrdersAsync.fulfilled, (state, action) => {
+                state.status.isFetchingUserOrders = false;
                 state.userOrders = action.payload;
             })
+            .addCase(fetchUserOrdersAsync.rejected, (state, action) => {
+                state.status.isFetchingUserOrders = false;
+                state.errors.ErrorFetchingUserOrders = action.error.message;
+            })
+
+            // updateUserAsync
             .addCase(updateUserAsync.pending, (state) => {
-                state.status = 'loading';
+                state.errors.ErrorUpdatingUser = null;
+                state.status.isUpdatingUser = true;
             })
             .addCase(updateUserAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
+                state.status.isUpdatingUser = false;
                 state.userInfo = action.payload;
             })
+            .addCase(updateUserAsync.rejected, (state, action) => {
+                state.status.isUpdatingUser = false;
+                state.errors.ErrorUpdatingUser = action.error.message;
+            })
+
+            // fetchLoggedInUserAsync
             .addCase(fetchLoggedInUserAsync.pending, (state) => {
-                state.status = 'loading';
+                state.errors.ErrorFetchingLoggedInUser = null;
+                state.status.isFetchingLoggedInUser = true;
             })
             .addCase(fetchLoggedInUserAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
+                state.status.isFetchingLoggedInUser = false;
                 state.userInfo = action.payload;
+            })
+            .addCase(fetchLoggedInUserAsync.rejected, (state, action) => {
+                state.status.isFetchingLoggedInUser = false;
+                state.errors.ErrorFetchingLoggedInUser = action.error.message;
             })
     }
 })
 
 export const selectUserOrders = (state) => state.user.userOrders;
 export const selectUserInfo = (state) => state.user.userInfo;
+
+export const selectIsFetchingLoggedInUser = (state) => state.user.status.isFetchingLoggedInUser;
+export const selectIsUpdatingUser = (state) => state.user.status.isUpdatingUser;
+export const selectIsFetchingUserOrders = (state) => state.user.status.isFetchingUserOrders;
+
+export const selectErrorFetchingLoggedInUser = (state) => state.user.errors.ErrorFetchingLoggedInUser;
+export const selectErrorUpdatingUser = (state) => state.user.errors.ErrorUpdatingUser;
+export const selectErrorFetchingUserOrders = (state) => state.user.errors.ErrorFetchingUserOrders;
 
 export const { setUserInfo } = userSlice.actions;
 

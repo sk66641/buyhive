@@ -1,19 +1,17 @@
 import React, { useEffect } from 'react'
 import Home from './pages/Home'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import LoginPage from './pages/LoginPage'
-import SignUpPage from './pages/SignUpPage'
 import CartPage from './pages/CartPage'
 import Checkout from './pages/CheckOutPage'
 import ProductDetailsPage from './pages/ProductDetailsPage'
 import Protected from './features/auth/component/Protected'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchItemsByUserIdAsync } from './features/cart/CartSlice'
 import PageNotFound from './pages/404'
 import OrderSuccess from './pages/OrderSuccess'
 import UserOrdersPage from './pages/UserOrdersPage'
 import ProfilePage from './pages/ProfilePage'
-import { fetchLoggedInUserAsync } from './features/user/userSlice'
+import { fetchLoggedInUserAsync, selectUserInfo } from './features/user/userSlice'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ProtectedAdmin from './features/auth/component/ProtectedAdmin'
 import AdminProductFormPage from './pages/AdminProductFormPage'
@@ -21,6 +19,8 @@ import AdminOrdersPage from './pages/AdminOrdersPage'
 import Stripe from './pages/Stripe'
 import StripeCompletePage from './pages/StripeCompletePage'
 import ResetPassword from './features/auth/component/ResetPassword'
+import AuthPage from './pages/AuthPage'
+import { disableInstantTransitions } from 'framer-motion'
 
 const router = createBrowserRouter([
   {
@@ -28,12 +28,8 @@ const router = createBrowserRouter([
     element: <Home></Home>
   },
   {
-    path: '/login',
-    element: <LoginPage></LoginPage>
-  },
-  {
-    path: '/signup',
-    element: <SignUpPage></SignUpPage>
+    path: '/auth',
+    element: <AuthPage></AuthPage>
   },
   {
     path: '/cart',
@@ -95,11 +91,16 @@ const router = createBrowserRouter([
 
 const App = () => {
   const dispatch = useDispatch();
+  const user = useSelector(selectUserInfo);
 
   useEffect(() => {
-    dispatch(fetchItemsByUserIdAsync());
-    dispatch(fetchLoggedInUserAsync())
-  }, [dispatch])
+    if (user) {
+      dispatch(fetchItemsByUserIdAsync());
+    }
+    else {
+      dispatch(fetchLoggedInUserAsync());
+    }
+  }, [dispatch, user])
 
   return (
     <RouterProvider router={router} />

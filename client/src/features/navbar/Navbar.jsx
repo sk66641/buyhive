@@ -3,8 +3,9 @@ import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outl
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink } from 'react-router-dom'
 import { selectItems } from '../cart/CartSlice'
-import { selectUserInfo } from '../user/userSlice'
-import { signOutAsync } from '../auth/authSlice'
+import { selectIsFetchingLoggedInUser, selectUserInfo } from '../user/userSlice'
+import { selectErrorSigningOut, selectIsSigningOut, signOutAsync } from '../auth/authSlice'
+import toast, { Toaster } from 'react-hot-toast'
 
 const user = {
     name: 'Tom Cook',
@@ -12,6 +13,7 @@ const user = {
     imageUrl:
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
+
 const navigation = [
     { name: 'Home', href: '/', current: true },
     { name: 'My Profile', href: '/profile', current: false },
@@ -36,8 +38,11 @@ function classNames(...classes) {
 export default function Navbar({ children }) {
 
     const dispatch = useDispatch();
+    const items = useSelector(selectItems);
     const getUser = useSelector(selectUserInfo);
-    const items = useSelector(selectItems)
+    const isSigningOut = useSelector(selectIsSigningOut);
+    const ErrorSigningOut = useSelector(selectErrorSigningOut);
+
     const handleSignOut = () => {
         dispatch(signOutAsync()).
             unwrap().then(() => {
@@ -46,6 +51,11 @@ export default function Navbar({ children }) {
             .catch((err) => {
                 console.error('Sign out failed:', err);
             });
+    }
+
+    if (ErrorSigningOut) {
+        toast.error(ErrorSigningOut);
+        // dispatch(resetAuthErrors());
     }
 
     return (
@@ -134,16 +144,16 @@ export default function Navbar({ children }) {
                                                     </MenuItem>
                                                 ))}
                                                 <MenuItem>
-                                                    <button type='button' onClick={handleSignOut}
-                                                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden text-left cursor-pointer w-full"
+                                                    <button disabled={isSigningOut} type='button' onClick={handleSignOut}
+                                                        className={`block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden text-left cursor-pointer w-full ${isSigningOut ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                                                     >
-                                                        Sign Out
+                                                        {isSigningOut ? 'Signing out...' : 'Sign out'}
                                                     </button>
                                                 </MenuItem>
                                             </MenuItems>
                                         </Menu> :
                                         <Link
-                                            to="/login"
+                                            to="/auth"
                                             className="ml-4 px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition"
                                         >
                                             Log in
@@ -223,6 +233,7 @@ export default function Navbar({ children }) {
                     </div>
                 </main>
             </div>
+            <Toaster />
         </>
     )
 }

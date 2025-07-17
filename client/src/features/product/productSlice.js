@@ -1,28 +1,28 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { createProduct, fetchAllProducts, fetchProductsByFilters, fetchProductsById, updateProduct } from './productAPI'
+import { createProduct, fetchProductsByFilters, fetchProductsById, updateProduct } from './productAPI'
 
 const initialState = {
     products: [],
-    status: 'idle',
+    status: {
+        isFetchingProducts: false,
+        isFetchingProductById: false,
+        isCreatingProduct: false,
+        isUpdatingProduct: false,
+    },
     totalItems: 0,
     selectedProduct: null,
+    errors:{
+        ErrorFetchingProducts: null,
+        ErrorFetchingProductById: null,
+        ErrorCreatingProduct: null,
+        ErrorUpdatingProduct: null,
+    }
 }
-
-export const fetchAllProductsAsync = createAsyncThunk('product/fetchAllProducts', async () => {
-
-    const response = await fetchAllProducts();
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
-
-})
 
 export const fetchProductsByFiltersAsync = createAsyncThunk(
     'product/fetchProductsByFilters',
     async ({ filter, sort, pagination }) => {
-        // console.log("fetchProductsByFiltersAsync", filter)
         const response = await fetchProductsByFilters(filter, sort, pagination);
-        // console.log(response)
-        // The value we return becomes the `fulfilled` action payload
         return response.data;
     }
 );
@@ -30,11 +30,7 @@ export const fetchProductsByFiltersAsync = createAsyncThunk(
 export const fetchProductsByIdAsync = createAsyncThunk(
     'product/fetchProductsById',
     async (id) => {
-        // console.log("id",id)
         const response = await fetchProductsById(id);
-        // console.log("fetchProductsByFiltersAsync", response)
-        // console.log(response)
-        // The value we return becomes the `fulfilled` action payload
         return response.data;
     }
 );
@@ -56,44 +52,69 @@ export const updateProductAsync = createAsyncThunk(
 export const productSlice = createSlice({
     name: 'product',
     initialState,
+    reducers: {
+        resetProductErrors: (state) => {
+            state.errors = initialState.errors;
+        }
+    },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchAllProductsAsync.pending, (state) => {
-                state.loading = 'loading';
-            })
-            .addCase(fetchAllProductsAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
-                state.products = action.payload
-            })
+            // fetchProductsByFiltersAsync
             .addCase(fetchProductsByFiltersAsync.pending, (state) => {
-                state.status = 'loading';
+                state.status.isFetchingProducts = true;
+                state.errors.ErrorFetchingProducts = null;
             })
             .addCase(fetchProductsByFiltersAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
                 state.products = action.payload.products.data;
                 state.totalItems = action.payload.totalItems;
+                state.status.isFetchingProducts = false;
             })
+            .addCase(fetchProductsByFiltersAsync.rejected, (state, action) => {
+                state.status.isFetchingProducts = false;
+                state.errors.ErrorFetchingProducts = action.error.message;
+            })
+
+            // fetchProductsByIdAsync
             .addCase(fetchProductsByIdAsync.pending, (state) => {
-                state.status = 'loading';
+                state.status.isFetchingProductById = true;
+                state.errors.ErrorFetchingProductById = null;
             })
             .addCase(fetchProductsByIdAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
                 state.selectedProduct = action.payload;
+                state.status.isFetchingProductById = false;
             })
+            .addCase(fetchProductsByIdAsync.rejected, (state, action) => {
+                state.status.isFetchingProductById = false;
+                state.errors.ErrorFetchingProductById = action.error.message;
+            })
+
+            // createProductAsync
             .addCase(createProductAsync.pending, (state) => {
-                state.status = 'loading';
+                state.status.isCreatingProduct = true;
+                state.errors.ErrorCreatingProduct = null;
             })
             .addCase(createProductAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
                 state.products.push(action.payload);
+                state.status.isCreatingProduct = false;
             })
+            .addCase(createProductAsync.rejected, (state, action) => {
+                state.status.isCreatingProduct = false;
+                state.errors.ErrorCreatingProduct = action.error.message;
+            })
+
+            // updateProductAsync
             .addCase(updateProductAsync.pending, (state) => {
-                state.status = 'loading';
+                state.status.isUpdatingProduct = true;
+                state.errors.ErrorUpdatingProduct = null;
             })
             .addCase(updateProductAsync.fulfilled, (state, action) => {
-                state.status = 'idle';
                 const index = state.products.findIndex((product) => product.id === action.payload.id)
                 state.products[index] = action.payload;
+                state.status.isUpdatingProduct = false;
+            })
+            .addCase(updateProductAsync.rejected, (state, action) => {
+                state.status.isUpdatingProduct = false;
+                state.errors.ErrorUpdatingProduct = action.error.message;
             })
     }
 })
@@ -101,5 +122,17 @@ export const productSlice = createSlice({
 export const selectAllProducts = (state) => state.product.products;
 export const selectTotalItems = (state) => state.product.totalItems;
 export const selectedProductById = (state) => state.product.selectedProduct
+
+export const selectIsFetchingProducts = (state) => state.product.status.isFetchingProducts;
+export const selectIsFetchingProductById = (state) => state.product.status.isFetchingProductById;
+export const selectIsCreatingProduct = (state) => state.product.status.isCreatingProduct
+export const selectIsUpdatingProduct = (state) => state.product.status.isUpdatingProduct;
+
+export const selectErrorFetchingProducts = (state) => state.product.errors.ErrorFetchingProducts;
+export const selectErrorFetchingProductById = (state) => state.product.errors.ErrorFetchingProductById;
+export const selectErrorCreatingProduct = (state) => state.product.errors.ErrorCreatingProduct
+export const selectErrorUpdatingProduct = (state) => state.product.errors.ErrorUpdatingProduct;
+
+export const { resetProductErrors } = productSlice.actions;
 
 export default productSlice.reducer

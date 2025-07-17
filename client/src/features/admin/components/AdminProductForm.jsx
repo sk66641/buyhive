@@ -1,8 +1,8 @@
 import { filters } from '../../product/components/productList'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { createProductAsync, fetchProductsByIdAsync, selectedProductById, updateProductAsync } from '../../product/productSlice';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { createProductAsync, fetchProductsByIdAsync, resetProductErrors, selectedProductById, selectErrorCreatingProduct, selectIsCreatingProduct, selectIsUpdatingProduct, updateProductAsync } from '../../product/productSlice';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
 
@@ -34,11 +34,18 @@ export default function AdminProductForm() {
     } = useForm();
     const params = useParams();
     const selectedProduct = useSelector(selectedProductById);
+    const isCreatingProduct = useSelector(selectIsCreatingProduct);
+    const ErrorCreatingProduct = useSelector(selectErrorCreatingProduct);
+    const isUpdatingProduct = useSelector(selectIsUpdatingProduct);
+    const ErrorUpdatingProduct = useSelector(selectErrorCreatingProduct);
+
+
     useEffect(() => {
         if (params.id) {
             dispatch(fetchProductsByIdAsync(params.id));
         }
     }, [params.id, dispatch])
+
     useEffect(() => {
         if (selectedProduct && params.id) {
             setValue('title', selectedProduct.title);
@@ -60,6 +67,16 @@ export default function AdminProductForm() {
     const handleDelete = () => {
         dispatch(updateProductAsync({ ...selectedProduct, deleted: true }));
     }
+
+    useEffect(() => {
+        if (ErrorCreatingProduct) {
+            toast.error(ErrorCreatingProduct);
+        }
+        if (ErrorUpdatingProduct) {
+            toast.error(ErrorUpdatingProduct);
+        }
+        dispatch(resetProductErrors());
+    }, [ErrorCreatingProduct, ErrorUpdatingProduct, dispatch]);
 
     return (
 
@@ -271,7 +288,6 @@ export default function AdminProductForm() {
                             </label>
                             <div className="mt-2">
                                 <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                    {/* <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">workcation.com/</div> */}
                                     <input
                                         id="discount"
                                         type="number"
@@ -291,7 +307,6 @@ export default function AdminProductForm() {
                             </label>
                             <div className="mt-2">
                                 <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                    {/* <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">workcation.com/</div> */}
                                     <input
                                         id="stock"
                                         type="number"
@@ -310,7 +325,6 @@ export default function AdminProductForm() {
                             </label>
                             <div className="mt-2">
                                 <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                    {/* <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">workcation.com/</div> */}
                                     <input
                                         id="thumbnail"
                                         type="text"
@@ -339,21 +353,6 @@ export default function AdminProductForm() {
                                     </div>
                                 </div>
                             ))}
-                            {/* <label htmlFor="images" className="block text-sm/6 font-medium text-gray-900">
-                                Image
-                            </label>
-                            <div className="mt-2">
-                                <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                    <input
-                                        id="images"
-                                        type="text"
-                                        {...register('images', {
-                                            required: 'image is required',
-                                        })}
-                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
-                                    />
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -371,12 +370,37 @@ export default function AdminProductForm() {
                     >
                         {selectedProduct.deleted ? 'Deleted' : 'Delete'}
                     </button>}
-                <button
+                {params.id ? <button
                     type="submit"
-                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
+                    disabled={isUpdatingProduct}
+                    className={`rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isUpdatingProduct ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
                 >
-                    Save
-                </button>
+                    {isUpdatingProduct ? (
+                        <span className="flex items-center gap-2">
+                            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                            </svg>
+                            Updating...
+                        </span>
+                    ) : "Update"}
+                </button> :
+                    <button
+                        type="submit"
+                        className={`rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isCreatingProduct ? "cursor-not-allowed opacity-70" : "cursor-pointer"} `}
+                    >
+                        {isCreatingProduct ? (
+                            <span className="flex items-center gap-2">
+                                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                                Creating...
+                            </span>
+                        ) : "Create"}
+                    </button>
+                }
+
             </div>
         </form>
     )

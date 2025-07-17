@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectAllProducts, fetchAllProductsAsync, fetchProductsByFiltersAsync, selectTotalItems } from '../productSlice'
+import { selectAllProducts, fetchProductsByFiltersAsync, selectTotalItems, selectIsFetchingProducts, selectErrorFetchingProducts, resetProductErrors } from '../productSlice'
 import {
     Dialog,
     DialogBackdrop,
@@ -420,6 +420,17 @@ function DesktopFilter({ handleFilter, filter }) {
 
 function ProductGrid({ products }) {
     const user = useSelector(selectUserInfo);
+    const dispatch = useDispatch();
+    const isFetchingProducts = useSelector(selectIsFetchingProducts);
+    const ErrorFetchingProducts = useSelector(selectErrorFetchingProducts);
+
+    useEffect(() => {
+        if (ErrorFetchingProducts) {
+            toast.error(ErrorFetchingProducts);
+        }
+        dispatch(resetProductErrors());
+    }, [ErrorFetchingProducts]);
+
     return (
         <div className="lg:col-span-3">
             <div className="bg-white">
@@ -429,93 +440,101 @@ function ProductGrid({ products }) {
                     >
                         Add Product
                     </Link>}
+                {ErrorFetchingProducts && <p className="text-red-500 mt-2">{ErrorFetchingProducts}</p>}
+                {isFetchingProducts ?
+                    <div className="flex items-center justify-center h-64">
+                        <svg className="animate-spin h-8 w-8 text-indigo-600" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4-4H4z" />
+                        </svg>
+                    </div>
+                    :
+                    <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
+                        <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-10">
+                            {products.map((product) => {
 
-                <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
-                    <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-10">
-                        {products.map((product) => {
+                                const hasDiscount = product.discountPercentage && product.discountPercentage > 0;
 
-                            const hasDiscount = product.discountPercentage && product.discountPercentage > 0;
-
-                            return (
-                                <div key={product.id} className='flex flex-col gap-2 justify-between'>
-                                    <Link
-                                        className="group relative flex flex-col border rounded-xl shadow-lg overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 hover:shadow-2xl transition-shadow duration-300 h-full"
-                                        to={`/product-details/${product.id}`}
-                                    >
-                                        <div className="relative">
-                                            <img
-                                                alt={product.imageAlt}
-                                                src={product.images}
-                                                className="aspect-square w-full object-cover rounded-t-xl bg-gray-100 transition-transform duration-300 group-hover:scale-105"
-                                            />
-                                            {hasDiscount && (
-                                                <span className="absolute top-3 left-3 bg-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
-                                                    {product.discountPercentage}%
-                                                </span>
-                                            )}
-                                            {product.stock === 0 && (
-                                                <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
-                                                    Out of Stock
-                                                </span>
-                                            )}
-                                        </div>
-                                        <div className="flex-1 flex flex-col justify-between p-4">
-                                            <div>
-                                                <h3 className="text-base font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-2 min-h-[3rem]">
-                                                    {product.title}
-                                                </h3>
-                                                <div className="flex items-center gap-2 mt-2">
-                                                    <span className="flex items-center text-yellow-400">
-                                                        {/* Star icons for rating */}
-                                                        {Array.from({ length: 5 }).map((_, i) => (
-                                                            <svg
-                                                                key={i}
-                                                                className={`h-4 w-4 ${i < Math.round(product.rating) ? 'fill-yellow-400' : 'fill-gray-200'}`}
-                                                                viewBox="0 0 20 20"
-                                                            >
-                                                                <polygon points="9.9,1.1 12.3,6.9 18.6,7.6 13.8,11.8 15.2,18 9.9,14.7 4.6,18 6,11.8 1.2,7.6 7.5,6.9 " />
-                                                            </svg>
-                                                        ))}
+                                return (
+                                    <div key={product.id} className='flex flex-col gap-2 justify-between'>
+                                        <Link
+                                            className="group relative flex flex-col border rounded-xl shadow-lg overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 hover:shadow-2xl transition-shadow duration-300 h-full"
+                                            to={`/product-details/${product.id}`}
+                                        >
+                                            <div className="relative">
+                                                <img
+                                                    alt={product.imageAlt}
+                                                    src={product.images}
+                                                    className="aspect-square w-full object-cover rounded-t-xl bg-gray-100 transition-transform duration-300 group-hover:scale-105"
+                                                />
+                                                {hasDiscount && (
+                                                    <span className="absolute top-3 left-3 bg-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+                                                        {product.discountPercentage}%
                                                     </span>
-                                                    <span className="text-xs text-gray-500 ml-1">{product.rating}</span>
-                                                </div>
-                                            </div>
-                                            <div className="mt-4 flex items-end justify-between">
-                                                <div>
-                                                    {hasDiscount ? (
-                                                        <div className="flex flex-col">
-                                                            <span className="text-lg font-bold text-pink-600">
-                                                                ${product.discountedPrice}
-                                                            </span>
-                                                            <span className="text-sm line-through text-gray-400">
-                                                                ${product.price}
-                                                            </span>
-                                                        </div>
-                                                    ) : (
-                                                        <span className="text-lg font-bold text-gray-900">
-                                                            ${product.price}
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                {product.deleted && (
-                                                    <span className="text-xs font-semibold text-red-500 ml-2">
-                                                        Deleted
+                                                )}
+                                                {product.stock === 0 && (
+                                                    <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+                                                        Out of Stock
                                                     </span>
                                                 )}
                                             </div>
-                                        </div>
-                                    </Link>
-                                    {user && user.role === 'admin' &&
-                                        <Link to={`/admin/product-form/edit/${product.id}`}
-                                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                        >
-                                            Edit Product
-                                        </Link>}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
+                                            <div className="flex-1 flex flex-col justify-between p-4">
+                                                <div>
+                                                    <h3 className="text-base font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-2 min-h-[3rem]">
+                                                        {product.title}
+                                                    </h3>
+                                                    <div className="flex items-center gap-2 mt-2">
+                                                        <span className="flex items-center text-yellow-400">
+                                                            {/* Star icons for rating */}
+                                                            {Array.from({ length: 5 }).map((_, i) => (
+                                                                <svg
+                                                                    key={i}
+                                                                    className={`h-4 w-4 ${i < Math.round(product.rating) ? 'fill-yellow-400' : 'fill-gray-200'}`}
+                                                                    viewBox="0 0 20 20"
+                                                                >
+                                                                    <polygon points="9.9,1.1 12.3,6.9 18.6,7.6 13.8,11.8 15.2,18 9.9,14.7 4.6,18 6,11.8 1.2,7.6 7.5,6.9 " />
+                                                                </svg>
+                                                            ))}
+                                                        </span>
+                                                        <span className="text-xs text-gray-500 ml-1">{product.rating}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="mt-4 flex items-end justify-between">
+                                                    <div>
+                                                        {hasDiscount ? (
+                                                            <div className="flex flex-col">
+                                                                <span className="text-lg font-bold text-pink-600">
+                                                                    ${product.discountedPrice}
+                                                                </span>
+                                                                <span className="text-sm line-through text-gray-400">
+                                                                    ${product.price}
+                                                                </span>
+                                                            </div>
+                                                        ) : (
+                                                            <span className="text-lg font-bold text-gray-900">
+                                                                ${product.price}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    {product.deleted && (
+                                                        <span className="text-xs font-semibold text-red-500 ml-2">
+                                                            Deleted
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </Link>
+                                        {user && user.role === 'admin' &&
+                                            <Link to={`/admin/product-form/edit/${product.id}`}
+                                                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                            >
+                                                Edit Product
+                                            </Link>}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>}
             </div>
         </div>
     )

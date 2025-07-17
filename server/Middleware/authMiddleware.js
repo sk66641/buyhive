@@ -7,10 +7,11 @@ exports.authMiddleware = (req, res, next) => {
         return res.status(401).json({ message: 'No token, authorization denied' });
     }
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded; // Attach user info (id, role) to request
         next();
     } catch (error) {
+        console.error('Token verification failed:', error);
         res.status(401).json({ message: 'Token is not valid' });
     }
 };

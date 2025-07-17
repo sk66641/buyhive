@@ -105,7 +105,8 @@ server.post("/create-payment-intent", authMiddleware, async (req, res) => {
 
     res.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error creating payment intent:", error);
+    res.status(500).json({ message: "Error creating payment intent" });
   }
 });
 
