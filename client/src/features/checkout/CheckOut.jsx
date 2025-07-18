@@ -1,10 +1,10 @@
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCartAsync, deleteItemFromCartAsync, selectItems, selectIsDeletingItem, selectErrorDeletingItem, resetCartErrors, selectErrorUpdatingCart, selectIsUpdatingCart } from '../cart/CartSlice';
 import { useForm } from 'react-hook-form';
 import { addAddressAsync, fetchAddressesAsync, resetUserErrors, selectAddresses, selectErrorAddingAddress, selectErrorFetchingAddresses, selectIsAddingAddress, selectIsFetchingAddresses, selectUserInfo, updateAddressAsync, updateUserAsync } from '../user/userSlice';
 import { use, useEffect, useState } from 'react';
-import { createOrderAsync, resetOrderErrors, selectCurrentOrder, selectErrorCreatingOrder, selectIsCreatingOrder } from '../order/orderSlice';
+import { createOrderAsync, resetOrderErrors, selectCurrentOrder, selectErrorCreatingOrder, selectIsCreatingOrder, setOrderSuccess } from '../order/orderSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import { updateAddress } from '../user/userAPI';
 
@@ -16,6 +16,7 @@ function Checkout() {
     formState: { errors },
   } = useForm();
 
+  const { orderId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -97,9 +98,11 @@ function Checkout() {
     return <Navigate to={'/'} replace={true}></Navigate>;
   }
   if (currentOrder && currentOrder.paymentMethod === 'cash') {
+    dispatch(setOrderSuccess(true));
     return <Navigate to={`/order-success/${currentOrder.id}`} replace={true}></Navigate>;
   }
   if (currentOrder && currentOrder.paymentMethod === 'card') {
+    dispatch(setOrderSuccess(true));
     return <Navigate to={'/stripe-checkout'} replace={true}></Navigate>;
   }
 

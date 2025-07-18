@@ -8,7 +8,7 @@ import Protected from './features/auth/component/Protected'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchItemsByUserIdAsync } from './features/cart/CartSlice'
 import PageNotFound from './pages/404'
-import OrderSuccess from './pages/OrderSuccess'
+// import OrderSuccess from './pages/OrderSuccess'
 import UserOrdersPage from './pages/UserOrdersPage'
 import ProfilePage from './pages/ProfilePage'
 import { fetchLoggedInUserAsync, selectUserInfo } from './features/user/userSlice'
@@ -56,8 +56,8 @@ const router = createBrowserRouter([
     element: <ProtectedAdmin><AdminOrdersPage></AdminOrdersPage></ProtectedAdmin>
   },
   {
-    path: '/order-success/:id',
-    element: <OrderSuccess></OrderSuccess>
+    path: '/order-success/:orderId',
+    element: <Protected><UserOrdersPage></UserOrdersPage></Protected>
   },
   {
     path: '/orders',

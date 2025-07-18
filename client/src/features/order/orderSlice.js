@@ -10,6 +10,7 @@ const initialState = {
     orders: [],
     currentOrder: null,
     totalOrders: 0,
+    OrderSuccess: false,
     errors: {
         ErrorCreatingOrder: null,
         ErrorFetchingAllOrders: null, // (admin)
@@ -50,6 +51,9 @@ export const orderSlice = createSlice({
         },
         resetOrderErrors: (state) => {
             state.errors = initialState.errors;
+        },
+        setOrderSuccess: (state, action) => {
+            state.OrderSuccess = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -105,6 +109,7 @@ export const orderSlice = createSlice({
 export const selectOrders = (state) => state.order.orders;
 export const selectTotalOrders = (state) => state.order.totalOrders;
 export const selectCurrentOrder = (state) => state.order.currentOrder;
+export const selectOrderSuccess = (state) => state.order.OrderSuccess;
 
 export const selectIsCreatingOrder = (state) => state.order.status.isCreatingOrder;
 export const selectIsFetchingAllOrders = (state) => state.order.status.isFetchingAllOrders;
@@ -114,6 +119,6 @@ export const selectErrorCreatingOrder = (state) => state.order.errors.ErrorCreat
 export const selectErrorFetchingAllOrders = (state) => state.order.errors.ErrorFetchingAllOrders;
 export const selectErrorUpdatingOrder = (state) => state.order.errors.ErrorUpdatingOrder;
 
-export const { resetCurrentOrder, resetOrderErrors } = orderSlice.actions;
+export const { resetCurrentOrder, resetOrderErrors, setOrderSuccess } = orderSlice.actions;
 
 export default orderSlice.reducer
