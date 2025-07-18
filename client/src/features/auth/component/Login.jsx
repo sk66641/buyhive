@@ -119,7 +119,7 @@ export default function Login({ setAuthMethod }) {
 
         <p className="mt-8 text-center text-base text-gray-600">
           Don't have an account?{' '}
-          <button onClick={() => setAuthMethod("register")} className="font-semibold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent hover:text-pink-500 transition">
+          <button onClick={() => setAuthMethod("register")} className="cursor-pointer font-semibold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent hover:text-pink-500 transition">
             Create
           </button>
         </p>

@@ -64,8 +64,37 @@ export default function ProductDetails() {
   return (
     <>
       {isFetchingProductById ?
-        <div className="flex justify-center items-center h-screen">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+        <div className="bg-white min-h-screen flex items-start justify-center">
+          {/* Shimmer effect for loading - matches product details layout */}
+          <div className="mx-auto mt-10 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8 w-full animate-pulse">
+            {/* Image gallery shimmer */}
+            <div className="hidden lg:block">
+              <div className="h-96 w-full bg-gray-200 rounded-lg mb-6" />
+            </div>
+            <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
+              <div className="h-40 w-full bg-gray-200 rounded-lg mb-4" />
+              <div className="h-40 w-full bg-gray-100 rounded-lg" />
+            </div>
+            <div className="h-96 w-full bg-gray-200 rounded-lg sm:rounded-lg lg:aspect-auto" />
+            {/* Product info shimmer */}
+            <div className="mx-auto max-w-2xl px-4 pt-10 pb-16 sm:px-6 lg:col-span-3 lg:row-span-2 lg:gap-x-8 lg:px-8 lg:pt-0 lg:pb-0 flex flex-col gap-6 mt-8 lg:mt-0">
+              <div className="h-8 w-2/3 bg-gray-200 rounded mb-2" />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-7 w-24 bg-gray-200 rounded" />
+                <div className="h-6 w-16 bg-gray-100 rounded" />
+                <div className="h-5 w-16 bg-green-100 rounded" />
+              </div>
+              <div className="flex items-center gap-2">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="h-5 w-5 bg-yellow-100 rounded" />
+                ))}
+                <div className="h-4 w-16 bg-gray-100 rounded ml-2" />
+              </div>
+              <div className="h-10 w-1/2 bg-gray-100 rounded mt-4" />
+              <div className="h-10 w-1/3 bg-gray-100 rounded mt-2" />
+              <div className="h-12 w-1/2 bg-gray-200 rounded mt-6" />
+            </div>
+          </div>
         </div>
         :
         <div className="bg-white">

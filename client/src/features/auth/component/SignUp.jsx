@@ -156,7 +156,7 @@ export default function SignUp({ setAuthMethod }) {
 
         <p className="mt-8 text-center text-base text-gray-600">
           Already have an account?{' '}
-          <button onClick={() => setAuthMethod('login')} className="font-semibold text-indigo-600 hover:text-pink-500 transition underline underline-offset-2">
+          <button onClick={() => setAuthMethod('login')} className="font-semibold text-indigo-600 hover:text-pink-500 transition underline underline-offset-2 cursor-pointer">
             Log in
           </button>
         </p>

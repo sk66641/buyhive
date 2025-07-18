@@ -5,6 +5,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { selectItems } from '../cart/CartSlice'
 import { selectIsFetchingLoggedInUser, selectUserInfo } from '../user/userSlice'
 import toast, { Toaster } from 'react-hot-toast'
+import Footer from '../common/Footer'
 
 const user = {
     name: 'Tom Cook',
@@ -44,12 +45,15 @@ export default function Navbar({ children }) {
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex h-16 items-center justify-between">
                             <div className="flex items-center">
-                                <div className="shrink-0">
+                                <div className="flex items-center shrink-0">
                                     <img
                                         alt="buyhive"
                                         src="buyhive.png"
                                         className="size-8"
                                     />
+                                    <span className='text-white font-bold'>
+                                        buyhive
+                                    </span>
                                 </div>
                                 <div className="hidden md:block">
                                     <div className="ml-10 flex items-baseline space-x-4">
@@ -86,7 +90,11 @@ export default function Navbar({ children }) {
                             </div>
                             <div className="hidden md:block">
                                 <div className="ml-4 flex items-center md:ml-6">
-                                    {isFetchingLoggedInUser ? "fetching shimmer effect" : getUser ?
+                                    {isFetchingLoggedInUser ? (
+                                        <div className="flex items-center gap-2 animate-pulse">
+                                            <div className="w-8 h-8 rounded-full bg-gray-200" />
+                                        </div>
+                                    ) : getUser ?
                                         <>
                                             <Link to={'/cart'}
                                                 type="button"
@@ -185,6 +193,7 @@ export default function Navbar({ children }) {
                         {children}
                     </div>
                 </main>
+                <Footer />
             </div>
             <Toaster />
         </>

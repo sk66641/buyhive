@@ -4,7 +4,7 @@ import { addToCart, deleteItemFromCart, fetchItemsByUserId, updateCart, resetCar
 const initialState = {
     status: {
         isAddingToCart: false,
-        isFetchingItems: false, // TODO: not used yet
+        isFetchingItems: false,
         isUpdatingCart: false,
         isDeletingItem: false,
         isResettingCart: false, // TODO: not used yet
@@ -12,7 +12,7 @@ const initialState = {
     items: [],
     errors: {
         ErrorAddingToCart: null,
-        ErrorFetchingItems: null, // TODO: not used yet
+        ErrorFetchingItems: null,
         ErrorUpdatingCart: null,
         ErrorDeletingItem: null,
         ErrorResettingCart: null, // TODO: not used yet

@@ -75,7 +75,21 @@ const AdminOrders = () => {
         <>
             {isFetchingAllOrders ?
                 <div className="flex justify-center items-center h-screen">
-                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+                    <div className="w-full max-w-4xl flex flex-col gap-4 animate-pulse">
+                        {[1,2,3,4,5].map((_, idx) => (
+                            <div key={idx} className="flex items-center gap-4 p-4 bg-white rounded-lg shadow border border-gray-100">
+                                <div className="h-10 w-10 bg-gray-200 rounded-full" />
+                                <div className="flex-1 flex flex-col gap-2">
+                                    <div className="h-4 w-1/2 bg-gray-200 rounded" />
+                                    <div className="h-3 w-1/3 bg-gray-100 rounded" />
+                                </div>
+                                <div className="flex flex-col items-end gap-2">
+                                    <div className="h-4 w-16 bg-gray-200 rounded" />
+                                    <div className="h-4 w-20 bg-gray-100 rounded" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 :
                 totalOrders > 0 ?

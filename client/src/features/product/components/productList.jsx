@@ -438,17 +438,38 @@ function ProductGrid({ products }) {
             <div className="bg-white">
                 {user && user.role === 'admin' &&
                     <Link to={'/admin/product-form'}
-                        className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                        className="inline-block mb-6 rounded-lg bg-green-600 px-5 py-2 text-base font-semibold text-white shadow-md hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 transition"
                     >
                         Add Product
                     </Link>}
                 {ErrorFetchingProducts && <p className="text-red-500 mt-2">{ErrorFetchingProducts}</p>}
                 {isFetchingProducts ?
-                    <div className="flex items-center justify-center h-64">
-                        <svg className="animate-spin h-8 w-8 text-indigo-600" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4-4H4z" />
-                        </svg>
+                    <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-10 mt-6">
+                        {[1,2,3,4,5,6,7,8].map((_, idx) => (
+                            <div key={idx} className="flex flex-col gap-2 justify-between animate-pulse">
+                                <div className="group relative flex flex-col border border-gray-200 rounded-2xl shadow-lg overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 h-full">
+                                    <div className="relative">
+                                        <div className="aspect-square w-full bg-gray-200" />
+                                    </div>
+                                    <div className="flex-1 flex flex-col justify-between p-4">
+                                        <div>
+                                            <div className="h-5 w-3/4 bg-gray-200 rounded mb-2" />
+                                            <div className="flex items-center gap-2 mt-2">
+                                                {[...Array(5)].map((_, i) => (
+                                                    <div key={i} className="h-4 w-4 bg-yellow-100 rounded" />
+                                                ))}
+                                                <div className="h-3 w-8 bg-gray-100 rounded ml-1" />
+                                            </div>
+                                        </div>
+                                        <div className="mt-4 flex items-end justify-between">
+                                            <div className="h-6 w-16 bg-gray-200 rounded mb-1" />
+                                            <div className="h-4 w-10 bg-gray-100 rounded ml-2" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="h-8 w-24 bg-gray-200 rounded-lg mt-2" />
+                            </div>
+                        ))}
                     </div>
                     :
                     <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
@@ -458,31 +479,29 @@ function ProductGrid({ products }) {
                                 const hasDiscount = product.discountPercentage && product.discountPercentage > 0;
 
                                 return (
-                                    <div key={product.id} className='flex flex-col gap-2 justify-between'>
+                                    <div key={product.id} className="flex flex-col gap-2 justify-between">
                                         <Link
-                                            className="group relative flex flex-col border rounded-xl shadow-lg overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 hover:shadow-2xl transition-shadow duration-300 h-full"
+                                            className="group relative flex flex-col border border-gray-200 rounded-2xl shadow-lg overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 h-full"
                                             to={`/product-details/${product.id}`}
                                         >
                                             <div className="relative">
                                                 <img
                                                     alt={product.imageAlt}
                                                     src={product.images}
-                                                    className="aspect-square w-full object-cover rounded-t-xl bg-gray-100 transition-transform duration-300 group-hover:scale-105"
+                                                    className="aspect-square w-full object-cover rounded-t-2xl bg-gray-100 transition-transform duration-300 group-hover:scale-105"
                                                 />
                                                 {hasDiscount && (
-                                                    <span className="absolute top-3 left-3 bg-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
-                                                        {product.discountPercentage}%
-                                                    </span>
+                                                    null
                                                 )}
                                                 {product.stock === 0 && (
-                                                    <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+                                                    <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg drop-shadow">
                                                         Out of Stock
                                                     </span>
                                                 )}
                                             </div>
                                             <div className="flex-1 flex flex-col justify-between p-4">
                                                 <div>
-                                                    <h3 className="text-base font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-2 min-h-[3rem]">
+                                                    <h3 className="text-base font-bold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-2 min-h-[3rem]">
                                                         {product.title}
                                                     </h3>
                                                     <div className="flex items-center gap-2 mt-2">
@@ -498,16 +517,21 @@ function ProductGrid({ products }) {
                                                                 </svg>
                                                             ))}
                                                         </span>
-                                                        <span className="text-xs text-gray-500 ml-1">{product.rating}</span>
+                                                        <span className="text-xs text-gray-500 ml-1 font-medium">{product.rating}</span>
                                                     </div>
                                                 </div>
                                                 <div className="mt-4 flex items-end justify-between">
                                                     <div>
                                                         {hasDiscount ? (
                                                             <div className="flex flex-col">
-                                                                <span className="text-lg font-bold text-pink-600">
-                                                                    ${product.discountedPrice}
-                                                                </span>
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className="text-lg font-bold text-green-500">
+                                                                        ${product.discountedPrice}
+                                                                    </span>
+                                                                    <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full border border-green-200">
+                                                                        {product.discountPercentage}% OFF
+                                                                    </span>
+                                                                </div>
                                                                 <span className="text-sm line-through text-gray-400">
                                                                     ${product.price}
                                                                 </span>
@@ -528,7 +552,7 @@ function ProductGrid({ products }) {
                                         </Link>
                                         {user && user.role === 'admin' &&
                                             <Link to={`/admin/product-form/edit/${product.id}`}
-                                                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition mt-2"
                                             >
                                                 Edit Product
                                             </Link>}

@@ -283,7 +283,27 @@ const Profile = () => {
 
                         <p className="mt-0.5 text-sm text-gray-500">My Addresses:</p>
                         <div>
-                            {isFetchingAddresses ? "Loading Addresses..." : addresses.length > 0 ?
+                            {isFetchingAddresses ? (
+                                <div className="flex flex-col gap-4">
+                                    {[1,2,3].map((_, idx) => (
+                                        <div key={idx} className="animate-pulse bg-gray-100 rounded-xl border border-gray-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                            <div className="flex flex-col gap-1 w-32">
+                                                <div className="h-4 bg-gray-300 rounded w-3/4 mb-1"></div>
+                                                <div className="h-3 bg-gray-200 rounded w-1/2 mb-1"></div>
+                                                <div className="h-3 bg-gray-200 rounded w-1/3"></div>
+                                            </div>
+                                            <div className="flex flex-col gap-1 sm:items-end w-24">
+                                                <div className="h-4 bg-gray-300 rounded w-2/3 mb-1"></div>
+                                                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                                            </div>
+                                            <div className="flex flex-col gap-1 min-w-[80px] w-16">
+                                                <div className="h-4 bg-gray-300 rounded w-full mb-1"></div>
+                                                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : addresses.length > 0 ?
                                 addresses.map((address, index) => {
                                     return (
                                         <div key={address.id}>
@@ -474,8 +494,8 @@ const Profile = () => {
                                         </div>
                                     )
                                 }) : (
-                                    <div className="mt-4 text-sm text-gray-500">
-                                        No addresses found.
+                                    <div className="flex flex-col items-center justify-center py-8">
+                                        <div className="text-base text-gray-400 font-medium">No addresses found</div>
                                     </div>
                                 )}
 
