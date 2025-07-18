@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchUserOrdersAsync, selectErrorFetchingUserOrders, selectIsFetchingUserOrders, selectUserInfo, selectUserOrders } from '../userSlice';
+import { fetchUserOrdersAsync, resetUserErrors, selectErrorFetchingUserOrders, selectIsFetchingUserOrders, selectUserInfo, selectUserOrders } from '../userSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import { resetAuthErrors } from '../../auth/authSlice';
 
@@ -19,7 +19,7 @@ const UserOrders = () => {
     if (ErrorFetchingUserOrders) {
       toast.error(ErrorFetchingUserOrders);
     }
-    dispatch(resetAuthErrors());
+    dispatch(resetUserErrors());
   }, [ErrorFetchingUserOrders, dispatch]);
 
   if (isFetchingUserOrders) {
@@ -43,6 +43,10 @@ const UserOrders = () => {
                     <div className="text-lg font-medium text-gray-900">OrderId #{order.id}</div>
                   </div>
                   <div>Order Status: {order.status}</div>
+                  <div>Ordered At: {new Date(order.createdAt).toLocaleString()}</div>
+                  {/* paymentMethod, paymentStatus */}
+                  <div>Payment Method: {order.paymentMethod}</div>
+                  <div>Payment Status: {order.paymentStatus}</div>
 
                   <div className="mt-8">
                     <div className="flow-root">

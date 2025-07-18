@@ -44,7 +44,7 @@ export default function ForgotPassword() {
                     </div>
 
                     <form noValidate onSubmit={handleSubmit((data) => {
-                        dispatch(resetPasswordRequestAsync(data.email));
+                        dispatch(resetPasswordRequestAsync(data.email)).unwrap().then(() => toast.success("Reset link sent"));
                     })} className="space-y-7">
                         <div>
                             <label htmlFor="email" className="block text-sm font-semibold text-indigo-700 mb-1">

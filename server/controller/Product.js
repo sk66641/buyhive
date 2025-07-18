@@ -16,7 +16,7 @@ exports.fetchAllProducts = async (req, res) => {
     if (req?.user?.role === 'admin') {
         query = Product.find();
     } else {
-        query = Product.find({ deleted: { $ne: true } });
+        query = Product.find({ deleted: { $ne: true } }).select('-createdAt -updatedAt');
     }
 
     if (req.query._sort) {
@@ -56,7 +56,7 @@ exports.fetchProductById = async (req, res) => {
         if (req?.user?.role === 'admin') {
             query = Product.findById(id);
         } else {
-            query = Product.findOne({ _id: id, deleted: { $ne: true } });
+            query = Product.findOne({ _id: id, deleted: { $ne: true } }).select('-createdAt -updatedAt');
         }
         const product = await query.exec();
         res.status(200).json(product);

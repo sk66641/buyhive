@@ -2,11 +2,10 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink } from 'react-router-dom'
-import { resetCartErrors, selectItems } from '../cart/CartSlice'
+import { selectItems } from '../cart/CartSlice'
 import { selectUserInfo } from '../user/userSlice'
-import { selectErrorSigningOut, selectIsSigningOut, signOutAsync } from '../auth/authSlice'
+import { signOutAsync } from '../auth/authSlice'
 import toast, { Toaster } from 'react-hot-toast'
-import { useEffect } from 'react';
 
 const user = {
     name: 'Tom Cook',
@@ -17,20 +16,20 @@ const user = {
 
 const navigation = [
     { name: 'Home', href: '/', current: true },
-    { name: 'My Profile', href: '/profile', current: false },
     { name: 'Orders', href: '/orders', current: false },
+    { name: 'My Profile', href: '/profile', current: false },
 ]
 const userNavigation = [
     { name: 'Home', link: '/' },
-    { name: 'My Profile', link: '/profile' },
     { name: 'My Orders', link: '/orders' },
+    { name: 'My Profile', link: '/profile' },
 ]
 
 const adminNavigation = [
     { name: 'Home', link: '/' },
-    { name: 'My Profile', link: '/profile' },
     { name: 'My Orders', link: '/orders' },
     { name: 'Orders', link: '/admin/orders' },
+    { name: 'My Profile', link: '/profile' },
 ]
 
 function classNames(...classes) {
@@ -42,25 +41,6 @@ export default function Navbar({ children }) {
     const dispatch = useDispatch();
     const items = useSelector(selectItems);
     const getUser = useSelector(selectUserInfo);
-    const isSigningOut = useSelector(selectIsSigningOut);
-    const ErrorSigningOut = useSelector(selectErrorSigningOut);
-
-    const handleSignOut = () => {
-        dispatch(signOutAsync()).
-            unwrap().then(() => {
-                window.location.replace('/');
-            })
-            .catch((err) => {
-                console.error('Sign out failed:', err);
-            });
-    }
-
-    useEffect(() => {
-        if (ErrorSigningOut) {
-            toast.error(ErrorSigningOut);
-        }
-        dispatch(resetCartErrors());
-    }, [ErrorSigningOut, dispatch]);
 
     return (
         <>
@@ -131,28 +111,19 @@ export default function Navbar({ children }) {
                                                     <span className="absolute -inset-1.5" />
                                                     <span className="sr-only">Open user menu</span>
                                                     <img alt="img" src={user.imageUrl} className="size-8 rounded-full z-0 cursor-pointer" />
+                                                    <div className="ml-3">
+                                                    </div>
                                                 </MenuButton>
                                             </div>
                                             <MenuItems
                                                 transition
                                                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                                             >
-                                                {userNavigation.map((item) => (
-                                                    <MenuItem key={item.name}>
-                                                        <Link
-                                                            to={item.link}
-                                                            className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                                                        >
-                                                            {item.name}
-                                                        </Link>
-                                                    </MenuItem>
-                                                ))}
                                                 <MenuItem>
-                                                    <button disabled={isSigningOut} type='button' onClick={handleSignOut}
-                                                        className={`block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden text-left cursor-pointer w-full ${isSigningOut ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                                                    >
-                                                        {isSigningOut ? 'Signing out...' : 'Sign out'}
-                                                    </button>
+                                                    <Link to={'/profile'}>
+                                                        <div className="text-base/5 font-medium text-white">{user.name}</div>
+                                                        <div className="text-sm font-medium text-gray-400">{user.email}</div>
+                                                    </Link>
                                                 </MenuItem>
                                             </MenuItems>
                                         </Menu> :
@@ -177,31 +148,15 @@ export default function Navbar({ children }) {
                     </div>
 
                     <DisclosurePanel className="md:hidden">
-                        {/* <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-                            {navigation.map((item) => (
-                                <DisclosureButton
-                                    key={item.name}
-                                    as="a"
-                                    href={item.href}
-                                    aria-current={item.current ? 'page' : undefined}
-                                    className={classNames(
-                                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                        'block rounded-md px-3 py-2 text-base font-medium',
-                                    )}
-                                >
-                                    {item.name}
-                                </DisclosureButton>
-                            ))}
-                        </div> */}
                         <div className="border-t border-gray-700 pt-4 pb-3">
                             <div className="flex items-center px-5">
                                 <div className="shrink-0">
                                     <img alt="" src={user.imageUrl} className="size-10 rounded-full" />
                                 </div>
-                                <div className="ml-3">
+                                <Link to={'/profile'} className="ml-3">
                                     <div className="text-base/5 font-medium text-white">{user.name}</div>
                                     <div className="text-sm font-medium text-gray-400">{user.email}</div>
-                                </div>
+                                </Link>
                                 <Link to={'/cart'}
                                     type="button"
                                     className="relative ml-auto shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"

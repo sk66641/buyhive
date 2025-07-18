@@ -61,9 +61,13 @@ exports.loginUser = async (req, res) => {
 }
 
 exports.logout = (req, res) => {
-    res.clearCookie('token');
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+    });
     res.status(200).json({ message: 'Logged out successfully' });
-};
+}
 
 // TODO: what about expiry?
 exports.resetPasswordRequest = async (req, res) => {

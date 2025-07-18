@@ -20,7 +20,7 @@ export default function Login({ setAuthMethod }) {
       toast.error(ErrorCheckingUser);
     }
     dispatch(resetAuthErrors());
-  }, [ErrorCheckingUser]);
+  }, [ErrorCheckingUser, dispatch]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#f8fafc] via-[#e0c3fc] to-[#8ec5fc] px-4 py-8 relative overflow-hidden">

@@ -89,7 +89,7 @@ const AdminOrders = () => {
 
                                             </th>
                                             <th className="p-3 text-center">Items</th>
-                                            <th className="p-3 text-center" onClick={() => handleSort({
+                                            <th className="p-3 text-center cursor-pointer" onClick={() => handleSort({
                                                 sort: sort?._sort === 'totalAmount' ? '-totalAmount' : 'totalAmount'
                                             })}>Total Amount  {sort &&
                                                 (sort._sort === 'totalAmount' ? (
@@ -101,7 +101,7 @@ const AdminOrders = () => {
                                             <th className="p-3 text-center">Status</th>
                                             <th className="p-3 text-center">Payment Method</th>
                                             <th className="p-3 text-center">Payment Status</th>
-                                            <th className="p-3 text-center" onClick={() => handleSort({
+                                            <th className="p-3 text-center cursor-pointer" onClick={() => handleSort({
                                                 sort: sort?._sort === 'createdAt' ? '-createdAt' : 'createdAt'
                                             })}>    Created At
                                                 {sort &&
@@ -110,7 +110,7 @@ const AdminOrders = () => {
                                                     ) : (
                                                         <ArrowDownIcon className="w-4 h-4 inline"></ArrowDownIcon>
                                                     ))}</th>
-                                            <th className="p-3 text-center" onClick={() => handleSort({
+                                            <th className="p-3 text-center cursor-pointer" onClick={() => handleSort({
                                                 sort: sort?._sort === 'updatedAt' ? '-updatedAt' : 'updatedAt'
                                             })}>   Updated At
                                                 {sort &&
@@ -127,9 +127,7 @@ const AdminOrders = () => {
                                         {orders.data && orders.data.map((order, index) => (
                                             <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-100">
                                                 <td className="p-3 text-center whitespace-nowrap">
-                                                    {/* <div className="flex justify-center items-center"> */}
                                                     <span className="font-medium">{index + 1}</span>
-                                                    {/* </div> */}
                                                 </td>
                                                 <td className="p-3">
                                                     {order.items.map((item) => (
@@ -216,7 +214,7 @@ const AdminOrders = () => {
 
                                                 <td className="p-3 text-center">
                                                     <div className="flex item-center justify-center">
-                                                        <div onClick={() => handleShow(order)} className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                                        <div onClick={() => handleShow(order)} className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
                                                             <svg
                                                                 xmlns="http://www.w3.org/2000/svg"
                                                                 fill="none"
@@ -237,7 +235,7 @@ const AdminOrders = () => {
                                                                 />
                                                             </svg>
                                                         </div>
-                                                        <div onClick={() => handleEdit(order)} className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                                        <div onClick={() => handleEdit(order)} className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
                                                             <svg
                                                                 xmlns="http://www.w3.org/2000/svg"
                                                                 fill="none"
@@ -252,21 +250,6 @@ const AdminOrders = () => {
                                                                 />
                                                             </svg>
                                                         </div>
-                                                        {/* <div onClick={handleDelete} className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="currentColor"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                                    />
-                                                </svg>
-                                            </div> */}
                                                     </div>
                                                 </td>
                                             </tr>

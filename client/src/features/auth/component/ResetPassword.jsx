@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
 import { resetAuthErrors, resetPasswordAsync, selectErrorResettingPassword, selectIsResettingPassword } from "../authSlice";
@@ -7,6 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 export default function ResetPassword() {
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const {
         register,
@@ -50,7 +51,7 @@ export default function ResetPassword() {
                     </div>
 
                     <form noValidate onSubmit={handleSubmit((data) => {
-                        dispatch(resetPasswordAsync({ token, email, password: data.password }));
+                        dispatch(resetPasswordAsync({ token, email, password: data.password })).unwrap().then(() => navigate('/auth', { replace: true }));
                     })} className="space-y-7">
 
                         <div>

@@ -4,7 +4,7 @@ import { createOrder, fetchAllOrders, updateOrder } from './orderAPI';
 const initialState = {
     status: {
         isCreatingOrder: false,
-        isFetchingAllOrders: false,
+        isFetchingAllOrders: false, // (admin)
         isUpdatingOrder: false, // TODO: not used yet (admin)
     },
     orders: [],
@@ -12,8 +12,8 @@ const initialState = {
     totalOrders: 0,
     errors: {
         ErrorCreatingOrder: null,
-        ErrorFetchingAllOrders: null,
-        ErrorUpdatingOrder: null,
+        ErrorFetchingAllOrders: null, // (admin)
+        ErrorUpdatingOrder: null, // (admin)
     }
 }
 

@@ -19,7 +19,7 @@ export default function SignUp({ setAuthMethod }) {
       toast.error(ErrorCreatingUser);
     }
     dispatch(resetAuthErrors());
-  }, [ErrorCreatingUser]);
+  }, [ErrorCreatingUser, dispatch]);
 
 
   return (
@@ -41,27 +41,51 @@ export default function SignUp({ setAuthMethod }) {
         </div>
 
         <form noValidate onSubmit={handleSubmit((data) => {
-          dispatch(createUserAsync({ email: data.email, password: data.password, role: 'user' }));
+          dispatch(createUserAsync({ name: data.name,  email: data.email, password: data.password, role: 'user' }));
         })} className="space-y-7 mt-4">
-          <div>
-            <label htmlFor="email" className="block text-base font-semibold text-indigo-700 mb-1">
-              Email address
-            </label>
-            <div className="relative mt-1">
-              <input
-                id="email"
-                {...register('email', {
-                  required: "email is required", pattern: {
-                    value: /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
-                    message: "email not valid",
-                  }
-                })}
-                type="email"
-                autoComplete="email"
-                className={`block w-full rounded-xl bg-white/80 px-5 py-3 text-base text-gray-900 border ${errors.email ? 'border-pink-400' : 'border-indigo-200'} placeholder:text-gray-400 focus:ring-2 focus:ring-pink-200 focus:border-pink-400 transition shadow-sm`}
-                placeholder="e.g. example@gmail.com"
-              />
-              {errors.email && <p className="text-pink-600 text-xs mt-1">{errors.email.message}</p>}
+          <div className='flex gap-3 md:flex-nowrap '>
+
+            {/* Name Field */}
+            <div className='w-2/5'>
+              <label htmlFor="name" className="block text-base font-semibold text-indigo-700 mb-1">
+                Name
+              </label>
+              <div className="relative mt-1">
+                <input
+                  id="name"
+                  {...register('name', {
+                    required: "name is required",
+                  })}
+                  type="text"
+                  autoComplete="name"
+                  className={`block w-full rounded-xl bg-white/80 px-5 py-3 text-base text-gray-900 border ${errors.name ? 'border-pink-400' : 'border-indigo-200'} placeholder:text-gray-400 focus:ring-2 focus:ring-pink-200 focus:border-pink-400 transition shadow-sm`}
+                  placeholder="e.g. John"
+                />
+                {errors.name && <p className="text-pink-600 text-xs mt-1">{errors.name.message}</p>}
+              </div>
+            </div>
+
+            {/* Email Field */}
+            <div className='w-3/5'>
+              <label htmlFor="email" className="block text-base font-semibold text-indigo-700 mb-1">
+                Email address
+              </label>
+              <div className="relative mt-1">
+                <input
+                  id="email"
+                  {...register('email', {
+                    required: "email is required", pattern: {
+                      value: /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
+                      message: "email not valid",
+                    }
+                  })}
+                  type="email"
+                  autoComplete="email"
+                  className={`block w-full rounded-xl bg-white/80 px-5 py-3 text-base text-gray-900 border ${errors.email ? 'border-pink-400' : 'border-indigo-200'} placeholder:text-gray-400 focus:ring-2 focus:ring-pink-200 focus:border-pink-400 transition shadow-sm`}
+                  placeholder="e.g. example@gmail.com"
+                />
+                {errors.email && <p className="text-pink-600 text-xs mt-1">{errors.email.message}</p>}
+              </div>
             </div>
           </div>
 

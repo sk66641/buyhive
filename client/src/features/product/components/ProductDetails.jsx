@@ -48,7 +48,7 @@ export default function ProductDetails() {
     }
 
     const userId = user.id;
-    dispatch(addToCartAsync({ item, userId }));
+    dispatch(addToCartAsync({ item, userId })).unwrap().then(() => toast.success("Item added to cart"));
   }
 
   useEffect(() => {

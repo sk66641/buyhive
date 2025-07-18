@@ -73,8 +73,8 @@ export function deleteItemFromCart(itemId) {
                 const err = await response.json();
                 throw err;
             }
-            await response.json();
-            resolve({ data: { id: itemId } });
+            const data = await response.json();
+            resolve({ data });
         } catch (error) {
             reject(error);
         }

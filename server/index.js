@@ -75,6 +75,7 @@ const userRoutes = require('./routes/User')
 const authRoutes = require('./routes/Auth')
 const cartRoutes = require('./routes/Cart')
 const orderRoutes = require('./routes/Order');
+const addressRoutes = require('./routes/Address');
 const { Order } = require('./model/Order');
 const { authMiddleware } = require('./Middleware/authMiddleware');
 // This is your test secret API key.
@@ -119,6 +120,7 @@ server.use('/users', authMiddleware, userRoutes.router);
 server.use('/auth', authRoutes.router);
 server.use('/cart', authMiddleware, cartRoutes.router);
 server.use('/orders', authMiddleware, orderRoutes.router);
+server.use('/addresses', authMiddleware, addressRoutes.router);
 
 server.listen(port, () => {
   console.log(`server running at http://localhost:${port}`);

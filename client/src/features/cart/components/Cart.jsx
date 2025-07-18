@@ -23,7 +23,7 @@ export default function Cart() {
     }
     const handleRemove = (id) => {
         setDeletingItemId(id);
-        dispatch(deleteItemFromCartAsync(id)).unwrap().then(()=>toast.success("Item successfully removed")).finally(() => {
+        dispatch(deleteItemFromCartAsync(id)).unwrap().then(() => toast.success("Item successfully removed")).finally(() => {
             setDeletingItemId(null)
         });
     }
@@ -53,7 +53,6 @@ export default function Cart() {
                                     <ul role="list" className="-my-6 divide-y divide-gray-200">
                                         {items.map((item) => (
                                             <>
-
                                                 <li key={item.id} className="flex py-6">
                                                     <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
                                                         <img alt="img" src={item.product.thumbnail} className="size-full object-cover" />
@@ -75,7 +74,7 @@ export default function Cart() {
                                                         <div className="flex flex-1 items-end justify-between text-sm">
                                                             <div className="text-gray-500">
                                                                 <span className='mr-2'>Qty</span>
-                                                                <select value={item.quantity} onChange={(e) => handleQuantatiy(e, item)} className='border px-1 cursor-pointer'>
+                                                                <select disabled={isDeletingItem && deletingItemId === item.id} value={item.quantity} onChange={(e) => handleQuantatiy(e, item)} className='border px-1 cursor-pointer'>
                                                                     <option value="1">1</option>
                                                                     <option value="2">2</option>
                                                                     <option value="3">3</option>
@@ -87,8 +86,8 @@ export default function Cart() {
                                                             <div className="flex">
                                                                 <button onClick={() => handleRemove(item.id)}
                                                                     type="button"
-                                                                    disabled={isDeletingItem && deletingItemId === item.id}
-                                                                    className={`font-medium text-indigo-600 hover:text-indigo-500 ${isDeletingItem && deletingItemId === item.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                                                                    disabled={isDeletingItem && deletingItemId === item.id || isUpdatingCart}
+                                                                    className={`font-medium text-indigo-600 hover:text-indigo-500 ${isDeletingItem && deletingItemId === item.id || isUpdatingCart ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                                                                 >
                                                                     {isDeletingItem && deletingItemId === item.id ? "Removing..." : "Remove"}
                                                                 </button>

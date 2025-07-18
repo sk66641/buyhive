@@ -7,8 +7,8 @@ const { Product } = require('../model/Product');
 exports.fetchOrdersByUser = async (req, res) => {
     const { id } = req.user;
     try {
-        const order = await Order.find({ user: id });
-        res.status(201).json(order);
+        const orders = await Order.find({ user: id }).sort({ createdAt: -1 });
+        res.status(201).json(orders);
     } catch (error) {
         console.error("Error fetching orders by user:", error);
         res.status(400).json({ message: 'Error fetching orders' });
@@ -55,8 +55,8 @@ exports.createOrder = async (req, res) => {
 exports.deleteOrder = async (req, res) => {
     const { id } = req.params;
     try {
-        const order = await Order.findByIdAndDelete(id);
-        res.status(200).json(order);
+        await Order.findByIdAndDelete(id);
+        res.status(200).json({ id });
     } catch (error) {
         console.error("Error deleting order:", error);
         res.status(400).json({ message: 'Error deleting order' });
@@ -77,17 +77,16 @@ exports.updateOrder = async (req, res) => {
 exports.fetchAllOrders = async (req, res) => {
     let query = Order.find({ deleted: { $ne: true } });
 
+    // Default sort by updatedAt descending
+    let sortField = 'updatedAt';
+    let sortOrder = -1;
+
     if (req.query._sort) {
-        const sortBy = req.query._sort[0] === "-" ? req.query._sort.slice(1) : req.query._sort;
-        const order = req.query._sort === "rating" ? -1 : req.query._sort[0] === '-' ? -1 : 1;
-        query = query.sort({ [sortBy]: order });
+        sortField = req.query._sort[0] === "-" ? req.query._sort.slice(1) : req.query._sort;
+        sortOrder = req.query._sort === "rating" ? -1 : req.query._sort[0] === '-' ? -1 : 1;
     }
-    if (req.query.brand) {
-        query = query.find({ brand: req.query.brand });
-    }
-    if (req.query.category) {
-        query = query.find({ category: req.query.category });
-    }
+
+    query = query.sort({ [sortField]: sortOrder });
 
     const totalDocs = await query.clone().countDocuments().exec();
 

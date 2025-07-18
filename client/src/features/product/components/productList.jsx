@@ -28,6 +28,7 @@ const sortOptions = [
     { name: 'Price: High to Low', sort: '-price', id: "price-high-to-low" },
 ]
 
+// TODO: Remove hardcoded brand and category filters. Fetch options dynamically from backend models and routes (backend implemented, needs frontend integration).
 export const filters =
     [
         {
@@ -430,7 +431,7 @@ function ProductGrid({ products }) {
             toast.error(ErrorFetchingProducts);
         }
         dispatch(resetProductErrors());
-    }, [ErrorFetchingProducts]);
+    }, [ErrorFetchingProducts, dispatch]);
 
     return (
         <div className="lg:col-span-3">
