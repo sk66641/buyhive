@@ -256,7 +256,7 @@ function Checkout() {
                     addresses.map((address, index) => (
                       <li
                         key={address.id}
-                        className="flex justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200"
+                        className="flex overflow-auto justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200"
                       >
                         <div className="flex gap-x-4">
                           <input
@@ -267,13 +267,13 @@ function Checkout() {
                             className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                           />
                           <div className="min-w-0 flex-auto">
-                            <p className="text-sm font-semibold leading-6 text-gray-900">
+                            <p className="text-sm font-semibold leading-6 text-gray-900 text-wrap">
                               {address.name}
                             </p>
-                            <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                            <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-wrap">
                               {address.street}
                             </p>
-                            <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                            <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-wrap">
                               {address.pinCode}
                             </p>
                           </div>

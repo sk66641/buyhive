@@ -443,7 +443,7 @@ function ProductGrid({ products }) {
                     </Link>}
                 {ErrorFetchingProducts && <p className="text-red-500 mt-2">{ErrorFetchingProducts}</p>}
                 {isFetchingProducts ?
-                    <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-10 mt-6">
+                    <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-10 mt-6">
                         {[1, 2, 3, 4, 5, 6, 7, 8].map((_, idx) => (
                             <div key={idx} className="flex flex-col gap-2 justify-between animate-pulse">
                                 <div className="group relative flex flex-col border border-gray-200 rounded-2xl shadow-lg overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 h-full">

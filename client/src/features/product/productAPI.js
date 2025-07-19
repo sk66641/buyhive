@@ -1,113 +1,82 @@
-export function fetchAllProducts() {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_HOST}/products`, {
-                credentials: 'include',
-            });
-            if (!response.ok) {
-                const err = await response.json();
-                throw err;
-            }
-            const data = await response.json();
-            resolve({ data });
-        } catch (error) {
-            reject(error);
-        }
+export async function fetchAllProducts() {
+    const response = await fetch(`${import.meta.env.VITE_HOST}/products`, {
+        credentials: 'include',
     });
+    if (!response.ok) {
+        const err = await response.json();
+        throw err;
+    }
+    return await response.json();
 }
 
-export function fetchProductsById(id) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_HOST}/products/${id}`, {
-                credentials: 'include',
-            });
-            if (!response.ok) {
-                const err = await response.json();
-                throw err;
-            }
-            const data = await response.json();
-            resolve({ data });
-        } catch (error) {
-            reject(error);
-        }
+export async function fetchProductsById(id) {
+    const response = await fetch(`${import.meta.env.VITE_HOST}/products/${id}`, {
+        credentials: 'include',
     });
+    if (!response.ok) {
+        const err = await response.json();
+        throw err;
+    }
+    return await response.json();
 }
 
-export function fetchProductsByFilters(filter, sort, pagination) {
-    let queryString = '';
+export async function fetchProductsByFilters(filter, sort, pagination) {
+    const params = new URLSearchParams();
     for (let key in filter) {
-        const categoryValues = filter[key];
-        if (categoryValues.length > 0) {
-            queryString += `${key}=${categoryValues}&`;
+        const values = filter[key];
+        if (values.length > 0) {
+            params.append(key, values);
         }
     }
     for (let key in sort) {
-        queryString += `${key}=${sort[key]}&`;
+        params.append(key, sort[key]);
     }
     for (let key in pagination) {
-        queryString += `${key}=${pagination[key]}&`;
+        params.append(key, pagination[key]);
     }
 
-    return new Promise(async (resolve, reject) => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_HOST}/products?` + queryString, {
-                credentials: 'include',
-            });
-            if (!response.ok) {
-                const err = await response.json();
-                throw err;
-            }
-            const data = await response.json();
-            resolve({ data: { products: data, totalItems: data.items } });
-        } catch (error) {
-            reject(error);
-        }
+    const response = await fetch(`${import.meta.env.VITE_HOST}/products?${params.toString()}`, {
+        credentials: 'include',
     });
+    if (!response.ok) {
+        const err = await response.json();
+        throw err;
+    }
+    const data = await response.json();
+    return {
+        products: data,
+        totalItems: data.items
+    };
 }
 
-export function updateProduct(update) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_HOST}/products/` + update.id, {
-                method: 'PATCH',
-                credentials: 'include',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify(update)
-            });
-            if (!response.ok) {
-                const err = await response.json();
-                throw err;
-            }
-            const data = await response.json();
-            resolve({ data });
-        } catch (error) {
-            reject(error);
-        }
+export async function updateProduct(update) {
+    const response = await fetch(`${import.meta.env.VITE_HOST}/products/${update.id}`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+            'content-type': 'application/json',
+        },
+        body: JSON.stringify(update)
     });
+    if (!response.ok) {
+        const err = await response.json();
+        throw err;
+    }
+    return await response.json();
 }
 
-export function createProduct(product) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_HOST}/products`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify(product)
-            });
-            if (!response.ok) {
-                const err = await response.json();
-                throw err;
-            }
-            const data = await response.json();
-            resolve({ data });
-        } catch (error) {
-            reject(error);
-        }
+export async function createProduct(product) {
+    const response = await fetch(`${import.meta.env.VITE_HOST}/products`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'content-type': 'application/json',
+        },
+        body: JSON.stringify(product)
     });
+    if (!response.ok) {
+        const err = await response.json();
+        throw err;
+    }
+    return await response.json();
 }

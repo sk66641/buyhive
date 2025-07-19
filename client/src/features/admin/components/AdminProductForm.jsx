@@ -1,10 +1,10 @@
 import { filters } from '../../product/components/ProductList'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { createProductAsync, fetchProductsByIdAsync, resetProductErrors, selectedProductById, selectErrorCreatingProduct, selectIsCreatingProduct, selectIsUpdatingProduct, updateProductAsync } from '../../product/productSlice';
+import { createProductAsync, fetchProductsByIdAsync, resetProductErrors, selectedProductById, selectErrorCreatingProduct, selectErrorUpdatingProduct, selectIsCreatingProduct, selectIsUpdatingProduct, updateProductAsync } from '../../product/productSlice';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-
+import toast from 'react-hot-toast';
 
 const colors = [
     { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400', id: 'white' },
@@ -37,7 +37,7 @@ export default function AdminProductForm() {
     const isCreatingProduct = useSelector(selectIsCreatingProduct);
     const ErrorCreatingProduct = useSelector(selectErrorCreatingProduct);
     const isUpdatingProduct = useSelector(selectIsUpdatingProduct);
-    const ErrorUpdatingProduct = useSelector(selectErrorCreatingProduct);
+    const ErrorUpdatingProduct = useSelector(selectErrorUpdatingProduct);
 
 
     useEffect(() => {
@@ -64,13 +64,10 @@ export default function AdminProductForm() {
         }
     }, [selectedProduct])
 
-    const handleDelete = () => {
-        dispatch(updateProductAsync({ ...selectedProduct, deleted: true }));
-    }
-
     useEffect(() => {
         if (ErrorCreatingProduct) {
             toast.error(ErrorCreatingProduct);
+            console.log("entering")
         }
         if (ErrorUpdatingProduct) {
             toast.error(ErrorUpdatingProduct);
@@ -127,6 +124,7 @@ export default function AdminProductForm() {
                                     />
                                 </div>
                             </div>
+                            {errors.title && <p className="text-pink-600 text-sm mt-1">{errors.title.message}</p>}
                         </div>
 
                         <div className="col-span-full">
@@ -145,6 +143,7 @@ export default function AdminProductForm() {
                                     defaultValue={''}
                                 />
                             </div>
+                            {errors.description && <p className="text-pink-600 text-sm mt-1">{errors.description.message}</p>}
                         </div>
 
                         {/* Details Section */}
@@ -164,6 +163,7 @@ export default function AdminProductForm() {
                                     defaultValue={''}
                                 />
                             </div>
+                            {errors.details && <p className="text-pink-600 text-sm mt-1">{errors.details.message}</p>}
                         </div>
 
                         {/* Colors, Sizes, and Highlights Section */}
@@ -210,16 +210,19 @@ export default function AdminProductForm() {
                             </label>
                             <p className="mt-1 text-xs text-gray-500">Add 4 highlights.</p>
                             {[1, 2, 3, 4].map((index) => (
-                                <div key={index} className="mt-2">
-                                    <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                        <input
-                                            type="text"
-                                            {...register(`highlight${index}`, { required: `highlight ${index} is required` })}
-                                            placeholder={`Highlight ${index}`}
-                                            className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
-                                        />
+                                <>
+                                    <div key={index} className="mt-2">
+                                        <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                            <input
+                                                type="text"
+                                                {...register(`highlight${index}`, { required: `highlight ${index} is required` })}
+                                                placeholder={`Highlight ${index}`}
+                                                className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
+                                    {errors[`highlight${index}`] && <p className="text-pink-600 text-sm mt-1">{errors[`highlight${index}`].message}</p>}
+                                </>
                             ))}
                         </div>
                         <div className="sm:col-span-3">
@@ -241,6 +244,7 @@ export default function AdminProductForm() {
                                     ))}
                                 </select>
                             </div>
+                            {errors.brand && <p className="text-pink-600 text-sm mt-1">{errors.brand.message}</p>}
                         </div>
                         <div className="sm:col-span-3">
                             <div
@@ -261,6 +265,7 @@ export default function AdminProductForm() {
                                     ))}
                                 </select>
                             </div>
+                            {errors.category && <p className="text-pink-600 text-sm mt-1">{errors.category.message}</p>}
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="price" className="block text-sm/6 font-medium text-gray-900">
@@ -273,14 +278,21 @@ export default function AdminProductForm() {
                                         type="number"
                                         {...register('price', {
                                             required: 'price is required',
-                                            min: 0,
-                                            max: 10000,
+                                            min: {
+                                                value: 0,
+                                                message: 'price must be at least 0',
+                                            },
+                                            max: {
+                                                value: 10000,
+                                                message: 'price must be at most 10000',
+                                            },
                                         })}
 
                                         className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
                                     />
                                 </div>
                             </div>
+                            {errors.price && <p className="text-pink-600 text-sm mt-1">{errors.price.message}</p>}
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="discount" className="block text-sm/6 font-medium text-gray-900">
@@ -293,13 +305,20 @@ export default function AdminProductForm() {
                                         type="number"
                                         {...register('discountPercentage', {
                                             required: 'discount is required',
-                                            min: 0,
-                                            max: 100,
+                                            min: {
+                                                value: 0,
+                                                message: 'discount must be at least 0',
+                                            },
+                                            max: {
+                                                value: 100,
+                                                message: 'discount must be at most 100',
+                                            },
                                         })}
                                         className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
                                     />
                                 </div>
                             </div>
+                            {errors.discountPercentage && <p className="text-pink-600 text-sm mt-1">{errors.discountPercentage.message}</p>}
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="stock" className="block text-sm/6 font-medium text-gray-900">
@@ -312,12 +331,16 @@ export default function AdminProductForm() {
                                         type="number"
                                         {...register('stock', {
                                             required: 'stock is required',
-                                            min: 0,
+                                            min: {
+                                                value: 0,
+                                                message: 'stock must be at least 0',
+                                            },
                                         })}
                                         className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
                                     />
                                 </div>
                             </div>
+                            {errors.stock && <p className="text-pink-600 text-sm mt-1">{errors.stock.message}</p>}
                         </div>
                         <div className="sm:col-span-6">
                             <label htmlFor="thumbnail" className="block text-sm/6 font-medium text-gray-900">
@@ -335,6 +358,7 @@ export default function AdminProductForm() {
                                     />
                                 </div>
                             </div>
+                            {errors.thumbnail && <p className="text-pink-600 text-sm mt-1">{errors.thumbnail.message}</p>}
                         </div>
                         <div className="sm:col-span-6">
                             <label className="block text-sm font-medium leading-6 text-gray-900">
@@ -342,16 +366,19 @@ export default function AdminProductForm() {
                             </label>
                             <p className="mt-1 text-xs text-gray-500">Add 4 images.</p>
                             {[1, 2, 3, 4].map((index) => (
-                                <div key={index} className="mt-2">
-                                    <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                        <input
-                                            type="text"
-                                            {...register(`image${index}`, { required: `image ${index} is required` })}
-                                            placeholder={`Image ${index}`}
-                                            className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
-                                        />
+                                <>
+                                    <div key={index} className="mt-2">
+                                        <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                            <input
+                                                type="text"
+                                                {...register(`image${index}`, { required: `image ${index} is required` })}
+                                                placeholder={`Image ${index}`}
+                                                className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
+                                    {errors[`image${index}`] && <p className="text-pink-600 text-sm mt-1">{errors[`image${index}`].message}</p>}
+                                </>
                             ))}
                         </div>
                     </div>
@@ -363,10 +390,10 @@ export default function AdminProductForm() {
                     Cancel
                 </Link>
                 {params.id && selectedProduct &&
-                    <button onClick={handleDelete}
+                    <button
                         type="submit"
-                        disabled={selectedProduct.deleted}
-                        className={`rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ${selectedProduct.deleted ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                        disabled={selectedProduct.deleted || isUpdatingProduct}
+                        className={`rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ${selectedProduct.deleted || isUpdatingProduct ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                     >
                         {selectedProduct.deleted ? 'Deleted' : 'Delete'}
                     </button>}

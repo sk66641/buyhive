@@ -21,38 +21,63 @@ const initialState = {
 
 export const addToCartAsync = createAsyncThunk(
     'cart/addToCart',
-    async ({ item, userId }) => {
-        const response = await addToCart(item, userId);
-        return response.data;
-    })
+    async ({ item, userId }, { rejectWithValue }) => {
+        try {
+            const data = await addToCart(item, userId);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const fetchItemsByUserIdAsync = createAsyncThunk(
     'cart/fetchItemsByUserId',
-    async () => {
-        const response = await fetchItemsByUserId();
-        return response.data;
-    })
+    async (_, { rejectWithValue }) => {
+        try {
+            const data = await fetchItemsByUserId();
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const updateCartAsync = createAsyncThunk(
     'cart/updateCart',
-    async (update) => {
-        const response = await updateCart(update);
-        return response.data;
-    })
+    async (update, { rejectWithValue }) => {
+        try {
+            const data = await updateCart(update);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const deleteItemFromCartAsync = createAsyncThunk(
     'cart/deleteItemFromCart',
-    async (itemId) => {
-        const response = await deleteItemFromCart(itemId);
-        return response.data;
-    })
+    async (itemId, { rejectWithValue }) => {
+        try {
+            const data = await deleteItemFromCart(itemId);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const resetCartAsync = createAsyncThunk(
     'cart/resetCart',
-    async () => {
-        const response = await resetCart();
-        return response.data;
-    })
+    async (_, { rejectWithValue }) => {
+        try {
+            const data = await resetCart();
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const cartSlice = createSlice({
     name: 'cart',
@@ -75,7 +100,7 @@ export const cartSlice = createSlice({
             })
             .addCase(addToCartAsync.rejected, (state, action) => {
                 state.status.isAddingToCart = false;
-                state.errors.ErrorAddingToCart = action.error.message;
+                state.errors.ErrorAddingToCart = action.payload.message;
             })
 
             // fetchItemsByUserIdAsync
@@ -89,7 +114,7 @@ export const cartSlice = createSlice({
             })
             .addCase(fetchItemsByUserIdAsync.rejected, (state, action) => {
                 state.status.isFetchingItems = false;
-                state.errors.ErrorFetchingItems = action.error.message;
+                state.errors.ErrorFetchingItems = action.payload.message;
             })
 
             // updateCartAsync
@@ -104,7 +129,7 @@ export const cartSlice = createSlice({
             })
             .addCase(updateCartAsync.rejected, (state, action) => {
                 state.status.isUpdatingCart = false;
-                state.errors.ErrorUpdatingCart = action.error.message;
+                state.errors.ErrorUpdatingCart = action.payload.message;
             })
 
             // deleteItemFromCartAsync
@@ -119,7 +144,7 @@ export const cartSlice = createSlice({
             })
             .addCase(deleteItemFromCartAsync.rejected, (state, action) => {
                 state.status.isDeletingItem = false;
-                state.errors.ErrorDeletingItem = action.error.message;
+                state.errors.ErrorDeletingItem = action.payload.message;
             })
 
             // resetCartAsync
@@ -133,7 +158,7 @@ export const cartSlice = createSlice({
             })
             .addCase(resetCartAsync.rejected, (state, action) => {
                 state.status.isResettingCart = false;
-                state.errors.ErrorResettingCart = action.error.message;
+                state.errors.ErrorResettingCart = action.payload.message;
             })
     }
 })

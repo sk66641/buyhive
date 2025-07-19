@@ -27,58 +27,87 @@ const initialState = {
 
 export const fetchUserOrdersAsync = createAsyncThunk(
     'user/fetchUserOrders',
-    async () => {
-        const response = await fetchUserOrders();
-        return response.data;
-    })
+    async (params, { rejectWithValue }) => {
+        try {
+            const data = await fetchUserOrders(params);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const fetchLoggedInUserAsync = createAsyncThunk(
     'user/fetchLoggedInUser',
-    async () => {
-        console.log("Fetching logged in user");
-        const response = await fetchLoggedInUser();
-        return response.data;
+    async (_, { rejectWithValue }) => {
+        try {
+            const data = await fetchLoggedInUser();
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 
 export const addAddressAsync = createAsyncThunk(
     'user/addAddress',
-    async (address) => {
-        const response = await addAddress(address);
-        return response.data;
+    async (address, { rejectWithValue }) => {
+        try {
+            const data = await addAddress(address);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 
 export const fetchAddressesAsync = createAsyncThunk(
     'user/fetchAddresses',
-    async () => {
-        const response = await fetchAddresses();
-        return response.data;
+    async (_, { rejectWithValue }) => {
+        try {
+            const data = await fetchAddresses();
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 
 export const updateAddressAsync = createAsyncThunk(
     'user/updateAddress',
-    async (address) => {
-        const response = await updateAddress(address);
-        return response.data;
+    async (address, { rejectWithValue }) => {
+        try {
+            const data = await updateAddress(address);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 
 export const deleteAddressAsync = createAsyncThunk(
     'user/deleteAddress',
-    async (addressId) => {
-        const response = await deleteAddress(addressId);
-        return response.data;
+    async (addressId, { rejectWithValue }) => {
+        try {
+            const data = await deleteAddress(addressId);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 
 export const updateUserAsync = createAsyncThunk(
     'user/updateUser',
-    async (update) => {
-        const response = await updateUser(update);
-        return response.data;
-    })
+    async (update, { rejectWithValue }) => {
+        try {
+            const data = await updateUser(update);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const userSlice = createSlice({
     name: 'user',
@@ -104,7 +133,7 @@ export const userSlice = createSlice({
             })
             .addCase(fetchUserOrdersAsync.rejected, (state, action) => {
                 state.status.isFetchingUserOrders = false;
-                state.errors.ErrorFetchingUserOrders = action.error.message;
+                state.errors.ErrorFetchingUserOrders = action.payload.message;
             })
 
             // updateUserAsync
@@ -118,7 +147,7 @@ export const userSlice = createSlice({
             })
             .addCase(updateUserAsync.rejected, (state, action) => {
                 state.status.isUpdatingUser = false;
-                state.errors.ErrorUpdatingUser = action.error.message;
+                state.errors.ErrorUpdatingUser = action.payload.message;
             })
 
             // fetchLoggedInUserAsync
@@ -132,7 +161,7 @@ export const userSlice = createSlice({
             })
             .addCase(fetchLoggedInUserAsync.rejected, (state, action) => {
                 state.status.isFetchingLoggedInUser = false;
-                state.errors.ErrorFetchingLoggedInUser = action.error.message;
+                state.errors.ErrorFetchingLoggedInUser = action.payload.message;
             })
 
             // addAddressAsync
@@ -146,7 +175,7 @@ export const userSlice = createSlice({
             })
             .addCase(addAddressAsync.rejected, (state, action) => {
                 state.status.isAddingAddress = false;
-                state.errors.ErrorAddingAddress = action.error.message;
+                state.errors.ErrorAddingAddress = action.payload.message;
             })
 
             // fetchAddressesAsync
@@ -160,7 +189,7 @@ export const userSlice = createSlice({
             })
             .addCase(fetchAddressesAsync.rejected, (state, action) => {
                 state.status.isFetchingAddresses = false;
-                state.errors.ErrorFetchingAddresses = action.error.message;
+                state.errors.ErrorFetchingAddresses = action.payload.message;
             })
 
             // updateAddressAsync
@@ -177,7 +206,7 @@ export const userSlice = createSlice({
             })
             .addCase(updateAddressAsync.rejected, (state, action) => {
                 state.status.isUpdatingAddress = false;
-                state.errors.ErrorUpdatingAddress = action.error.message;
+                state.errors.ErrorUpdatingAddress = action.payload.message;
             })
 
             // deleteAddressAsync
@@ -191,7 +220,7 @@ export const userSlice = createSlice({
             })
             .addCase(deleteAddressAsync.rejected, (state, action) => {
                 state.status.isDeletingAddress = false;
-                state.errors.ErrorDeletingAddress = action.error.message;
+                state.errors.ErrorDeletingAddress = action.payload.message;
             })
     }
 })

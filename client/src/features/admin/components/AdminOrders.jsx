@@ -14,7 +14,7 @@ const AdminOrders = () => {
     const ErrorFetchingAllOrders = useSelector(selectErrorFetchingAllOrders);
     const ErrorUpdatingOrder = useSelector(selectErrorUpdatingOrder);
 
-    const [editableOrderId, setEditableOrderId] = useState(-1);
+    const [editableOrder, setEditableOrder] = useState(null);
     const [sort, setSort] = useState({});
 
     const chooseColor = (status) => {
@@ -38,17 +38,17 @@ const AdminOrders = () => {
         setPage(page);
     }
     const handleEdit = (order) => {
-        setEditableOrderId(order.id);
+        setEditableOrder(order);
     }
     const handleUpdate = (e, order) => {
         const updatedOrder = { ...order, status: e.target.value };
         dispatch(updateOrderAsync(updatedOrder));
-        setEditableOrderId(-1);
+        setEditableOrder(null);
     }
     const handlePaymentStatus = (e, order) => {
         const updatePaymentStatus = { ...order, paymentStatus: e.target.value };
         dispatch(updateOrderAsync(updatePaymentStatus));
-        setEditableOrderId(-1);
+        setEditableOrder(null);
     }
     const handleSort = (sortOption) => {
         const sort = { _sort: sortOption.sort };
@@ -135,7 +135,7 @@ const AdminOrders = () => {
                                         </tr>
                                     </thead>
                                     <tbody className="text-gray-600 text-sm font-light">
-                                        {orders.data && orders.data.map((order, index) => (
+                                        {orders.length > 0 && orders.map((order, index) => (
                                             <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-100">
                                                 <td className="p-3 text-center whitespace-nowrap">
                                                     <span className="font-medium">{index + 1}</span>
@@ -166,8 +166,8 @@ const AdminOrders = () => {
                                                     <span>{order.selectedAddress.pinCode}</span>
                                                 </td>
                                                 <td className="p-3 text-center">
-                                                    {order.id === editableOrderId ? (
-                                                        <select onChange={(e) => handleUpdate(e, order)}>
+                                                    {order.id === editableOrder?.id ? (
+                                                        <select value={editableOrder?.status} className='cursor-pointer' onChange={(e) => handleUpdate(e, order)}>
                                                             <option value="pending">Pending</option>
                                                             <option value="placed">Placed</option>
                                                             <option value="dispatched">Dispatched</option>
@@ -188,8 +188,8 @@ const AdminOrders = () => {
                                                     {order.paymentMethod}
                                                 </td>
                                                 <td className="p-3 text-center">
-                                                    {order.id === editableOrderId ? (
-                                                        <select onChange={(e) => handlePaymentStatus(e, order)}>
+                                                    {order.id === editableOrder?.id ? (
+                                                        <select className='cursor-pointer' value={editableOrder?.paymentStatus} onChange={(e) => handlePaymentStatus(e, order)}>
                                                             <option value="pending">Pending</option>
                                                             <option value="received">Received</option>
                                                         </select>

@@ -20,24 +20,37 @@ const initialState = {
 
 export const createOrderAsync = createAsyncThunk(
     'order/createOrder',
-    async (orderData) => {
-        const response = await createOrder(orderData);
-        return response.data;
-    })
+    async (orderData, { rejectWithValue }) => {
+        try {
+            const data = await createOrder(orderData);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const fetchAllOrdersAsync = createAsyncThunk(
     'order/fetchAllOrders',
-    async ({ sort, pagination }) => {
-        const response = await fetchAllOrders(sort, pagination);
-        return response.data;
+    async ({ sort, pagination }, { rejectWithValue }) => {
+        try {
+            const data = await fetchAllOrders(sort, pagination);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 
 export const updateOrderAsync = createAsyncThunk(
     'order/updateOrder',
-    async (order) => {
-        const response = await updateOrder(order);
-        return response.data;
+    async (order, { rejectWithValue }) => {
+        try {
+            const data = await updateOrder(order);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 
@@ -67,10 +80,11 @@ export const orderSlice = createSlice({
                 state.status.isCreatingOrder = false;
                 state.orders.push(action.payload);
                 state.currentOrder = action.payload;
+                state.totalOrders += 1;
             })
             .addCase(createOrderAsync.rejected, (state, action) => {
                 state.status.isCreatingOrder = false;
-                state.errors.ErrorCreatingOrder = action.error.message;
+                state.errors.ErrorCreatingOrder = action.payload.message;
             })
 
             // fetchAllOrdersAsync
@@ -85,7 +99,7 @@ export const orderSlice = createSlice({
             })
             .addCase(fetchAllOrdersAsync.rejected, (state, action) => {
                 state.status.isFetchingAllOrders = false;
-                state.errors.ErrorFetchingAllOrders = action.error.message;
+                state.errors.ErrorFetchingAllOrders = action.payload.message;
             })
 
             // updateOrderAsync
@@ -95,12 +109,12 @@ export const orderSlice = createSlice({
             })
             .addCase(updateOrderAsync.fulfilled, (state, action) => {
                 state.status.isUpdatingOrder = false;
-                const index = state.orders.data.findIndex((order) => order.id === action.payload.id);
-                state.orders.data[index] = action.payload;
+                const index = state.orders.findIndex((order) => order.id === action.payload.id);
+                state.orders[index] = action.payload;
             })
             .addCase(updateOrderAsync.rejected, (state, action) => {
                 state.status.isUpdatingOrder = false;
-                state.errors.ErrorUpdatingOrder = action.error.message;
+                state.errors.ErrorUpdatingOrder = action.payload.message;
             })
 
     }

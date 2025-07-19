@@ -21,40 +21,63 @@ const initialState = {
 export const createUserAsync = createAsyncThunk(
     'user/createUser',
     async (userData, thunkAPI) => {
-        const { dispatch } = thunkAPI;
-        const response = await createUser(userData, dispatch);
-        return response.data;
-    })
+        try {
+            const { dispatch } = thunkAPI;
+            const data = await createUser(userData, dispatch);
+            return data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
 
 export const checkUserAsync = createAsyncThunk(
     'user/checkUser',
     async (loginInfo, thunkAPI) => {
-        const { dispatch } = thunkAPI;
-        const response = await checkUser(loginInfo, dispatch);
-        return response.data;
-    })
+        try {
+            const { dispatch } = thunkAPI;
+            const data = await checkUser(loginInfo, dispatch);
+            return data;
+        } catch (error) {
+            console.log(error);
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
 
 export const signOutAsync = createAsyncThunk(
     'user/signOut',
-    async () => {
-        const response = await signOut();
-        return response.data;
+    async (_, thunkAPI) => {
+        try {
+            const data = await signOut();
+            return data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
     }
 );
 
 export const resetPasswordRequestAsync = createAsyncThunk(
     'user/resetPasswordRequest',
-    async (email) => {
-        const response = await resetPasswordRequest(email);
-        return response.data;
+    async (email, thunkAPI) => {
+        try {
+            const data = await resetPasswordRequest(email);
+            return data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
     }
 );
 
 export const resetPasswordAsync = createAsyncThunk(
     'user/resetPassword',
-    async ({ token, email, password }) => {
-        const response = await resetPassword(email, token, password);
-        return response.data;
+    async ({ token, email, password }, thunkAPI) => {
+        try {
+            const data = await resetPassword(email, token, password);
+            return data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
     }
 );
 
@@ -77,7 +100,7 @@ export const authSlice = createSlice({
                 state.status.isCreatingUser = false;
             })
             .addCase(createUserAsync.rejected, (state, action) => {
-                state.errors.ErrorCreatingUser = action.error.message;
+                state.errors.ErrorCreatingUser = action.payload.message;
                 state.status.isCreatingUser = false;
             })
 
@@ -90,7 +113,7 @@ export const authSlice = createSlice({
                 state.status.isCheckingUser = false;
             })
             .addCase(checkUserAsync.rejected, (state, action) => {
-                state.errors.ErrorCheckingUser = action.error.message;
+                state.errors.ErrorCheckingUser = action.payload.message;
                 state.status.isCheckingUser = false;
             })
 
@@ -103,7 +126,7 @@ export const authSlice = createSlice({
                 state.status.isSigningOut = false;
             })
             .addCase(signOutAsync.rejected, (state, action) => {
-                state.errors.ErrorSigningOut = action.error.message;
+                state.errors.ErrorSigningOut = action.payload.message;
                 state.status.isSigningOut = false;
             })
 
@@ -116,7 +139,7 @@ export const authSlice = createSlice({
                 state.status.isSendingResetPasswordRequest = false;
             })
             .addCase(resetPasswordRequestAsync.rejected, (state, action) => {
-                state.errors.ErrorSendingResetPasswordRequest = action.error.message;
+                state.errors.ErrorSendingResetPasswordRequest = action.payload.message;
                 state.status.isSendingResetPasswordRequest = false;
             })
 
@@ -129,7 +152,7 @@ export const authSlice = createSlice({
                 state.status.isResettingPassword = false;
             })
             .addCase(resetPasswordAsync.rejected, (state, action) => {
-                state.errors.ErrorResettingPassword = action.error.message;
+                state.errors.ErrorResettingPassword = action.payload.message;
                 state.status.isResettingPassword = false;
             })
     }

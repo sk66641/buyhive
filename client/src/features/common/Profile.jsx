@@ -158,6 +158,7 @@ const Profile = () => {
                                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
+                                                {errors.name && <p className="text-pink-600 text-sm mt-1">{errors.name.message}</p>}
                                             </div>
 
                                             <div className="sm:col-span-3">
@@ -170,12 +171,19 @@ const Profile = () => {
                                                 <div className="mt-2">
                                                     <input
                                                         type="tel"
-                                                        {...register('phone', { required: "phone is required" })}
+                                                        {...register('phone', {
+                                                            required: "phone is required",
+                                                            pattern: {
+                                                                value: /^[0-9]{10}$/,
+                                                                message: 'Phone number must be 10 digits and contain only numbers'
+                                                            }
+                                                        })}
                                                         id="phone-number"
                                                         autoComplete="phone-number"
                                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
+                                                {errors.phone && <p className="text-pink-600 text-sm mt-1">{errors.phone.message}</p>}
                                             </div>
 
                                             <div className="col-span-full">
@@ -194,6 +202,7 @@ const Profile = () => {
                                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
+                                                {errors.street && <p className="text-pink-600 text-sm mt-1">{errors.street.message}</p>}
                                             </div>
 
                                             <div className="sm:col-span-2 sm:col-start-1">
@@ -212,6 +221,7 @@ const Profile = () => {
                                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
+                                                {errors.city && <p className="text-pink-600 text-sm mt-1">{errors.city.message}</p>}
                                             </div>
 
                                             <div className="sm:col-span-2">
@@ -230,6 +240,7 @@ const Profile = () => {
                                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
+                                                {errors.region && <p className="text-pink-600 text-sm mt-1">{errors.region.message}</p>}
                                             </div>
 
                                             <div className="sm:col-span-2">
@@ -248,6 +259,7 @@ const Profile = () => {
                                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
+                                                {errors.pinCode && <p className="text-pink-600 text-sm mt-1">{errors.pinCode.message}</p>}
                                             </div>
                                         </div>
                                     </div>
@@ -310,19 +322,19 @@ const Profile = () => {
                                         <div key={address.id}>
                                             <div
 
-                                                className="flex justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200"
+                                                className="flex justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200 overflow-auto"
                                             >
 
                                                 <div className="flex gap-x-4">
 
                                                     <div className="min-w-0 flex-auto">
-                                                        <p className="text-sm font-semibold leading-6 text-gray-900">
+                                                        <p className="text-sm font-semibold leading-6 text-gray-900 text-wrap">
                                                             {address.name}
                                                         </p>
-                                                        <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                                                        <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-wrap">
                                                             {address.street}
                                                         </p>
-                                                        <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                                                        <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-wrap">
                                                             {address.pinCode}
                                                         </p>
                                                     </div>
@@ -380,6 +392,7 @@ const Profile = () => {
                                                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
+                                                                    {errors.name && <p className="text-pink-600 text-sm mt-1">{errors.name.message}</p>}
                                                                 </div>
 
                                                                 <div className="sm:col-span-3">
@@ -392,12 +405,20 @@ const Profile = () => {
                                                                     <div className="mt-2">
                                                                         <input
                                                                             type="tel"
-                                                                            {...register('phone', { required: "phone is required" })}
+                                                                            {...register('phone', {
+                                                                                required: 'Phone number is required',
+                                                                                pattern: {
+                                                                                    value: /^[0-9]{10}$/,
+                                                                                    message: 'Phone number must be 10 digits and contain only numbers',
+                                                                                },
+                                                                            })}
+
                                                                             id="phone-number"
                                                                             autoComplete="phone-number"
                                                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
+                                                                    {errors.phone && <p className="text-pink-600 text-sm mt-1">{errors.phone.message}</p>}
                                                                 </div>
 
                                                                 <div className="col-span-full">
@@ -416,6 +437,7 @@ const Profile = () => {
                                                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
+                                                                    {errors.street && <p className="text-pink-600 text-sm mt-1">{errors.street.message}</p>}
                                                                 </div>
 
                                                                 <div className="sm:col-span-2 sm:col-start-1">
@@ -434,6 +456,7 @@ const Profile = () => {
                                                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
+                                                                    {errors.city && <p className="text-pink-600 text-sm mt-1">{errors.city.message}</p>}
                                                                 </div>
 
                                                                 <div className="sm:col-span-2">
@@ -452,6 +475,7 @@ const Profile = () => {
                                                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
+                                                                    {errors.region && <p className="text-pink-600 text-sm mt-1">{errors.region.message}</p>}
                                                                 </div>
 
                                                                 <div className="sm:col-span-2">
@@ -470,6 +494,7 @@ const Profile = () => {
                                                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
+                                                                    {errors.pinCode && <p className="text-pink-600 text-sm mt-1">{errors.pinCode.message}</p>}
                                                                 </div>
                                                             </div>
                                                         </div>

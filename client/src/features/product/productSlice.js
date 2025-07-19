@@ -21,33 +21,51 @@ const initialState = {
 
 export const fetchProductsByFiltersAsync = createAsyncThunk(
     'product/fetchProductsByFilters',
-    async ({ filter, sort, pagination }) => {
-        const response = await fetchProductsByFilters(filter, sort, pagination);
-        return response.data;
+    async ({ filter, sort, pagination }, { rejectWithValue }) => {
+        try {
+            const data = await fetchProductsByFilters(filter, sort, pagination);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 
 export const fetchProductsByIdAsync = createAsyncThunk(
     'product/fetchProductsById',
-    async (id) => {
-        const response = await fetchProductsById(id);
-        return response.data;
+    async (id, { rejectWithValue }) => {
+        try {
+            const data = await fetchProductsById(id);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 
 export const createProductAsync = createAsyncThunk(
     'product/createProduct',
-    async (product) => {
-        const response = await createProduct(product);
-        return response.data;
-    })
+    async (product, { rejectWithValue }) => {
+        try {
+            const data = await createProduct(product);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const updateProductAsync = createAsyncThunk(
-    'product/udpateProduct',
-    async (product) => {
-        const response = await updateProduct(product);
-        return response.data;
-    })
+    'product/updateProduct',
+    async (product, { rejectWithValue }) => {
+        try {
+            const data = await updateProduct(product);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
 
 export const productSlice = createSlice({
     name: 'product',
@@ -71,7 +89,7 @@ export const productSlice = createSlice({
             })
             .addCase(fetchProductsByFiltersAsync.rejected, (state, action) => {
                 state.status.isFetchingProducts = false;
-                state.errors.ErrorFetchingProducts = action.error.message;
+                state.errors.ErrorFetchingProducts = action.payload.message;
             })
 
             // fetchProductsByIdAsync
@@ -85,7 +103,7 @@ export const productSlice = createSlice({
             })
             .addCase(fetchProductsByIdAsync.rejected, (state, action) => {
                 state.status.isFetchingProductById = false;
-                state.errors.ErrorFetchingProductById = action.error.message;
+                state.errors.ErrorFetchingProductById = action.payload.message;
             })
 
             // createProductAsync
@@ -99,7 +117,7 @@ export const productSlice = createSlice({
             })
             .addCase(createProductAsync.rejected, (state, action) => {
                 state.status.isCreatingProduct = false;
-                state.errors.ErrorCreatingProduct = action.error.message;
+                state.errors.ErrorCreatingProduct = action.payload.message;
             })
 
             // updateProductAsync
@@ -114,7 +132,7 @@ export const productSlice = createSlice({
             })
             .addCase(updateProductAsync.rejected, (state, action) => {
                 state.status.isUpdatingProduct = false;
-                state.errors.ErrorUpdatingProduct = action.error.message;
+                state.errors.ErrorUpdatingProduct = action.payload.message;
             })
     }
 })
