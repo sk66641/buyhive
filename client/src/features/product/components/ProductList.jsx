@@ -89,9 +89,8 @@ export const filters =
         }
     ]
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
+// TODO: We can also show when the product was created or last updated
+// TODO: Add product search functionality (we don't have to just return a single product, we need to return a list of products based on the search query)
 
 const ProductList = () => {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)

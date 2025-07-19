@@ -43,6 +43,8 @@ export default function Cart() {
         dispatch(resetCartErrors());
     }, [ErrorUpdatingCart, ErrorDeletingItem, ErrorFetchingItems, dispatch]);
 
+    // TODO: Add popups while deleting items or addresses
+
     return (
         <>
             {isFetchingItems ? (

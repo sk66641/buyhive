@@ -33,6 +33,9 @@ const UserOrders = () => {
     dispatch(fetchUserOrdersAsync())
   }, [dispatch]);
 
+
+  // TODO: Add infinite scroll or pagination for orders
+
   return (
     <>
       {isFetchingUserOrders ? (

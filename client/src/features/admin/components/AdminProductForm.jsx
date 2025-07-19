@@ -1,4 +1,4 @@
-import { filters } from '../../product/components/productList'
+import { filters } from '../../product/components/ProductList'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { createProductAsync, fetchProductsByIdAsync, resetProductErrors, selectedProductById, selectErrorCreatingProduct, selectIsCreatingProduct, selectIsUpdatingProduct, updateProductAsync } from '../../product/productSlice';
