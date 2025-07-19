@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addAddressAsync, deleteAddressAsync, fetchAddressesAsync, resetUserErrors, selectAddresses, selectErrorAddingAddress, selectErrorDeletingAddress, selectErrorFetchingAddresses, selectErrorUpdatingAddress, selectIsAddingAddress, selectIsDeletingAddress, selectIsFetchingAddresses, selectIsUpdatingAddress, selectUserInfo, updateAddressAsync } from '../user/userSlice';
 import { useForm } from 'react-hook-form';
 import { resetAuthErrors, selectErrorSigningOut, selectIsSigningOut, signOutAsync } from '../auth/authSlice';
-import { resetCartErrors } from '../cart/CartSlice';
 import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector(selectUserInfo);
     const addresses = useSelector(selectAddresses);
@@ -79,7 +80,7 @@ const Profile = () => {
     const handleSignOut = () => {
         dispatch(signOutAsync()).
             unwrap().then(() => {
-                window.location.replace('/');
+                navigate('/', { replace: true });
             });
     }
 
@@ -109,7 +110,7 @@ const Profile = () => {
 
     return (
         <div className="lg:col-span-2">
-            <div className="mx-auto mt-12 bg-white max-w-7xl px-0 sm:px-0 lg:px-0">
+            <div className="mx-auto bg-white px-0 sm:px-0 lg:px-0">
                 <div className="flex h-full flex-col bg-white shadow-xl">
                     <div className='flex items-center justify-between flex-wrap gap-3 px-4 py-6 sm:px-6'>
                         <div className="flex flex-col overflow-y-auto">
@@ -285,8 +286,8 @@ const Profile = () => {
                         <div>
                             {isFetchingAddresses ? (
                                 <div className="flex flex-col gap-4">
-                                    {[1,2,3].map((_, idx) => (
-                                        <div key={idx} className="animate-pulse bg-gray-100 rounded-xl border border-gray-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                    {[1, 2, 3].map((_, idx) => (
+                                        <div key={idx} className="animate-pulse bg-gray-100 border border-gray-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                             <div className="flex flex-col gap-1 w-32">
                                                 <div className="h-4 bg-gray-300 rounded w-3/4 mb-1"></div>
                                                 <div className="h-3 bg-gray-200 rounded w-1/2 mb-1"></div>

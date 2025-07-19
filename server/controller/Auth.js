@@ -14,7 +14,7 @@ exports.createUser = async (req, res) => {
         const response = await user.save();
         // Generate JWT token
         const token = jwt.sign(
-            { id: response._id, email: response.email, role: response.role, addresses: response.addresses, orders: response.orders },
+            { id: response._id, name: user.name, email: response.email, role: response.role },
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
@@ -26,7 +26,7 @@ exports.createUser = async (req, res) => {
             sameSite: 'None',
         });
 
-        res.status(201).json({ id: response._id, email: response.email, role: response.role, addresses: response.addresses, orders: response.orders });
+        res.status(201).json({ id: response._id, name: user.name, email: response.email, role: response.role });
     } catch (error) {
         console.error("Error creating user:", error);
         res.status(400).json({ message: 'Error creating user' });
@@ -44,7 +44,7 @@ exports.loginUser = async (req, res) => {
             return res.status(401).json({ message: 'invalid credentials' });
         }
         const token = jwt.sign(
-            { id: user._id, email: user.email, role: user.role, addresses: user.addresses, orders: user.orders },
+            { id: user._id, name: user.name, email: user.email, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -53,7 +53,7 @@ exports.loginUser = async (req, res) => {
             secure: true,
             sameSite: 'None',
         });
-        res.status(201).json({ id: user._id, email: user.email, role: user.role, addresses: user.addresses, orders: user.orders });
+        res.status(201).json({ id: user._id, name: user.name, email: user.email, role: user.role });
     } catch (error) {
         console.error("Error logging in user:", error);
         res.status(400).json({ message: 'Error logging in' });
@@ -69,7 +69,6 @@ exports.logout = (req, res) => {
     res.status(200).json({ message: 'Logged out successfully' });
 }
 
-// TODO: what about expiry?
 exports.resetPasswordRequest = async (req, res) => {
     try {
         const { email } = req.body;

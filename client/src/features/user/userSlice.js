@@ -3,7 +3,7 @@ import { updateUser, fetchLoggedInUser, fetchUserOrders, addAddress, fetchAddres
 
 const initialState = {
     status: {
-        isFetchingLoggedInUser: false,
+        isFetchingLoggedInUser: true,
         isUpdatingUser: false, // TODO: not used yet
         isFetchingUserOrders: false,
         isAddingAddress: false,

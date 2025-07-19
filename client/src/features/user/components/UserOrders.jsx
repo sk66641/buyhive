@@ -36,9 +36,9 @@ const UserOrders = () => {
   return (
     <>
       {isFetchingUserOrders ? (
-        <div className="flex flex-col gap-8 w-full px-2 sm:px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
+        <div className="flex flex-col gap-8 w-full">
           {[1, 2].map((i) => (
-            <div key={i} className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 animate-pulse">
+            <div key={i} className="bg-white shadow-lg p-6 border border-gray-100 animate-pulse">
               <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-2">
                 <div className="h-6 w-32 bg-gray-200 rounded mb-2"></div>
                 <div className="h-4 w-40 bg-gray-200 rounded"></div>
@@ -90,15 +90,15 @@ const UserOrders = () => {
           ))}
         </div>
       ) : orders.length > 0 ? (
-        <div className="flex flex-col gap-8 w-full px-2 sm:px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
+        <div className="flex flex-col gap-8 w-full">
           {orders.map((order) => (
-            <div key={order.id} className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+            <div key={order.id} className="bg-white shadow-lg p-6 border border-gray-100">
               <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-2">
                 <div className="text-lg font-semibold text-blue-700">Order #{order.id}</div>
                 <div className="text-sm text-gray-500">Ordered At: {new Date(order.createdAt).toLocaleString()}</div>
               </div>
               <div className="flex flex-wrap gap-4 mb-4">
-                <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium">Status: {order.status}</span>
+                <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium">Order: {order.status}</span>
                 <span className="px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-medium">Payment: {order.paymentMethod}</span>
                 <span className="px-3 py-1 rounded-full bg-yellow-50 text-yellow-700 text-xs font-medium">{order.paymentStatus}</span>
               </div>
@@ -129,10 +129,6 @@ const UserOrders = () => {
                   <span>Subtotal</span>
                   <span>${order.totalAmount}</span>
                 </div>
-                {/* <div className="flex justify-between text-base font-medium text-gray-900">
-                <p>Total Items in Cart</p>
-                <p>{order.totalItems} items</p>
-              </div> */}
                 <div className="mt-2">
                   <div className="text-sm text-gray-500 font-medium mb-1">Shipping Address:</div>
                   <div className="bg-gray-50 rounded-lg p-4 flex flex-col sm:flex-row sm:justify-between gap-2 border border-gray-200">
@@ -152,7 +148,7 @@ const UserOrders = () => {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center h-[60vh] bg-gradient-to-br from-indigo-50 to-white rounded-xl shadow-md">
+        <div className="flex flex-col items-center justify-center h-[60vh] bg-gradient-to-br from-indigo-50 to-white shadow-md">
           <span className="text-lg text-gray-500">No order found</span>
           <button
             type="button"

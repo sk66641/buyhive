@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+// TODO: Remove actual number of stocks being sent to frontend
+// -> Add a field 'available' to indicate if stock is available for each item
+// -> Before saving a product, check if it's stock is greater than 0 and set 'available' accordingly
+// -> When an order is created, decrease the stock for each item and update the 'available' field
+
 const productSchema = new mongoose.Schema(
     {
         title: { type: String, required: true },

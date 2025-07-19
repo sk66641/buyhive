@@ -87,7 +87,7 @@ export const authSlice = createSlice({
                 state.status.isCheckingUser = true;
             })
             .addCase(checkUserAsync.fulfilled, (state, action) => {
-                state.status.isCheckingUser = true;
+                state.status.isCheckingUser = false;
             })
             .addCase(checkUserAsync.rejected, (state, action) => {
                 state.errors.ErrorCheckingUser = action.error.message;

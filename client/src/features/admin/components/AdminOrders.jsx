@@ -21,6 +21,8 @@ const AdminOrders = () => {
         switch (status) {
             case 'pending':
                 return 'bg-purple-200 text-purple-600';
+            case 'placed':
+                return 'bg-blue-200 text-blue-600';
             case 'dispatched':
                 return 'bg-yellow-200 text-yellow-600';
             case 'delivered':
@@ -37,9 +39,6 @@ const AdminOrders = () => {
     }
     const handleEdit = (order) => {
         setEditableOrderId(order.id);
-    }
-    const handleShow = (order) => {
-        console.log("handleShow");
     }
     const handleUpdate = (e, order) => {
         const updatedOrder = { ...order, status: e.target.value };
@@ -74,28 +73,26 @@ const AdminOrders = () => {
     return (
         <>
             {isFetchingAllOrders ?
-                <div className="flex justify-center items-center h-screen">
-                    <div className="w-full max-w-4xl flex flex-col gap-4 animate-pulse">
-                        {[1,2,3,4,5].map((_, idx) => (
-                            <div key={idx} className="flex items-center gap-4 p-4 bg-white rounded-lg shadow border border-gray-100">
-                                <div className="h-10 w-10 bg-gray-200 rounded-full" />
-                                <div className="flex-1 flex flex-col gap-2">
-                                    <div className="h-4 w-1/2 bg-gray-200 rounded" />
-                                    <div className="h-3 w-1/3 bg-gray-100 rounded" />
-                                </div>
-                                <div className="flex flex-col items-end gap-2">
-                                    <div className="h-4 w-16 bg-gray-200 rounded" />
-                                    <div className="h-4 w-20 bg-gray-100 rounded" />
-                                </div>
+                <div className="w-full flex flex-col gap-4 animate-pulse">
+                    {[1, 2, 3, 4, 5].map((_, idx) => (
+                        <div key={idx} className="flex items-center gap-4 p-4 bg-white shadow border border-gray-100">
+                            <div className="h-10 w-10 bg-gray-200 rounded-full" />
+                            <div className="flex-1 flex flex-col gap-2">
+                                <div className="h-4 w-1/2 bg-gray-200 rounded" />
+                                <div className="h-3 w-1/3 bg-gray-100 rounded" />
                             </div>
-                        ))}
-                    </div>
+                            <div className="flex flex-col items-end gap-2">
+                                <div className="h-4 w-16 bg-gray-200 rounded" />
+                                <div className="h-4 w-20 bg-gray-100 rounded" />
+                            </div>
+                        </div>
+                    ))}
                 </div>
                 :
                 totalOrders > 0 ?
-                    <div className="overflow-x-auto bg-white rounded-md font-sans overflow-hidden">
+                    <div className="overflow-x-auto bg-white font-sans overflow-hidden">
                         <div className="w-full">
-                            <div className="rounded my-6">
+                            <div className="my-6">
                                 <table className="min-w-max w-full table-auto">
                                     <thead>
                                         <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -172,6 +169,7 @@ const AdminOrders = () => {
                                                     {order.id === editableOrderId ? (
                                                         <select onChange={(e) => handleUpdate(e, order)}>
                                                             <option value="pending">Pending</option>
+                                                            <option value="placed">Placed</option>
                                                             <option value="dispatched">Dispatched</option>
                                                             <option value="delivered">Delivered</option>
                                                             <option value="cancelled">Cancelled</option>
@@ -228,27 +226,7 @@ const AdminOrders = () => {
 
                                                 <td className="p-3 text-center">
                                                     <div className="flex item-center justify-center">
-                                                        <div onClick={() => handleShow(order)} className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none"
-                                                                viewBox="0 0 24 24"
-                                                                stroke="currentColor"
-                                                            >
-                                                                <path
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth={2}
-                                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                                                />
-                                                                <path
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth={2}
-                                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                                                />
-                                                            </svg>
-                                                        </div>
+                                                        {/* TODO: add showOrder and deleteOrder */}
                                                         <div onClick={() => handleEdit(order)} className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
                                                             <svg
                                                                 xmlns="http://www.w3.org/2000/svg"
@@ -274,7 +252,17 @@ const AdminOrders = () => {
                                 <Pagination totalItems={totalOrders} handlePage={handlePage} page={page} setPage={setPage}></Pagination>
                             </div>
                         </div>
-                    </div> : "No orders found"
+                    </div> :
+                    <div className="flex flex-col items-center justify-center h-[60vh] bg-gradient-to-br from-indigo-50 to-white shadow-md">
+                        <span className="text-lg text-gray-500">No orders found</span>
+                        <button
+                            type="button"
+                            onClick={() => navigate('/')}
+                            className="mt-6 px-4 py-2 bg-indigo-600 cursor-pointer text-white rounded hover:bg-indigo-700 transition"
+                        >
+                            Continue Shopping
+                        </button>
+                    </div>
             }
         </>
     )

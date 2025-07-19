@@ -80,7 +80,7 @@ export default function AdminProductForm() {
 
     return (
 
-        <form noValidate onSubmit={handleSubmit((data) => {
+        <form className='bg-white shadow-xl px-5 py-12' noValidate onSubmit={handleSubmit((data) => {
 
             const { highlight1, highlight2, highlight3, highlight4, image1, image2, image3, image4, ...rest } = data;
 

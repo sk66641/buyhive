@@ -7,13 +7,6 @@ import { selectIsFetchingLoggedInUser, selectUserInfo } from '../user/userSlice'
 import toast, { Toaster } from 'react-hot-toast'
 import Footer from '../common/Footer'
 
-const user = {
-    name: 'Tom Cook',
-    email: 'tom@example.com',
-    imageUrl:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
-
 const userNavigation = [
     { name: 'Home', link: '/' },
     { name: 'My Orders', link: '/orders' },
@@ -27,13 +20,8 @@ const adminNavigation = [
     { name: 'My Profile', link: '/profile' },
 ]
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
-
 export default function Navbar({ children }) {
 
-    const dispatch = useDispatch();
     const items = useSelector(selectItems);
     const getUser = useSelector(selectUserInfo);
     const isFetchingLoggedInUser = useSelector(selectIsFetchingLoggedInUser);
@@ -111,7 +99,9 @@ export default function Navbar({ children }) {
                                                 <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                                                     <span className="absolute -inset-1.5" />
                                                     <span className="sr-only">Open user menu</span>
-                                                    <img alt="img" src={user.imageUrl} className="size-8 rounded-full z-0 cursor-pointer" />
+                                                    {/* TODO */}
+                                                    {/* <img alt="img" src={user.imageUrl} className="size-8 rounded-full z-0 cursor-pointer" /> */}
+                                                    <div className='w-8 h-8 rounded-full text-xl text-center font-medium bg-indigo-200 cursor-pointer z-0'>{getUser.name?.split('')[0]}</div>
                                                 </MenuButton>
                                                 <MenuItems
                                                     transition
@@ -119,8 +109,8 @@ export default function Navbar({ children }) {
                                                 >
                                                     <MenuItem>
                                                         <Link to={'/profile'} className='flex flex-col px-3 py-1 hover:bg-gray-300'>
-                                                            <div className="text-base/5 font-medium text-gray-800">{user.name}</div>
-                                                            <div className="text-sm font-medium text-gray-800">{user.email}</div>
+                                                            <div className="text-base/5 font-medium text-gray-800">{getUser.name}</div>
+                                                            <div className="text-sm font-medium text-gray-800">{getUser.email}</div>
                                                         </Link>
                                                     </MenuItem>
                                                 </MenuItems>
@@ -149,29 +139,43 @@ export default function Navbar({ children }) {
 
                     <DisclosurePanel className="md:hidden">
                         <div className="border-t border-gray-700 pt-4 pb-3">
-                            <div className="flex items-center px-5">
-                                <Link to={'/profile'} className='flex items-center'>
-                                    <div className="shrink-0">
-                                        <img alt="" src={user.imageUrl} className="size-10 rounded-full" />
-                                    </div>
-                                    <div className="ml-3">
-                                        <div className="text-base/5 font-medium text-white">{user.name}</div>
-                                        <div className="text-sm font-medium text-gray-400">{user.email}</div>
-                                    </div>
-                                </Link>
-                                <Link to={'/cart'}
-                                    type="button"
-                                    className="relative ml-auto shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
-                                >
-                                    <span className="absolute -inset-1.5" />
-                                    <span className="sr-only">View notifications</span>
-                                    <ShoppingCartIcon aria-hidden="true" className="size-6" />
-                                </Link>
-                                {items.length > 0 && <span className="inline-flex items-center rounded-md bg-gray-50 mb-5 -ml-3 px-1.5 py-0.5 z-0 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset">
-                                    {items.length}
-                                </span>}
+                            {isFetchingLoggedInUser ? (
+                                <div className="flex items-center gap-2 animate-pulse">
+                                    <div className="w-8 h-8 rounded-full bg-gray-200" />
+                                </div>
+                            ) : getUser ?
+                                <div className="flex items-center px-5">
+                                    <Link to={'/profile'} className='flex items-center'>
+                                        <div className="shrink-0">
+                                            {/* TODO */}
+                                            {/* <img alt="" src={user.imageUrl} className="size-10 rounded-full" /> */}
+                                            <div className='w-10 h-10 z-0 rounded-full bg-indigo-200 text-3xl font-medium cursor-pointer text-center'>{getUser.name?.split('')[0]}</div>
+                                        </div>
+                                        <div className="ml-3">
+                                            <div className="text-base/5 font-medium text-white">{getUser.name}</div>
+                                            <div className="text-sm font-medium text-gray-400">{getUser.email}</div>
+                                        </div>
+                                    </Link>
+                                    <Link to={'/cart'}
+                                        type="button"
+                                        className="relative ml-auto shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
+                                    >
+                                        <span className="absolute -inset-1.5" />
+                                        <span className="sr-only">View notifications</span>
+                                        <ShoppingCartIcon aria-hidden="true" className="size-6" />
+                                    </Link>
+                                    {items.length > 0 && <span className="inline-flex items-center rounded-md bg-gray-50 mb-5 -ml-3 px-1.5 py-0.5 z-0 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset">
+                                        {items.length}
+                                    </span>}
 
-                            </div>
+                                </div> :
+                                <Link
+                                    to="/auth"
+                                    className="ml-4 px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition"
+                                >
+                                    Log in
+                                </Link>
+                            }
                             <div className="mt-3 space-y-1 px-2">
                                 {userNavigation.map((item) => (
                                     <DisclosureButton

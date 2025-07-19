@@ -445,7 +445,7 @@ function ProductGrid({ products }) {
                 {ErrorFetchingProducts && <p className="text-red-500 mt-2">{ErrorFetchingProducts}</p>}
                 {isFetchingProducts ?
                     <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-10 mt-6">
-                        {[1,2,3,4,5,6,7,8].map((_, idx) => (
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map((_, idx) => (
                             <div key={idx} className="flex flex-col gap-2 justify-between animate-pulse">
                                 <div className="group relative flex flex-col border border-gray-200 rounded-2xl shadow-lg overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 h-full">
                                     <div className="relative">
@@ -472,8 +472,8 @@ function ProductGrid({ products }) {
                         ))}
                     </div>
                     :
-                    <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
-                        <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-10">
+                    <div className="mx-auto max-w-5xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
+                        <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-10">
                             {products.map((product) => {
 
                                 const hasDiscount = product.discountPercentage && product.discountPercentage > 0;
@@ -490,14 +490,15 @@ function ProductGrid({ products }) {
                                                     src={product.images}
                                                     className="aspect-square w-full object-cover rounded-t-2xl bg-gray-100 transition-transform duration-300 group-hover:scale-105"
                                                 />
-                                                {hasDiscount && (
-                                                    null
-                                                )}
-                                                {product.stock === 0 && (
+                                                {product.deleted ?
                                                     <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg drop-shadow">
-                                                        Out of Stock
-                                                    </span>
-                                                )}
+                                                        Deleted
+                                                    </span> :
+                                                    product.stock === 0 && (
+                                                        <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg drop-shadow">
+                                                            Out of Stock
+                                                        </span>
+                                                    )}
                                             </div>
                                             <div className="flex-1 flex flex-col justify-between p-4">
                                                 <div>
@@ -525,11 +526,14 @@ function ProductGrid({ products }) {
                                                         {hasDiscount ? (
                                                             <div className="flex flex-col">
                                                                 <div className="flex items-center gap-2">
-                                                                    <span className="text-lg font-bold text-green-500">
+                                                                    <span className="text-sm font-bold text-green-500">
                                                                         ${product.discountedPrice}
                                                                     </span>
                                                                     <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full border border-green-200">
-                                                                        {product.discountPercentage}% OFF
+                                                                        {product.discountPercentage}%
+                                                                        <span className="ml-1 text-xs">
+                                                                            OFF
+                                                                        </span>
                                                                     </span>
                                                                 </div>
                                                                 <span className="text-sm line-through text-gray-400">
@@ -542,11 +546,6 @@ function ProductGrid({ products }) {
                                                             </span>
                                                         )}
                                                     </div>
-                                                    {product.deleted && (
-                                                        <span className="text-xs font-semibold text-red-500 ml-2">
-                                                            Deleted
-                                                        </span>
-                                                    )}
                                                 </div>
                                             </div>
                                         </Link>
