@@ -77,7 +77,7 @@ export default function AdminProductForm() {
 
     return (
 
-        <form className='bg-white shadow-xl px-5 py-12' noValidate onSubmit={handleSubmit((data) => {
+        <form className='bg-white rounded-2xl dark:bg-gray-800 shadow-xl px-5 py-12' noValidate onSubmit={handleSubmit((data) => {
 
             const { highlight1, highlight2, highlight3, highlight4, image1, image2, image3, image4, ...rest } = data;
 
@@ -105,33 +105,33 @@ export default function AdminProductForm() {
 
         })}>
             <div className="space-y-12">
-                <div className="border-b border-gray-900/10 pb-12">
-                    <h2 className="text-base/7 font-semibold text-gray-900">Add Product</h2>
+                <div className="border-b border-gray-900/10 dark:border-gray-700/50 pb-12">
+                    <h2 className="text-base/7 font-semibold text-gray-900 dark:text-white">Add Product</h2>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="sm:col-span-6">
-                            <label htmlFor="title" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="title" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
                                 Product Name
                             </label>
                             <div className="mt-2">
-                                <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <div className="flex items-center rounded-md bg-white dark:bg-gray-700 pl-3 outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-600 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                                     <input
                                         id="title"
                                         type="text"
                                         {...register('title', {
                                             required: 'title is required',
                                         })}
-                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
                                     />
                                 </div>
                             </div>
-                            {errors.title && <p className="text-pink-600 text-sm mt-1">{errors.title.message}</p>}
+                            {errors.title && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.title.message}</p>}
                         </div>
 
                         <div className="col-span-full">
-                            <label htmlFor="description" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="description" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
                                 Description
                             </label>
-                            <p className="mt-3 text-sm/6 text-gray-600">Write a few sentences about the product.</p>
+                            <p className="mt-3 text-sm/6 text-gray-600 dark:text-gray-400">Write a few sentences about the product.</p>
                             <div className="mt-2">
                                 <textarea
                                     id="description"
@@ -139,19 +139,19 @@ export default function AdminProductForm() {
                                     {...register('description', {
                                         required: 'description is required',
                                     })}
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    className="block w-full rounded-md bg-white dark:bg-gray-700 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     defaultValue={''}
                                 />
                             </div>
-                            {errors.description && <p className="text-pink-600 text-sm mt-1">{errors.description.message}</p>}
+                            {errors.description && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.description.message}</p>}
                         </div>
 
                         {/* Details Section */}
                         <div className="col-span-full">
-                            <label htmlFor="details" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="details" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
                                 Details
                             </label>
-                            <p className="mt-3 text-sm/6 text-gray-600">Write details about the product.</p>
+                            <p className="mt-3 text-sm/6 text-gray-600 dark:text-gray-400">Write details about the product.</p>
                             <div className="mt-2">
                                 <textarea
                                     id="details"
@@ -159,16 +159,16 @@ export default function AdminProductForm() {
                                     {...register('details', {
                                         required: 'details is required',
                                     })}
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    className="block w-full rounded-md bg-white dark:bg-gray-700 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     defaultValue={''}
                                 />
                             </div>
-                            {errors.details && <p className="text-pink-600 text-sm mt-1">{errors.details.message}</p>}
+                            {errors.details && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.details.message}</p>}
                         </div>
 
                         {/* Colors, Sizes, and Highlights Section */}
                         <div className="col-span-full">
-                            <label className="block text-sm/6 font-medium text-gray-900">
+                            <label className="block text-sm/6 font-medium text-gray-900 dark:text-white">
                                 Colors
                             </label>
                             <div className="mt-2 flex flex-wrap gap-4">
@@ -178,16 +178,16 @@ export default function AdminProductForm() {
                                             type="checkbox"
                                             value={color.id}
                                             {...register('colors')}
-                                            className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                            className="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 rounded"
                                         />
                                         <span className={`inline-block w-6 h-6 rounded-full ${color.class} border`} />
-                                        <span>{color.name}</span>
+                                        <span className="text-gray-900 dark:text-white">{color.name}</span>
                                     </label>
                                 ))}
                             </div>
                         </div>
                         <div className="col-span-full">
-                            <label className="block text-sm/6 font-medium text-gray-900">
+                            <label className="block text-sm/6 font-medium text-gray-900 dark:text-white">
                                 Sizes
                             </label>
                             <div className="mt-2 flex flex-wrap gap-4">
@@ -197,37 +197,37 @@ export default function AdminProductForm() {
                                             type="checkbox"
                                             value={size.id}
                                             {...register('sizes')}
-                                            className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                            className="h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 rounded"
                                         />
-                                        <span>{size.name}</span>
+                                        <span className="text-gray-900 dark:text-white">{size.name}</span>
                                     </label>
                                 ))}
                             </div>
                         </div>
                         <div className="col-span-full">
-                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                                 Highlights
                             </label>
-                            <p className="mt-1 text-xs text-gray-500">Add 4 highlights.</p>
+                            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Add 4 highlights.</p>
                             {[1, 2, 3, 4].map((index) => (
                                 <>
                                     <div key={index} className="mt-2">
-                                        <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                        <div className="flex items-center rounded-md bg-white dark:bg-gray-700 pl-3 outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-600 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                                             <input
                                                 type="text"
                                                 {...register(`highlight${index}`, { required: `highlight ${index} is required` })}
                                                 placeholder={`Highlight ${index}`}
-                                                className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                                className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
                                             />
                                         </div>
                                     </div>
-                                    {errors[`highlight${index}`] && <p className="text-pink-600 text-sm mt-1">{errors[`highlight${index}`].message}</p>}
+                                    {errors[`highlight${index}`] && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors[`highlight${index}`].message}</p>}
                                 </>
                             ))}
                         </div>
                         <div className="sm:col-span-3">
                             <div
-                                className="block text-sm font-medium leading-6 text-gray-900"
+                                className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                             >
                                 Brand
                             </div>
@@ -236,7 +236,7 @@ export default function AdminProductForm() {
                                     {...register('brand', {
                                         required: 'brand is required',
                                     })}
-                                    className='p-2 border'
+                                    className='p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white'
                                 >
                                     <option value="">--choose brand--</option>
                                     {filters[0].options.map((brand) => (
@@ -244,11 +244,11 @@ export default function AdminProductForm() {
                                     ))}
                                 </select>
                             </div>
-                            {errors.brand && <p className="text-pink-600 text-sm mt-1">{errors.brand.message}</p>}
+                            {errors.brand && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.brand.message}</p>}
                         </div>
                         <div className="sm:col-span-3">
                             <div
-                                className="block text-sm font-medium leading-6 text-gray-900"
+                                className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                             >
                                 Categories
                             </div>
@@ -257,7 +257,7 @@ export default function AdminProductForm() {
                                     {...register('category', {
                                         required: 'category is required',
                                     })}
-                                    className='border p-2'
+                                    className='border border-gray-300 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white'
                                 >
                                     <option value="">--choose categories--</option>
                                     {filters[1].options.map((category) => (
@@ -265,14 +265,14 @@ export default function AdminProductForm() {
                                     ))}
                                 </select>
                             </div>
-                            {errors.category && <p className="text-pink-600 text-sm mt-1">{errors.category.message}</p>}
+                            {errors.category && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.category.message}</p>}
                         </div>
                         <div className="sm:col-span-2">
-                            <label htmlFor="price" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="price" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
                                 Price
                             </label>
                             <div className="mt-2">
-                                <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <div className="flex items-center rounded-md bg-white dark:bg-gray-700 pl-3 outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-600 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                                     <input
                                         id="price"
                                         type="number"
@@ -288,18 +288,18 @@ export default function AdminProductForm() {
                                             },
                                         })}
 
-                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
                                     />
                                 </div>
                             </div>
-                            {errors.price && <p className="text-pink-600 text-sm mt-1">{errors.price.message}</p>}
+                            {errors.price && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.price.message}</p>}
                         </div>
                         <div className="sm:col-span-2">
-                            <label htmlFor="discount" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="discount" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
                                 Discount
                             </label>
                             <div className="mt-2">
-                                <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <div className="flex items-center rounded-md bg-white dark:bg-gray-700 pl-3 outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-600 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                                     <input
                                         id="discount"
                                         type="number"
@@ -314,18 +314,18 @@ export default function AdminProductForm() {
                                                 message: 'discount must be at most 100',
                                             },
                                         })}
-                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
                                     />
                                 </div>
                             </div>
-                            {errors.discountPercentage && <p className="text-pink-600 text-sm mt-1">{errors.discountPercentage.message}</p>}
+                            {errors.discountPercentage && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.discountPercentage.message}</p>}
                         </div>
                         <div className="sm:col-span-2">
-                            <label htmlFor="stock" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="stock" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
                                 Stock
                             </label>
                             <div className="mt-2">
-                                <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <div className="flex items-center rounded-md bg-white dark:bg-gray-700 pl-3 outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-600 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                                     <input
                                         id="stock"
                                         type="number"
@@ -336,48 +336,48 @@ export default function AdminProductForm() {
                                                 message: 'stock must be at least 0',
                                             },
                                         })}
-                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
                                     />
                                 </div>
                             </div>
-                            {errors.stock && <p className="text-pink-600 text-sm mt-1">{errors.stock.message}</p>}
+                            {errors.stock && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.stock.message}</p>}
                         </div>
                         <div className="sm:col-span-6">
-                            <label htmlFor="thumbnail" className="block text-sm/6 font-medium text-gray-900">
+                            <label htmlFor="thumbnail" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
                                 Thumbnail
                             </label>
                             <div className="mt-2">
-                                <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <div className="flex items-center rounded-md bg-white dark:bg-gray-700 pl-3 outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-600 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                                     <input
                                         id="thumbnail"
                                         type="text"
                                         {...register('thumbnail', {
                                             required: 'thumbnail is required',
                                         })}
-                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                        className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
                                     />
                                 </div>
                             </div>
-                            {errors.thumbnail && <p className="text-pink-600 text-sm mt-1">{errors.thumbnail.message}</p>}
+                            {errors.thumbnail && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.thumbnail.message}</p>}
                         </div>
                         <div className="sm:col-span-6">
-                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                                 Images
                             </label>
-                            <p className="mt-1 text-xs text-gray-500">Add 4 images.</p>
+                            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Add 4 images.</p>
                             {[1, 2, 3, 4].map((index) => (
                                 <>
                                     <div key={index} className="mt-2">
-                                        <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                        <div className="flex items-center rounded-md bg-white dark:bg-gray-700 pl-3 outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-600 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                                             <input
                                                 type="text"
                                                 {...register(`image${index}`, { required: `image ${index} is required` })}
                                                 placeholder={`Image ${index}`}
-                                                className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                                                className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
                                             />
                                         </div>
                                     </div>
-                                    {errors[`image${index}`] && <p className="text-pink-600 text-sm mt-1">{errors[`image${index}`].message}</p>}
+                                    {errors[`image${index}`] && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors[`image${index}`].message}</p>}
                                 </>
                             ))}
                         </div>
@@ -386,21 +386,21 @@ export default function AdminProductForm() {
             </div>
 
             <div className="mt-6 flex items-center justify-end gap-x-6">
-                <Link to={'/'} className="text-sm/6 font-semibold text-gray-900">
+                <Link to={'/'} className="text-sm/6 font-semibold text-gray-900 dark:text-white">
                     Cancel
                 </Link>
                 {params.id && selectedProduct &&
                     <button
                         type="submit"
                         disabled={selectedProduct.deleted || isUpdatingProduct}
-                        className={`rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ${selectedProduct.deleted || isUpdatingProduct ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                        className={`rounded-md bg-red-600 dark:bg-red-700 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 dark:hover:bg-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ${selectedProduct.deleted || isUpdatingProduct ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                     >
                         {selectedProduct.deleted ? 'Deleted' : 'Delete'}
                     </button>}
                 {params.id ? <button
                     type="submit"
                     disabled={isUpdatingProduct}
-                    className={`rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isUpdatingProduct ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
+                    className={`rounded-md bg-indigo-600 dark:bg-indigo-700 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 dark:hover:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isUpdatingProduct ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
                 >
                     {isUpdatingProduct ? (
                         <span className="flex items-center gap-2">
@@ -414,7 +414,7 @@ export default function AdminProductForm() {
                 </button> :
                     <button
                         type="submit"
-                        className={`rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isCreatingProduct ? "cursor-not-allowed opacity-70" : "cursor-pointer"} `}
+                        className={`rounded-md bg-indigo-600 dark:bg-indigo-700 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 dark:hover:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isCreatingProduct ? "cursor-not-allowed opacity-70" : "cursor-pointer"} `}
                     >
                         {isCreatingProduct ? (
                             <span className="flex items-center gap-2">

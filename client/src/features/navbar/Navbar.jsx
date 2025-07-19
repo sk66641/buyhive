@@ -52,20 +52,31 @@ export default function Navbar({ children }) {
 
     return (
         <>
-            <div className="min-h-full">
+            <div className="min-h-screen">
                 <Disclosure as="nav" className="bg-gray-800">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex h-16 items-center justify-between">
                             <div className="flex items-center">
-                                <div className="flex items-center shrink-0">
+                                <div className="flex items-center shrink-0 cursor-pointer">
                                     <img
-                                        alt="buyhive"
-                                        src="buyhive.png"
+                                        alt="img"
+                                        src="/buyhive.png"
                                         className="size-8"
                                     />
                                     <span className='text-white font-bold'>
                                         buyhive
                                     </span>
+                                </div>
+                                {/* Dark mode toggle for mobile */}
+                                <div className="flex md:hidden items-center gap-2 px-5">
+                                    <button
+                                        type="button"
+                                        aria-label="Toggle dark mode"
+                                        onClick={handleThemeToggle}
+                                        className="rounded-full bg-gray-700 cursor-pointer p-2 text-gray-300 hover:bg-gray-600 hover:text-white transition"
+                                    >
+                                        {theme === "dark" ? <SunIcon className="size-5" /> : <MoonIcon className="size-5" />}
+                                    </button>
                                 </div>
                                 <div className="hidden md:block">
                                     <div className="ml-10 flex items-baseline space-x-4">
@@ -108,7 +119,7 @@ export default function Navbar({ children }) {
                                             type="button"
                                             aria-label="Toggle dark mode"
                                             onClick={handleThemeToggle}
-                                            className="rounded-full bg-gray-700 p-2 text-gray-300 hover:bg-gray-600 hover:text-white transition"
+                                            className="rounded-full bg-gray-700 cursor-pointer p-2 text-gray-300 hover:bg-gray-600 hover:text-white transition"
                                         >
                                             {theme === "dark" ? <SunIcon className="size-5" /> : <MoonIcon className="size-5" />}
                                         </button>
@@ -138,17 +149,17 @@ export default function Navbar({ children }) {
                                                     {/* <img alt="img" src={user.imageUrl} className="size-8 rounded-full z-0 cursor-pointer" /> */}
                                                     <div className='w-8 h-8 rounded-full text-xl text-center font-medium bg-indigo-200 cursor-pointer z-0'>{getUser.name?.split('')[0]}</div>
                                                 </MenuButton>
-                                                <MenuItems
-                                                    transition
-                                                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-                                                >
-                                                    <MenuItem>
-                                                        <Link to={'/profile'} className='flex flex-col px-3 py-1 hover:bg-gray-300'>
-                                                            <div className="text-base/5 font-medium text-gray-800">{getUser.name}</div>
-                                                            <div className="text-sm font-medium text-gray-800">{getUser.email}</div>
-                                                        </Link>
-                                                    </MenuItem>
-                                                </MenuItems>
+                                               <MenuItems
+                                                        transition
+                                                        className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-900 py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                                                    >
+                                                        <MenuItem>
+                                                            <Link to={'/profile'} className='flex flex-col px-3 py-1 hover:bg-gray-300 dark:hover:bg-gray-700'>
+                                                                <div className="text-base/5 font-medium text-gray-800 dark:text-white">{getUser.name}</div>
+                                                                <div className="text-sm font-medium text-gray-800 dark:text-gray-300">{getUser.email}</div>
+                                                            </Link>
+                                                        </MenuItem>
+                                                    </MenuItems>
                                             </Menu>
                                         </>
                                         :
@@ -174,17 +185,6 @@ export default function Navbar({ children }) {
 
                     <DisclosurePanel className="md:hidden">
                         <div className="border-t border-gray-700 pt-4 pb-3">
-                            {/* Dark mode toggle for mobile */}
-                            <div className="flex items-center gap-2 px-5 mb-2">
-                                <button
-                                    type="button"
-                                    aria-label="Toggle dark mode"
-                                    onClick={handleThemeToggle}
-                                    className="rounded-full bg-gray-700 p-2 text-gray-300 hover:bg-gray-600 hover:text-white transition"
-                                >
-                                    {theme === "dark" ? <SunIcon className="size-5" /> : <MoonIcon className="size-5" />}
-                                </button>
-                            </div>
                             {isFetchingLoggedInUser ? (
                                 <div className="flex items-center gap-2 animate-pulse">
                                     <div className="w-8 h-8 rounded-full bg-gray-200" />
@@ -238,7 +238,7 @@ export default function Navbar({ children }) {
                     </DisclosurePanel>
                 </Disclosure>
 
-                <main>
+                <main className='dark:bg-gray-700'>
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                         {children}
                     </div>

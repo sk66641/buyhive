@@ -89,19 +89,10 @@ const Profile = () => {
             toast.error(ErrorSigningOut);
             dispatch(resetAuthErrors());
         }
-        if (ErrorAddingAddress) {
-            toast.error(ErrorAddingAddress);
+        if (ErrorFetchingAddresses || ErrorAddingAddress || ErrorUpdatingAddress || ErrorDeletingAddress) {
+            toast.error(ErrorFetchingAddresses || ErrorAddingAddress || ErrorUpdatingAddress || ErrorDeletingAddress);
+            dispatch(resetUserErrors());
         }
-        if (ErrorUpdatingAddress) {
-            toast.error(ErrorUpdatingAddress);
-        }
-        if (ErrorDeletingAddress) {
-            toast.error(ErrorDeletingAddress);
-        }
-        if (ErrorFetchingAddresses) {
-            toast.error(ErrorFetchingAddresses);
-        }
-        dispatch(resetUserErrors());
     }, [ErrorSigningOut, ErrorAddingAddress, ErrorUpdatingAddress, ErrorDeletingAddress, ErrorFetchingAddresses, dispatch]);
 
     useEffect(() => {
@@ -110,34 +101,34 @@ const Profile = () => {
 
     return (
         <div className="lg:col-span-2">
-            <div className="mx-auto bg-white px-0 sm:px-0 lg:px-0">
-                <div className="flex h-full flex-col bg-white shadow-xl">
+            <div className="mx-auto bg-white dark:bg-gray-800 px-0 sm:px-0 lg:px-0">
+                <div className="flex h-full flex-col bg-white dark:bg-gray-800 shadow-xl">
                     <div className='flex items-center justify-between flex-wrap gap-3 px-4 py-6 sm:px-6'>
                         <div className="flex flex-col overflow-y-auto">
-                            <div className="text-lg font-medium text-gray-900">Name: {user.name}</div>
-                            <div>Email Address: {user.email}</div>
-                            {user.role === 'admin' && <div>Role: {user.role}</div>}
+                            <div className="text-lg font-medium text-gray-900 dark:text-white">Name: {user.name}</div>
+                            <div className="text-gray-700 dark:text-gray-300">Email Address: {user.email}</div>
+                            {user.role === 'admin' && <div className="text-gray-700 dark:text-gray-300">Role: {user.role}</div>}
                         </div>
                         <button disabled={isSigningOut} type='button' onClick={handleSignOut}
-                            className={`rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isSigningOut ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                            className={`rounded-md bg-indigo-600 dark:bg-indigo-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:hover:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isSigningOut ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
                             {isSigningOut ? 'Signing out...' : 'Sign out'}
                         </button>
                     </div>
-                    <div className="border-t border-gray-200 px-4 py-6 space-y-1 sm:px-6">
+                    <div className="border-t border-gray-200 dark:border-gray-700 px-4 py-6 space-y-1 sm:px-6">
 
 
                         {showAddAddressForm ?
                             <form noValidate onSubmit={
                                 handleSubmit((data) => {
                                     handleAddAddress(data);
-                                })} className="bg-white px-5 py-12 border-solid border-2 border-gray-200 mb-12">
+                                })} className="bg-white dark:bg-gray-800 px-5 py-12 border-solid border-2 border-gray-200 dark:border-gray-600 mb-12">
                                 <div className="space-y-12">
-                                    <div className="border-b border-gray-900/10 pb-12">
-                                        <h2 className="text-2xl font-semibold leading-7 text-gray-900">
+                                    <div className="border-b border-gray-900/10 dark:border-gray-700/50 pb-12">
+                                        <h2 className="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">
                                             Personal Information
                                         </h2>
-                                        <p className="mt-1 text-sm leading-6 text-gray-600">
+                                        <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">
                                             Use a permanent address where you can receive mail.
                                         </p>
 
@@ -145,7 +136,7 @@ const Profile = () => {
                                             <div className="sm:col-span-3">
                                                 <label
                                                     htmlFor="first-name"
-                                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                 >
                                                     Full name
                                                 </label>
@@ -155,16 +146,16 @@ const Profile = () => {
                                                         {...register('name', { required: "name is required" })}
                                                         id="name"
                                                         autoComplete="given-name"
-                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
-                                                {errors.name && <p className="text-pink-600 text-sm mt-1">{errors.name.message}</p>}
+                                                {errors.name && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.name.message}</p>}
                                             </div>
 
                                             <div className="sm:col-span-3">
                                                 <label
                                                     htmlFor="phone"
-                                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                 >
                                                     Phone
                                                 </label>
@@ -180,16 +171,16 @@ const Profile = () => {
                                                         })}
                                                         id="phone-number"
                                                         autoComplete="phone-number"
-                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
-                                                {errors.phone && <p className="text-pink-600 text-sm mt-1">{errors.phone.message}</p>}
+                                                {errors.phone && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.phone.message}</p>}
                                             </div>
 
                                             <div className="col-span-full">
                                                 <label
                                                     htmlFor="street-address"
-                                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                 >
                                                     Street address
                                                 </label>
@@ -199,16 +190,16 @@ const Profile = () => {
                                                         {...register('street', { required: "street is required" })}
                                                         id="street-address"
                                                         autoComplete="street-address"
-                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
-                                                {errors.street && <p className="text-pink-600 text-sm mt-1">{errors.street.message}</p>}
+                                                {errors.street && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.street.message}</p>}
                                             </div>
 
                                             <div className="sm:col-span-2 sm:col-start-1">
                                                 <label
                                                     htmlFor="city"
-                                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                 >
                                                     City
                                                 </label>
@@ -218,16 +209,16 @@ const Profile = () => {
                                                         {...register('city', { required: "city is required" })}
                                                         id="city"
                                                         autoComplete="address-level2"
-                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
-                                                {errors.city && <p className="text-pink-600 text-sm mt-1">{errors.city.message}</p>}
+                                                {errors.city && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.city.message}</p>}
                                             </div>
 
                                             <div className="sm:col-span-2">
                                                 <label
                                                     htmlFor="region"
-                                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                 >
                                                     State / Province
                                                 </label>
@@ -237,16 +228,16 @@ const Profile = () => {
                                                         {...register('region', { required: "region is required" })}
                                                         id="region"
                                                         autoComplete="address-level1"
-                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
-                                                {errors.region && <p className="text-pink-600 text-sm mt-1">{errors.region.message}</p>}
+                                                {errors.region && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.region.message}</p>}
                                             </div>
 
                                             <div className="sm:col-span-2">
                                                 <label
                                                     htmlFor="postal-code"
-                                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                 >
                                                     ZIP / Pin code
                                                 </label>
@@ -256,10 +247,10 @@ const Profile = () => {
                                                         {...register('pinCode', { required: "pinCode is required" })}
                                                         id="pinCode"
                                                         autoComplete="pinCode"
-                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
-                                                {errors.pinCode && <p className="text-pink-600 text-sm mt-1">{errors.pinCode.message}</p>}
+                                                {errors.pinCode && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.pinCode.message}</p>}
                                             </div>
                                         </div>
                                     </div>
@@ -268,14 +259,14 @@ const Profile = () => {
                                         <button
                                             onClick={() => { setShowAddAddressForm(false); reset(); }}
                                             type="button"
-                                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
+                                            className="rounded-md bg-indigo-600 dark:bg-indigo-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:hover:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             type="submit"
                                             disabled={isAddingAddress}
-                                            className={`rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isAddingAddress ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                                            className={`rounded-md bg-indigo-600 dark:bg-indigo-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:hover:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isAddingAddress ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                                         >
                                             {isAddingAddress ? 'Adding Address...' : 'Add Address'}
                                         </button>
@@ -288,30 +279,30 @@ const Profile = () => {
                                     reset();
                                     setShowAddAddressForm(true);
                                 }}
-                                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-3.5 cursor-pointer"
+                                className="rounded-md bg-indigo-600 dark:bg-indigo-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:hover:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-3.5 cursor-pointer"
                             >
                                 Add Address
                             </button>}
 
 
-                        <p className="mt-0.5 text-sm text-gray-500">My Addresses:</p>
+                        <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">My Addresses:</p>
                         <div>
                             {isFetchingAddresses ? (
                                 <div className="flex flex-col gap-4">
                                     {[1, 2, 3].map((_, idx) => (
-                                        <div key={idx} className="animate-pulse bg-gray-100 border border-gray-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                        <div key={idx} className="animate-pulse bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                             <div className="flex flex-col gap-1 w-32">
-                                                <div className="h-4 bg-gray-300 rounded w-3/4 mb-1"></div>
-                                                <div className="h-3 bg-gray-200 rounded w-1/2 mb-1"></div>
-                                                <div className="h-3 bg-gray-200 rounded w-1/3"></div>
+                                                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4 mb-1"></div>
+                                                <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded w-1/2 mb-1"></div>
+                                                <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded w-1/3"></div>
                                             </div>
                                             <div className="flex flex-col gap-1 sm:items-end w-24">
-                                                <div className="h-4 bg-gray-300 rounded w-2/3 mb-1"></div>
-                                                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                                                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-2/3 mb-1"></div>
+                                                <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded w-1/2"></div>
                                             </div>
                                             <div className="flex flex-col gap-1 min-w-[80px] w-16">
-                                                <div className="h-4 bg-gray-300 rounded w-full mb-1"></div>
-                                                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                                                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-full mb-1"></div>
+                                                <div className="h-4 bg-gray-200 dark:bg-gray-500 rounded w-full"></div>
                                             </div>
                                         </div>
                                     ))}
@@ -322,40 +313,40 @@ const Profile = () => {
                                         <div key={address.id}>
                                             <div
 
-                                                className="flex justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200 overflow-auto"
+                                                className="flex justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200 dark:border-gray-600 overflow-auto"
                                             >
 
                                                 <div className="flex gap-x-4">
 
                                                     <div className="min-w-0 flex-auto">
-                                                        <p className="text-sm font-semibold leading-6 text-gray-900 text-wrap">
+                                                        <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white text-wrap">
                                                             {address.name}
                                                         </p>
-                                                        <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-wrap">
+                                                        <p className="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400 text-wrap">
                                                             {address.street}
                                                         </p>
-                                                        <p className="mt-1 truncate text-xs leading-5 text-gray-500 text-wrap">
+                                                        <p className="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400 text-wrap">
                                                             {address.pinCode}
                                                         </p>
                                                     </div>
                                                 </div>
                                                 <div className="hidden sm:flex sm:flex-col sm:items-end">
-                                                    <p className="text-sm leading-6 text-gray-900">
+                                                    <p className="text-sm leading-6 text-gray-900 dark:text-white">
                                                         Phone: {address.phone}
                                                     </p>
-                                                    <p className="text-sm leading-6 text-gray-500">
+                                                    <p className="text-sm leading-6 text-gray-500 dark:text-gray-400">
                                                         {address.city}
                                                     </p>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <button type='button' onClick={() => handleEditForm(index)} className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer">
+                                                    <button type='button' onClick={() => handleEditForm(index)} className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 cursor-pointer">
                                                         Edit
                                                     </button>
                                                     <button
                                                         type='button'
                                                         disabled={isDeletingAddress && deletingAddressId !== address.id}
                                                         onClick={() => handleRemove(address.id)}
-                                                        className={`font-medium text-red-600 hover:text-red-500 ${isDeletingAddress && deletingAddressId === address.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                                                        className={`font-medium text-red-600 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300 ${isDeletingAddress && deletingAddressId === address.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                                                     >
                                                         {isDeletingAddress && deletingAddressId === address.id ? 'Deleting...' : 'Delete'}
                                                     </button>
@@ -365,13 +356,13 @@ const Profile = () => {
                                                 <form noValidate onSubmit={
                                                     handleSubmit((data) => {
                                                         handleEdit(data);
-                                                    })} className="bg-white px-5 py-12 border-solid border-2 border-gray-200 mb-12">
+                                                    })} className="bg-white dark:bg-gray-800 px-5 py-12 border-solid border-2 border-gray-200 dark:border-gray-600 mb-12">
                                                     <div className="space-y-12">
-                                                        <div className="border-b border-gray-900/10 pb-12">
-                                                            <h2 className="text-2xl font-semibold leading-7 text-gray-900">
+                                                        <div className="border-b border-gray-900/10 dark:border-gray-700/50 pb-12">
+                                                            <h2 className="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">
                                                                 Personal Information
                                                             </h2>
-                                                            <p className="mt-1 text-sm leading-6 text-gray-600">
+                                                            <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">
                                                                 Use a permanent address where you can receive mail.
                                                             </p>
 
@@ -379,7 +370,7 @@ const Profile = () => {
                                                                 <div className="sm:col-span-3">
                                                                     <label
                                                                         htmlFor="first-name"
-                                                                        className="block text-sm font-medium leading-6 text-gray-900"
+                                                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                                     >
                                                                         Full name
                                                                     </label>
@@ -389,16 +380,16 @@ const Profile = () => {
                                                                             {...register('name', { required: "name is required" })}
                                                                             id="name"
                                                                             autoComplete="given-name"
-                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
-                                                                    {errors.name && <p className="text-pink-600 text-sm mt-1">{errors.name.message}</p>}
+                                                                    {errors.name && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.name.message}</p>}
                                                                 </div>
 
                                                                 <div className="sm:col-span-3">
                                                                     <label
                                                                         htmlFor="phone"
-                                                                        className="block text-sm font-medium leading-6 text-gray-900"
+                                                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                                     >
                                                                         Phone
                                                                     </label>
@@ -415,16 +406,16 @@ const Profile = () => {
 
                                                                             id="phone-number"
                                                                             autoComplete="phone-number"
-                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
-                                                                    {errors.phone && <p className="text-pink-600 text-sm mt-1">{errors.phone.message}</p>}
+                                                                    {errors.phone && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.phone.message}</p>}
                                                                 </div>
 
                                                                 <div className="col-span-full">
                                                                     <label
                                                                         htmlFor="street-address"
-                                                                        className="block text-sm font-medium leading-6 text-gray-900"
+                                                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                                     >
                                                                         Street address
                                                                     </label>
@@ -434,16 +425,16 @@ const Profile = () => {
                                                                             {...register('street', { required: "street is required" })}
                                                                             id="street-address"
                                                                             autoComplete="street-address"
-                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
-                                                                    {errors.street && <p className="text-pink-600 text-sm mt-1">{errors.street.message}</p>}
+                                                                    {errors.street && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.street.message}</p>}
                                                                 </div>
 
                                                                 <div className="sm:col-span-2 sm:col-start-1">
                                                                     <label
                                                                         htmlFor="city"
-                                                                        className="block text-sm font-medium leading-6 text-gray-900"
+                                                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                                     >
                                                                         City
                                                                     </label>
@@ -453,16 +444,16 @@ const Profile = () => {
                                                                             {...register('city', { required: "city is required" })}
                                                                             id="city"
                                                                             autoComplete="address-level2"
-                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
-                                                                    {errors.city && <p className="text-pink-600 text-sm mt-1">{errors.city.message}</p>}
+                                                                    {errors.city && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.city.message}</p>}
                                                                 </div>
 
                                                                 <div className="sm:col-span-2">
                                                                     <label
                                                                         htmlFor="region"
-                                                                        className="block text-sm font-medium leading-6 text-gray-900"
+                                                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                                     >
                                                                         State / Province
                                                                     </label>
@@ -472,16 +463,16 @@ const Profile = () => {
                                                                             {...register('region', { required: "region is required" })}
                                                                             id="region"
                                                                             autoComplete="address-level1"
-                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
-                                                                    {errors.region && <p className="text-pink-600 text-sm mt-1">{errors.region.message}</p>}
+                                                                    {errors.region && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.region.message}</p>}
                                                                 </div>
 
                                                                 <div className="sm:col-span-2">
                                                                     <label
                                                                         htmlFor="postal-code"
-                                                                        className="block text-sm font-medium leading-6 text-gray-900"
+                                                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
                                                                     >
                                                                         ZIP / Pin code
                                                                     </label>
@@ -491,10 +482,10 @@ const Profile = () => {
                                                                             {...register('pinCode', { required: "pinCode is required" })}
                                                                             id="pinCode"
                                                                             autoComplete="pinCode"
-                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-700 sm:text-sm sm:leading-6"
                                                                         />
                                                                     </div>
-                                                                    {errors.pinCode && <p className="text-pink-600 text-sm mt-1">{errors.pinCode.message}</p>}
+                                                                    {errors.pinCode && <p className="text-pink-600 dark:text-pink-400 text-sm mt-1">{errors.pinCode.message}</p>}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -503,14 +494,14 @@ const Profile = () => {
                                                             <button
                                                                 onClick={() => { setSelectedEditIndex(-1); reset(); }}
                                                                 type="button"
-                                                                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
+                                                                className="rounded-md bg-indigo-600 dark:bg-indigo-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:hover:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
                                                             >
                                                                 Cancel
                                                             </button>
                                                             <button
                                                                 type="submit"
                                                                 disabled={isUpdatingAddress}
-                                                                className={`rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isUpdatingAddress ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                                                                className={`rounded-md bg-indigo-600 dark:bg-indigo-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:hover:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${isUpdatingAddress ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                                                             >
                                                                 {isUpdatingAddress ? 'Saving Address...' : 'Save Address'}
                                                             </button>
@@ -521,7 +512,7 @@ const Profile = () => {
                                     )
                                 }) : (
                                     <div className="flex flex-col items-center justify-center py-8">
-                                        <div className="text-base text-gray-400 font-medium">No addresses found</div>
+                                        <div className="text-base text-gray-400 dark:text-gray-500 font-medium">No addresses found</div>
                                     </div>
                                 )}
 

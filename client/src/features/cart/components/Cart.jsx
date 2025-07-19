@@ -48,62 +48,62 @@ export default function Cart() {
     return (
         <>
             {isFetchingItems ? (
-                <div className="flex flex-col gap-4">
+                <div className="flex rounded-2xl flex-col gap-4">
                     {[1, 2, 3].map((_, idx) => (
-                        <div key={idx} className="flex items-center gap-4 p-4 bg-white shadow animate-pulse">
-                            <div className="w-20 h-20 bg-gray-200 rounded-lg" />
+                        <div key={idx} className="flex items-center gap-4 p-4 bg-white dark:bg-gray-800 shadow animate-pulse">
+                            <div className="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-lg" />
                             <div className="flex-1 flex flex-col gap-2">
-                                <div className="h-5 w-1/2 bg-gray-200 rounded" />
-                                <div className="h-4 w-1/3 bg-gray-100 rounded" />
-                                <div className="h-4 w-1/4 bg-gray-100 rounded" />
+                                <div className="h-5 w-1/2 bg-gray-200 dark:bg-gray-700 rounded" />
+                                <div className="h-4 w-1/3 bg-gray-100 dark:bg-gray-600 rounded" />
+                                <div className="h-4 w-1/4 bg-gray-100 dark:bg-gray-600 rounded" />
                             </div>
                             <div className="flex flex-col items-end gap-2">
-                                <div className="h-5 w-12 bg-gray-200 rounded" />
-                                <div className="h-8 w-20 bg-gray-100 rounded" />
+                                <div className="h-5 w-12 bg-gray-200 dark:bg-gray-700 rounded" />
+                                <div className="h-8 w-20 bg-gray-100 dark:bg-gray-600 rounded" />
                             </div>
                         </div>
                     ))}
                 </div>
             ) : items.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-[60vh] bg-gradient-to-br from-indigo-50 to-white shadow-md">
-                    <span className="text-2xl font-semibold text-gray-700 mb-2">🛒</span>
-                    <span className="text-lg text-gray-500">Your cart is empty</span>
+                <div className="flex flex-col rounded-2xl items-center justify-center h-[60vh] bg-gradient-to-br from-indigo-50 to-white dark:from-gray-800 dark:to-gray-900 shadow-md">
+                    <span className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-2">🛒</span>
+                    <span className="text-lg text-gray-500 dark:text-gray-400">Your cart is empty</span>
                     <button
                         type="button"
                         onClick={() => navigate('/')}
-                        className="mt-6 px-4 py-2 cursor-pointer bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+                        className="mt-6 px-4 py-2 cursor-pointer bg-indigo-600 dark:bg-indigo-700 text-white rounded hover:bg-indigo-700 dark:hover:bg-indigo-600 transition"
                     >
                         Continue Shopping
                     </button>
                 </div>
             ) : (
-                <div className="bg-white shadow-lg p-6">
+                <div className="bg-white rounded-2xl dark:bg-gray-800 shadow-lg p-6">
                     <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-indigo-700">Shopping Cart</h2>
-                        <span className="text-sm text-gray-400">{totalItems} items</span>
+                        <h2 className="text-2xl font-bold text-indigo-700 dark:text-indigo-400">Shopping Cart</h2>
+                        <span className="text-sm text-gray-400 dark:text-gray-500">{totalItems} items</span>
                     </div>
-                    <ul className="divide-y divide-gray-200">
+                    <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                         {items.map((item) => (
                             <li key={item.id} className="flex py-6 items-center">
-                                <img alt="img" src={item.product.thumbnail} className="w-20 h-20 rounded-lg border object-cover" />
+                                <img alt="img" src={item.product.thumbnail} className="w-20 h-20 rounded-lg border border-gray-200 dark:border-gray-600 object-cover" />
                                 <div className="ml-4 flex-1">
                                     <div className="flex justify-between items-center">
-                                        <h3 className="text-lg font-medium text-gray-900">
+                                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                                             <a href={item.product.href}>{item.product.title}</a>
                                         </h3>
-                                        <span className="text-indigo-600 font-semibold">${item.product.discountedPrice}</span>
+                                        <span className="text-indigo-600 dark:text-indigo-400 font-semibold">${item.product.discountedPrice}</span>
                                     </div>
                                     {item.color &&
                                         // item.color = {name, id, class, selectedClass}
-                                        <p className="mt-1 text-sm text-gray-500">{item.color.name}</p>
+                                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{item.color.name}</p>
                                     }
                                     <div className="flex items-center mt-2">
-                                        <span className="mr-2 text-gray-500">Qty</span>
+                                        <span className="mr-2 text-gray-500 dark:text-gray-400">Qty</span>
                                         <select
                                             disabled={isDeletingItem && deletingItemId === item.id}
                                             value={item.quantity}
                                             onChange={(e) => handleQuantatiy(e, item)}
-                                            className="border rounded px-2 py-1 focus:outline-none focus:ring focus:border-indigo-400"
+                                            className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 focus:outline-none focus:ring focus:border-indigo-400 dark:bg-gray-700 dark:text-white"
                                         >
                                             <option value="1">1</option>
                                             <option value="2">2</option>
@@ -115,7 +115,7 @@ export default function Cart() {
                                             onClick={() => handleRemove(item.id)}
                                             type="button"
                                             disabled={isDeletingItem && deletingItemId === item.id || isUpdatingCart}
-                                            className={`ml-6 text-sm font-medium text-red-500 hover:text-red-700 transition ${isDeletingItem && deletingItemId === item.id || isUpdatingCart ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                                            className={`ml-6 text-sm font-medium text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition ${isDeletingItem && deletingItemId === item.id || isUpdatingCart ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                                         >
                                             {isDeletingItem && deletingItemId === item.id ? "Removing..." : "Remove"}
                                         </button>
@@ -124,17 +124,17 @@ export default function Cart() {
                             </li>
                         ))}
                     </ul>
-                    <div className="border-t pt-6 mt-6 space-y-2">
-                        <div className="flex justify-between text-lg font-semibold text-gray-700">
+                    <div className="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6 space-y-2">
+                        <div className="flex justify-between text-lg font-semibold text-gray-700 dark:text-gray-300">
                             <span>Subtotal</span>
                             <span>${totalAmount}</span>
                         </div>
-                        <p className="text-sm text-gray-400">Shipping and taxes calculated at checkout.</p>
+                        <p className="text-sm text-gray-400 dark:text-gray-500">Shipping and taxes calculated at checkout.</p>
                         <button
                             type='button'
                             onClick={() => navigate('/checkout')}
                             disabled={isUpdatingCart || isDeletingItem}
-                            className={`mt-4 w-full py-3 rounded bg-indigo-600 text-white font-bold shadow hover:bg-indigo-700 transition ${isUpdatingCart || isDeletingItem ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                            className={`mt-4 w-full py-3 rounded bg-indigo-600 dark:bg-indigo-700 text-white font-bold shadow hover:bg-indigo-700 dark:hover:bg-indigo-600 transition ${isUpdatingCart || isDeletingItem ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
                             {isUpdatingCart ? "Updating Cart..." : isDeletingItem ? "Removing Item..." : "Checkout"}
                         </button>
@@ -143,7 +143,7 @@ export default function Cart() {
                                 type="button"
                                 onClick={() => navigate('/')}
                                 disabled={isUpdatingCart || isDeletingItem}
-                                className={`text-indigo-600 font-medium hover:text-indigo-800 transition ${isUpdatingCart || isDeletingItem ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                                className={`text-indigo-600 dark:text-indigo-400 font-medium hover:text-indigo-800 dark:hover:text-indigo-300 transition ${isUpdatingCart || isDeletingItem ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                             >
                                 Continue Shopping
                                 <span aria-hidden="true"> &rarr;</span>

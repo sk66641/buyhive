@@ -1,2 +1,19 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+.dark ::-webkit-scrollbar {
+    background-color: #1a1a1a;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background-color: #333;
+    border-radius: 8px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background-color: #444;
+}
+
+.dark {
+    scrollbar-color: #333 #1a1a1a;
+    scrollbar-width: thin;
+}

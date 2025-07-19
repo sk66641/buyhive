@@ -4,6 +4,7 @@ import { fetchAllOrdersAsync, resetOrderErrors, selectErrorFetchingAllOrders, se
 import { useDispatch, useSelector } from 'react-redux';
 import Pagination from '../../common/Pagination';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/outline';
+import toast from 'react-hot-toast';
 
 const AdminOrders = () => {
     const [page, setPage] = useState(1);
@@ -20,17 +21,17 @@ const AdminOrders = () => {
     const chooseColor = (status) => {
         switch (status) {
             case 'pending':
-                return 'bg-purple-200 text-purple-600';
+                return 'bg-purple-200 dark:bg-purple-900 text-purple-600 dark:text-purple-300';
             case 'placed':
-                return 'bg-blue-200 text-blue-600';
+                return 'bg-blue-200 dark:bg-blue-900 text-blue-600 dark:text-blue-300';
             case 'dispatched':
-                return 'bg-yellow-200 text-yellow-600';
+                return 'bg-yellow-200 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300';
             case 'delivered':
-                return 'bg-green-200 text-green-600';
+                return 'bg-green-200 dark:bg-green-900 text-green-600 dark:text-green-300';
             case 'received':
-                return 'bg-green-200 text-green-600';
+                return 'bg-green-200 dark:bg-green-900 text-green-600 dark:text-green-300';
             case 'cancelled':
-                return 'bg-red-200 text-red-600';
+                return 'bg-red-200 dark:bg-red-900 text-red-600 dark:text-red-300';
         }
     };
 
@@ -61,13 +62,10 @@ const AdminOrders = () => {
     }, [dispatch, page, sort]);
 
     useEffect(() => {
-        if (ErrorFetchingAllOrders) {
-            toast.error(ErrorFetchingAllOrders);
+        if (ErrorFetchingAllOrders || ErrorUpdatingOrder) {
+            toast.error(ErrorFetchingAllOrders || ErrorUpdatingOrder);
+            dispatch(resetOrderErrors());
         }
-        if (ErrorUpdatingOrder) {
-            toast.error(ErrorUpdatingOrder);
-        }
-        dispatch(resetOrderErrors());
     }, [ErrorFetchingAllOrders, ErrorUpdatingOrder, dispatch]);
 
     return (
@@ -75,27 +73,27 @@ const AdminOrders = () => {
             {isFetchingAllOrders ?
                 <div className="w-full flex flex-col gap-4 animate-pulse">
                     {[1, 2, 3, 4, 5].map((_, idx) => (
-                        <div key={idx} className="flex items-center gap-4 p-4 bg-white shadow border border-gray-100">
-                            <div className="h-10 w-10 bg-gray-200 rounded-full" />
+                        <div key={idx} className="flex rounded-2xl items-center gap-4 p-4 bg-white dark:bg-gray-800 shadow border border-gray-100 dark:border-gray-700">
+                            <div className="h-10 w-10 bg-gray-200 dark:bg-gray-700 rounded-full" />
                             <div className="flex-1 flex flex-col gap-2">
-                                <div className="h-4 w-1/2 bg-gray-200 rounded" />
-                                <div className="h-3 w-1/3 bg-gray-100 rounded" />
+                                <div className="h-4 w-1/2 bg-gray-200 dark:bg-gray-700 rounded" />
+                                <div className="h-3 w-1/3 bg-gray-100 dark:bg-gray-600 rounded" />
                             </div>
                             <div className="flex flex-col items-end gap-2">
-                                <div className="h-4 w-16 bg-gray-200 rounded" />
-                                <div className="h-4 w-20 bg-gray-100 rounded" />
+                                <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded" />
+                                <div className="h-4 w-20 bg-gray-100 dark:bg-gray-600 rounded" />
                             </div>
                         </div>
                     ))}
                 </div>
                 :
                 totalOrders > 0 ?
-                    <div className="overflow-x-auto bg-white font-sans overflow-hidden">
+                    <div className="overflow-x-auto rounded-2xl bg-white dark:bg-gray-800 font-sans overflow-hidden">
                         <div className="w-full">
                             <div className="my-6">
                                 <table className="min-w-max w-full table-auto">
                                     <thead>
-                                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                        <tr className="bg-gray-200 dark:bg-gray-900 text-gray-600 dark:text-gray-300 uppercase text-sm leading-normal">
                                             <th className="p-3 text-center" >Order Number
 
                                             </th>
@@ -134,9 +132,9 @@ const AdminOrders = () => {
                                             <th className="p-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="text-gray-600 text-sm font-light">
+                                    <tbody className="text-gray-600 dark:text-gray-300 text-sm font-light">
                                         {orders.length > 0 && orders.map((order, index) => (
-                                            <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-100">
+                                            <tr key={order.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900">
                                                 <td className="p-3 text-center whitespace-nowrap">
                                                     <span className="font-medium">{index + 1}</span>
                                                 </td>
@@ -167,7 +165,7 @@ const AdminOrders = () => {
                                                 </td>
                                                 <td className="p-3 text-center">
                                                     {order.id === editableOrder?.id ? (
-                                                        <select value={editableOrder?.status} className='cursor-pointer' onChange={(e) => handleUpdate(e, order)}>
+                                                        <select value={editableOrder?.status} className='cursor-pointer dark:bg-gray-700 dark:text-white dark:border-gray-600' onChange={(e) => handleUpdate(e, order)}>
                                                             <option value="pending">Pending</option>
                                                             <option value="placed">Placed</option>
                                                             <option value="dispatched">Dispatched</option>
@@ -189,7 +187,7 @@ const AdminOrders = () => {
                                                 </td>
                                                 <td className="p-3 text-center">
                                                     {order.id === editableOrder?.id ? (
-                                                        <select className='cursor-pointer' value={editableOrder?.paymentStatus} onChange={(e) => handlePaymentStatus(e, order)}>
+                                                        <select className='cursor-pointer dark:bg-gray-700 dark:text-white dark:border-gray-600' value={editableOrder?.paymentStatus} onChange={(e) => handlePaymentStatus(e, order)}>
                                                             <option value="pending">Pending</option>
                                                             <option value="received">Received</option>
                                                         </select>
@@ -207,7 +205,7 @@ const AdminOrders = () => {
                                                     {order.createdAt ? (
                                                         <>
                                                             <div>{new Date(order.createdAt).toLocaleDateString()}</div>
-                                                            <div className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleTimeString()}</div>
+                                                            <div className="text-sm text-gray-500 dark:text-gray-400">{new Date(order.createdAt).toLocaleTimeString()}</div>
                                                         </>
                                                     ) : (
                                                         'N/A'
@@ -217,7 +215,7 @@ const AdminOrders = () => {
                                                     {order.updatedAt ? (
                                                         <>
                                                             <div>{new Date(order.updatedAt).toLocaleDateString()}</div>
-                                                            <div className="text-sm text-gray-500">{new Date(order.updatedAt).toLocaleTimeString()}</div>
+                                                            <div className="text-sm text-gray-500 dark:text-gray-400">{new Date(order.updatedAt).toLocaleTimeString()}</div>
                                                         </>
                                                     ) : (
                                                         'N/A'
@@ -227,7 +225,7 @@ const AdminOrders = () => {
                                                 <td className="p-3 text-center">
                                                     <div className="flex item-center justify-center">
                                                         {/* TODO: add showOrder and deleteOrder */}
-                                                        <div onClick={() => handleEdit(order)} className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
+                                                        <div onClick={() => handleEdit(order)} className="w-4 mr-2 transform hover:text-purple-500 dark:hover:text-purple-400 hover:scale-110 cursor-pointer">
                                                             <svg
                                                                 xmlns="http://www.w3.org/2000/svg"
                                                                 fill="none"
@@ -253,12 +251,12 @@ const AdminOrders = () => {
                             </div>
                         </div>
                     </div> :
-                    <div className="flex flex-col items-center justify-center h-[60vh] bg-gradient-to-br from-indigo-50 to-white shadow-md">
-                        <span className="text-lg text-gray-500">No orders found</span>
+                    <div className="flex rounded-2xl flex-col items-center justify-center h-[60vh] bg-gradient-to-br from-indigo-50 to-white dark:from-gray-800 dark:to-gray-900 shadow-md">
+                        <span className="text-lg text-gray-500 dark:text-gray-400">No orders found</span>
                         <button
                             type="button"
                             onClick={() => navigate('/')}
-                            className="mt-6 px-4 py-2 bg-indigo-600 cursor-pointer text-white rounded hover:bg-indigo-700 transition"
+                            className="mt-6 px-4 py-2 bg-indigo-600 dark:bg-indigo-700 cursor-pointer text-white rounded hover:bg-indigo-700 dark:hover:bg-indigo-600 transition"
                         >
                             Continue Shopping
                         </button>
