@@ -1,5 +1,6 @@
+import React, { useEffect, useState } from 'react'
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, ShoppingCartIcon, XMarkIcon, MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink } from 'react-router-dom'
 import { selectItems } from '../cart/CartSlice'
@@ -20,11 +21,34 @@ const adminNavigation = [
     { name: 'My Profile', link: '/profile' },
 ]
 
+function setThemeClass(theme) {
+    if (theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+    } else {
+        document.documentElement.classList.remove("dark");
+    }
+}
+
 export default function Navbar({ children }) {
 
     const items = useSelector(selectItems);
     const getUser = useSelector(selectUserInfo);
     const isFetchingLoggedInUser = useSelector(selectIsFetchingLoggedInUser);
+
+    const [theme, setTheme] = useState(() => {
+        if ("theme" in localStorage) return localStorage.theme;
+        return "dark";
+    });
+
+    useEffect(() => {
+        setThemeClass(theme);
+    }, [theme]);
+
+    const handleThemeToggle = () => {
+        const nextTheme = theme === "dark" ? "light" : "dark";
+        setTheme(nextTheme);
+        localStorage.theme = nextTheme;
+    };
 
     return (
         <>
@@ -78,6 +102,17 @@ export default function Navbar({ children }) {
                             </div>
                             <div className="hidden md:block">
                                 <div className="ml-4 flex items-center md:ml-6">
+                                    {/* Dark mode toggle button */}
+                                    <div className="flex items-center gap-2 mr-2">
+                                        <button
+                                            type="button"
+                                            aria-label="Toggle dark mode"
+                                            onClick={handleThemeToggle}
+                                            className="rounded-full bg-gray-700 p-2 text-gray-300 hover:bg-gray-600 hover:text-white transition"
+                                        >
+                                            {theme === "dark" ? <SunIcon className="size-5" /> : <MoonIcon className="size-5" />}
+                                        </button>
+                                    </div>
                                     {isFetchingLoggedInUser ? (
                                         <div className="flex items-center gap-2 animate-pulse">
                                             <div className="w-8 h-8 rounded-full bg-gray-200" />
@@ -139,6 +174,17 @@ export default function Navbar({ children }) {
 
                     <DisclosurePanel className="md:hidden">
                         <div className="border-t border-gray-700 pt-4 pb-3">
+                            {/* Dark mode toggle for mobile */}
+                            <div className="flex items-center gap-2 px-5 mb-2">
+                                <button
+                                    type="button"
+                                    aria-label="Toggle dark mode"
+                                    onClick={handleThemeToggle}
+                                    className="rounded-full bg-gray-700 p-2 text-gray-300 hover:bg-gray-600 hover:text-white transition"
+                                >
+                                    {theme === "dark" ? <SunIcon className="size-5" /> : <MoonIcon className="size-5" />}
+                                </button>
+                            </div>
                             {isFetchingLoggedInUser ? (
                                 <div className="flex items-center gap-2 animate-pulse">
                                     <div className="w-8 h-8 rounded-full bg-gray-200" />
