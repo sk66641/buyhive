@@ -155,8 +155,8 @@ export default function Navbar({ children }) {
                                                     >
                                                         <MenuItem>
                                                             <Link to={'/profile'} className='flex flex-col px-3 py-1 hover:bg-gray-300 dark:hover:bg-gray-700'>
-                                                                <div className="text-base/5 font-medium text-gray-800 dark:text-white">{getUser.name}</div>
-                                                                <div className="text-sm font-medium text-gray-800 dark:text-gray-300">{getUser.email}</div>
+                                                                <div className="text-base/5 font-medium text-gray-800 dark:text-white break-words">{getUser.name}</div>
+                                                                <div className="text-sm font-medium text-gray-800 dark:text-gray-300 break-words">{getUser.email}</div>
                                                             </Link>
                                                         </MenuItem>
                                                     </MenuItems>

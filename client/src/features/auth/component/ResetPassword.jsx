@@ -51,7 +51,7 @@ export default function ResetPassword() {
                     </div>
 
                     <form noValidate onSubmit={handleSubmit((data) => {
-                        dispatch(resetPasswordAsync({ token, email, password: data.password })).unwrap().then(() => navigate('/auth', { replace: true }));
+                        dispatch(resetPasswordAsync({ token, email, password: data.password })).unwrap().then(() => window.location.replace('/auth'));
                     })} className="space-y-7">
 
                         <div>

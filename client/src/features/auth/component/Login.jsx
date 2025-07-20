@@ -9,11 +9,17 @@ export default function Login({ setAuthMethod }) {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
   const isCheckingUser = useSelector(selectIsCheckingUser);
   const ErrorCheckingUser = useSelector(selectErrorCheckingUser);
+
+  const handleAdminLogin = () => {
+    setValue('email', "admin@gmail.com");
+    setValue('password', "User@12345");
+  }
 
   useEffect(() => {
     if (ErrorCheckingUser) {
@@ -122,6 +128,17 @@ export default function Login({ setAuthMethod }) {
           <button onClick={() => setAuthMethod("register")} className="cursor-pointer font-semibold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent hover:text-pink-500 transition">
             Create
           </button>
+        </p>
+        {/* Divider */}
+        <hr className="my-2 border-gray-300" />
+
+        {/* Login as admin paragraph */}
+        <p className="text-center text-base text-gray-700">
+          <button
+            type="button"
+            onClick={handleAdminLogin}
+            className="font-semibold text-indigo-600 cursor-pointer hover:text-pink-500 underline transition"
+          >Log in</button> as admin
         </p>
       </div>
       <Toaster />

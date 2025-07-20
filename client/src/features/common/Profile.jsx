@@ -80,7 +80,7 @@ const Profile = () => {
     const handleSignOut = () => {
         dispatch(signOutAsync()).
             unwrap().then(() => {
-                navigate('/', { replace: true });
+                window.location.replace('/');
             });
     }
 

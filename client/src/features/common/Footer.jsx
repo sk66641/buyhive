@@ -29,7 +29,7 @@ const Footer = () => {
                     <div>
                         <h4 className="text-lg font-semibold mb-4">Follow Us</h4>
                         <div className="flex space-x-4">
-                            <a href="https://github.com/" target="_blank" rel="noreferrer"
+                            <a href="https://github.com/sk66641" target="_blank" rel="noreferrer"
                                 className="text-gray-400 hover:text-white transition text-xl">
                                 <FaGithub />
                             </a>
@@ -47,7 +47,12 @@ const Footer = () => {
 
                 {/* Divider */}
                 <div className="border-t border-gray-700 mt-8 pt-6 text-sm text-gray-400 text-center">
-                    Made with <FaHeart className="inline text-red-500 mx-1" /> &copy; {new Date().getFullYear()}
+                    {/* Made with <FaHeart className="inline text-red-500 mx-1" /> &copy; {new Date().getFullYear()} */}
+                    <div className='flex justify-center items-center'>
+
+                    <img src="/buyhive.png" alt="img" className='h-8' />
+                    buyhive &copy; {new Date().getFullYear()}
+                    </div>
                 </div>
             </div>
         </footer>

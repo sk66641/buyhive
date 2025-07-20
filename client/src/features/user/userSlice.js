@@ -3,7 +3,7 @@ import { updateUser, fetchLoggedInUser, fetchUserOrders, addAddress, fetchAddres
 
 const initialState = {
     status: {
-        isFetchingLoggedInUser: true,
+        isFetchingLoggedInUser: true, // exception (reason: refreshing the page don't redirect you to '/auth', earlier it was redirecting to '/auth' for a moment before fetching user info)
         isUpdatingUser: false, // TODO: not used yet
         isFetchingUserOrders: false,
         isAddingAddress: false,

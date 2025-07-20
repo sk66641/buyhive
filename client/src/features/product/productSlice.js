@@ -11,7 +11,7 @@ const initialState = {
     },
     totalItems: 0,
     selectedProduct: null,
-    errors:{
+    errors: {
         ErrorFetchingProducts: null,
         ErrorFetchingProductById: null,
         ErrorCreatingProduct: null,
@@ -73,7 +73,7 @@ export const productSlice = createSlice({
     reducers: {
         resetProductErrors: (state) => {
             state.errors = initialState.errors;
-        }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -129,6 +129,7 @@ export const productSlice = createSlice({
                 const index = state.products.findIndex((product) => product.id === action.payload.id)
                 state.products[index] = action.payload;
                 state.status.isUpdatingProduct = false;
+                state.selectedProduct = null;
             })
             .addCase(updateProductAsync.rejected, (state, action) => {
                 state.status.isUpdatingProduct = false;
