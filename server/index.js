@@ -47,6 +47,13 @@ server.post('/webhook', express.raw({ type: 'application/json' }), async (reques
       const paymentIntent = event.data.object;
       console.log(`PaymentIntent for ${paymentIntent.id} was successful!`);
       await Order.findByIdAndUpdate(paymentIntent.metadata.orderId, { paymentStatus: 'received', status: 'placed' });
+
+      // Clear the cart after successful payment
+      const cartItems = await Cart.find({ user: paymentIntent.metadata.userId });
+      for (let item of cartItems) {
+        await Cart.findByIdAndDelete(item._id);
+      }
+
       // Then define and call a method to handle the successful payment intent.
       // handlePaymentIntentSucceeded(paymentIntent);
       break;
@@ -79,6 +86,7 @@ const orderRoutes = require('./routes/Order');
 const addressRoutes = require('./routes/Address');
 const { Order } = require('./model/Order');
 const { authMiddleware } = require('./Middleware/authMiddleware');
+const { Cart } = require('./model/Cart');
 // This is your test secret API key.
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
