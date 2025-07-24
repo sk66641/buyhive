@@ -1,26 +1,46 @@
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
+
+// Route Imports
+const productsRoutes = require('./routes/Products');
+const brandsRoutes = require('./routes/Brands');
+const categoriesRoutes = require('./routes/Categories');
+const userRoutes = require('./routes/User');
+const authRoutes = require('./routes/Auth');
+const cartRoutes = require('./routes/Cart');
+const orderRoutes = require('./routes/Order');
+const addressRoutes = require('./routes/Address');
+
+// Middleware and Model Imports
+const { authMiddleware } = require('./Middleware/authMiddleware');
+const { Order } = require('./model/Order');
+const { Cart } = require('./model/Cart');
+
 
 dotenv.config();
 
 const server = express();
 const port = 3000;
+// This is your test secret API key.
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
+// Core Middleware
 server.use(cors({
   origin: process.env.CLIENT_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
-}))
-
+}));
 server.use(morgan('dev')); // Logging middleware
+server.use(cookieParser());
 
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-
+// Stripe Webhook Endpoint
+// This route must be placed before `express.json()` to receive the raw body for signature verification.
 server.post('/webhook', express.raw({ type: 'application/json' }), async (request, response) => {
   let event = request.body;
   // Only verify the event if you have an endpoint secret defined.
@@ -43,15 +63,22 @@ server.post('/webhook', express.raw({ type: 'application/json' }), async (reques
   // Handle the event
   switch (event.type) {
     case 'payment_intent.succeeded':
-      console.log(event.data)
       const paymentIntent = event.data.object;
       console.log(`PaymentIntent for ${paymentIntent.id} was successful!`);
       await Order.findByIdAndUpdate(paymentIntent.metadata.orderId, { paymentStatus: 'received', status: 'placed' });
 
       // Clear the cart after successful payment
-      const cartItems = await Cart.find({ user: paymentIntent.metadata.userId });
-      for (let item of cartItems) {
-        await Cart.findByIdAndDelete(item._id);
+      try {
+        const userId = paymentIntent.metadata.userId;
+        if (userId) {
+          console.log("Clearing cart for user:", userId);
+          const result = await Cart.deleteMany({ user: new mongoose.Types.ObjectId(userId) });
+          console.log(`Deleted ${result.deletedCount} cart items.`);
+        } else {
+          console.log("No userId in metadata, cannot clear cart.");
+        }
+      } catch (err) {
+        console.error("Error deleting cart items:", err);
       }
 
       // Then define and call a method to handle the successful payment intent.
@@ -68,28 +95,14 @@ server.post('/webhook', express.raw({ type: 'application/json' }), async (reques
   }
 
   // Return a 200 response to acknowledge receipt of the event
-  response.send();
+  response.status(200).send();
 });
 
-server.use(cookieParser())
+// JSON Parser Middleware for all other API routes
 server.use(express.json());
 
 
-const mongoose = require('mongoose');
-const productsRoutes = require('./routes/Products')
-const brandsRoutes = require('./routes/Brands')
-const categoriesRoutes = require('./routes/Categories')
-const userRoutes = require('./routes/User')
-const authRoutes = require('./routes/Auth')
-const cartRoutes = require('./routes/Cart')
-const orderRoutes = require('./routes/Order');
-const addressRoutes = require('./routes/Address');
-const { Order } = require('./model/Order');
-const { authMiddleware } = require('./Middleware/authMiddleware');
-const { Cart } = require('./model/Cart');
-// This is your test secret API key.
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
+// Database Connection
 main().catch(err => console.log(err));
 
 async function main() {
@@ -97,20 +110,21 @@ async function main() {
   console.log("Connected to database");
 }
 
+// API Routes
 server.get('/', (req, res) => {
   res.json({ status: "buyhive server is running" });
-})
-
+});
 
 server.post("/create-payment-intent", authMiddleware, async (req, res) => {
   const { totalAmount, orderId } = req.body;
+  const userId = req.user.id; // Get user from authenticated session
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: parseInt(totalAmount * 100),
+      amount: Math.round(totalAmount * 100), // Use Math.round for precision
       currency: "usd",
       automatic_payment_methods: { enabled: true },
-      metadata: { orderId },
+      metadata: { orderId, userId }, // Add userId to metadata
     });
 
     res.json({ clientSecret: paymentIntent.client_secret });
@@ -119,8 +133,6 @@ server.post("/create-payment-intent", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Error creating payment intent" });
   }
 });
-
-
 
 server.use('/products', productsRoutes.router);
 server.use('/brands', authMiddleware, brandsRoutes.router);
@@ -131,6 +143,7 @@ server.use('/cart', authMiddleware, cartRoutes.router);
 server.use('/orders', authMiddleware, orderRoutes.router);
 server.use('/addresses', authMiddleware, addressRoutes.router);
 
+
 server.listen(port, () => {
   console.log(`server running at http://localhost:${port}`);
-})
+});
