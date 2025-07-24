@@ -17,7 +17,7 @@ export default function Login({ setAuthMethod }) {
   const ErrorCheckingUser = useSelector(selectErrorCheckingUser);
 
   const handleAdminLogin = () => {
-    setValue('email', "admin@gmail.com");
+    setValue('email', "sanukumar66641@gmail.com");
     setValue('password', "User@12345");
   }
 
