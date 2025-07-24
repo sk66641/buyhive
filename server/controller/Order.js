@@ -17,10 +17,10 @@ exports.fetchOrdersByUser = async (req, res) => {
 
 exports.createOrder = async (req, res) => {
     try {
-        const order = new Order(req.body);  
+        const order = new Order(req.body);
 
         // If payment method is cash, set status to 'placed'
-        if (order.paymentMethod === 'cash') {
+        if (order.paymentMethod === 'cash' || (order.paymentMethod === 'card' && order.paymentStatus === 'received')) {
             order.status = 'placed';
         }
 
