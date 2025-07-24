@@ -64,7 +64,7 @@ export default function ProductDetails() {
   return (
     <>
       {isFetchingProductById ?
-        <div className="bg-white dark:bg-gray-900 min-h-screen flex items-start justify-center">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl min-h-screen flex items-start justify-center">
           {/* Shimmer effect for loading - matches product details layout */}
           <div className="mx-auto mt-10 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8 w-full animate-pulse">
             {/* Image gallery shimmer */}
@@ -97,7 +97,7 @@ export default function ProductDetails() {
           </div>
         </div>
         :
-        <div className="bg-white dark:bg-gray-900">
+        <div className="bg-white rounded-2xl dark:bg-gray-900">
           {product &&
             <div className="pt-6">
               <nav aria-label="Breadcrumb">
