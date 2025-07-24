@@ -1,12 +1,20 @@
 const express = require('express');
-const server = express();
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 
+dotenv.config();
 
+const server = express();
 const port = 3000;
+
+server.use(cors({
+  origin: process.env.CLIENT_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}))
 
 server.use(morgan('dev')); // Logging middleware
 
@@ -56,16 +64,9 @@ server.post('/webhook', express.raw({ type: 'application/json' }), async (reques
   response.send();
 });
 
-server.use(cors({
-  origin: process.env.CLIENT_URL,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}))
-
 server.use(cookieParser())
 server.use(express.json());
-dotenv.config();
+
 
 const mongoose = require('mongoose');
 const productsRoutes = require('./routes/Products')
