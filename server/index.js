@@ -57,11 +57,11 @@ server.post('/webhook', express.raw({ type: 'application/json' }), async (reques
 });
 
 server.use(cors({
-  origin: (origin, callback) => {
-    callback(null, true);
-  },
-  credentials: true, // Allow cookies and credentials
-}));
+  origin: process.env.CLIENT_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}))
 
 server.use(cookieParser())
 server.use(express.json());
