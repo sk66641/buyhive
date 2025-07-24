@@ -20,7 +20,7 @@ exports.createOrder = async (req, res) => {
         const order = new Order(req.body);
 
         // If payment method is cash, set status to 'placed'
-        if (order.paymentMethod === 'cash' || (order.paymentMethod === 'card' && order.paymentStatus === 'received')) {
+        if (order.paymentMethod === 'cash') {
             order.status = 'placed';
         }
 

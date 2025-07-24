@@ -102,7 +102,6 @@ function Checkout() {
     return <Navigate to={`/order-success/${currentOrder.id}`} replace={true}></Navigate>;
   }
   if (currentOrder && currentOrder.paymentMethod === 'card') {
-    dispatch(setOrderSuccess(true));
     return <Navigate to={'/stripe-checkout'} replace={true}></Navigate>;
   }
 
