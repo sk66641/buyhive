@@ -61,14 +61,18 @@ exports.loginUser = async (req, res) => {
 }
 
 exports.logout = (req, res) => {
-    res.clearCookie("token", {
+    const options = {
         httpOnly: true,
         secure: true,
         sameSite: 'None',
-    });
-    res.status(200).json({ message: 'Logged out successfully' });
-}
+        path: '/',
+        domain: 'buyhive-get.vercel.app'
+    };
 
+    res.status(200)
+        .clearCookie("token", options)
+        .json({ message: 'Logged out successfully' });
+}
 exports.resetPasswordRequest = async (req, res) => {
     try {
         const { email } = req.body;

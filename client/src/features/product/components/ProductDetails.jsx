@@ -3,7 +3,7 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchProductsByIdAsync, selectedProductById, selectErrorFetchingProductById, selectIsFetchingProductById } from '../productSlice'
-import { Link, useParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { addToCartAsync, resetCartErrors, selectErrorAddingToCart, selectIsAddingToCart, selectItems } from '../../cart/CartSlice'
 import { selectUserInfo } from '../../user/userSlice'
 import toast, { Toaster } from 'react-hot-toast'
@@ -16,6 +16,7 @@ function classNames(...classes) {
 export default function ProductDetails() {
   const dispatch = useDispatch();
   const params = useParams();
+  const navigate = useNavigate();
 
   const [selectedColor, setSelectedColor] = useState()
   const [selectedSize, setSelectedSize] = useState()
@@ -37,6 +38,10 @@ export default function ProductDetails() {
   }, [dispatch, params.id])
 
   const handleCart = (e) => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
     e.preventDefault();
     const item = { product: product.id, quantity: 1, user: user.id };
 
@@ -195,7 +200,7 @@ export default function ProductDetails() {
                     </div>
                   </div>
 
-                  <form className="mt-6">
+                  <div className="mt-6">
                     {/* Colors */}
                     {product.colors.length > 0 &&
                       <div>
@@ -281,12 +286,12 @@ export default function ProductDetails() {
                     <button
                       onClick={handleCart}
                       disabled={product.deleted || !(product.stock > 0) || isAddedToCart || isAddingToCart}
-                      type="submit"
+                      type="button"
                       className={`mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 dark:bg-indigo-700 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 dark:hover:bg-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden ${product.deleted || !(product.stock > 0) || isAddedToCart || isAddingToCart ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
                     >
                       {isAddingToCart ? "Adding to Cart..." : product.deleted ? "Deleted" : product.stock > 0 ? isAddedToCart ? "Added to Cart" : "Add to Cart" : "Out of Stock"}
                     </button>
-                  </form>
+                  </div>
                 </div>
 
                 <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 dark:lg:border-gray-700 lg:pt-6 lg:pr-8 lg:pb-16">
