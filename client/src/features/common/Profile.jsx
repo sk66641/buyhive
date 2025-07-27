@@ -100,9 +100,9 @@ const Profile = () => {
     }, [dispatch])
 
     return (
-        <div className="lg:col-span-2">
-            <div className="mx-auto bg-white dark:bg-gray-800 px-0 sm:px-0 lg:px-0">
-                <div className="flex h-full flex-col bg-white dark:bg-gray-800 shadow-xl">
+        <div className="lg:col-span-2 rounded-2xl">
+            <div className="mx-auto bg-white rounded-2xl dark:bg-gray-800 px-0 sm:px-0 lg:px-0">
+                <div className="flex h-full flex-col rounded-2xl bg-white dark:bg-gray-800 shadow-xl">
                     <div className='flex items-center justify-between flex-wrap gap-3 px-4 py-6 sm:px-6'>
                         <div className="flex flex-col overflow-y-auto">
                             <div className="text-lg font-medium text-gray-900 dark:text-white">Name: {user.name}</div>
@@ -330,7 +330,7 @@ const Profile = () => {
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <div className="hidden sm:flex sm:flex-col sm:items-end">
+                                                <div className="sm:flex sm:flex-col sm:items-end">
                                                     <p className="text-sm leading-6 text-gray-900 dark:text-white">
                                                         Phone: {address.phone}
                                                     </p>

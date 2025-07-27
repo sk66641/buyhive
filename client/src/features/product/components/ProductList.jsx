@@ -151,7 +151,7 @@ const ProductList = () => {
 
                     <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex items-baseline justify-between border-b border-gray-200 dark:border-gray-700 pt-24 pb-6">
-                            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">Products</h1>
+                            <h1 className="md:text-4xl text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Products</h1>
 
                             <div className="flex items-center">
                                 <Menu as="div" className="relative inline-block text-left">

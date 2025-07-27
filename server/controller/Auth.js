@@ -66,7 +66,7 @@ exports.logout = (req, res) => {
         secure: true,
         sameSite: 'None',
         path: '/',
-        domain: 'buyhive-get.vercel.app'
+        domain: 'buyhive-serve.vercel.app'
     };
 
     res.status(200)

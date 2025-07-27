@@ -107,7 +107,7 @@ function Checkout() {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-x-8 gap-y-10` lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
         <div className="lg:col-span-3">
           <form noValidate onSubmit={handleSubmit((data) => {
             dispatch(addAddressAsync({ ...data, userId: user.id })).unwrap().then(() => {
@@ -265,19 +265,21 @@ function Checkout() {
                             type="radio"
                             className="h-4 w-4 border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-600"
                           />
-                          <div className="min-w-0 flex-auto">
-                            <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white text-wrap">
-                              {address.name}
-                            </p>
-                            <p className="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400 text-wrap">
-                              {address.street}
-                            </p>
-                            <p className="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400 text-wrap">
-                              {address.pinCode}
-                            </p>
+                          <div>
+                            <div className="min-w-0 flex-auto">
+                              <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white text-wrap">
+                                {address.name}
+                              </p>
+                              <p className="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400 text-wrap">
+                                {address.street}
+                              </p>
+                              <p className="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400 text-wrap">
+                                {address.pinCode}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                        <div className="hidden sm:flex sm:flex-col sm:items-end">
+                        <div className="text-right sm:flex sm:flex-col sm:items-end">
                           <p className="text-sm leading-6 text-gray-900 dark:text-white">
                             Phone: {address.phone}
                           </p>
@@ -343,9 +345,9 @@ function Checkout() {
             </div>
           </form>
         </div>
-        <div className="lg:col-span-2">
-          <div className="mx-auto bg-white dark:bg-gray-800">
-            <div className="flex h-full flex-col bg-white dark:bg-gray-800 shadow-xl">
+        <div className="lg:col-span-2 rounded-2xl">
+          <div className="mx-auto bg-white rounded-2xl dark:bg-gray-800">
+            <div className="flex h-full flex-col rounded-2xl bg-white dark:bg-gray-800 shadow-xl">
               <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                 <div className="flex items-start justify-between">
                   <div className="text-lg font-medium text-gray-900 dark:text-white">Shopping cart</div>
