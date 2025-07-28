@@ -34,14 +34,19 @@ virtual.get(function () {
     return this._id;
 })
 productSchema.set('toJSON', {
-    versionKe: false,
+    versionKey: false,
     virtuals: true,
     transform: function (doc, ret) { delete ret._id }
 })
 
-productSchema.pre('save', () => {
+productSchema.pre('save', function (next) {
     this.discountedPrice = this.price - (this.price * this.discountPercentage / 100);
+    next();
 });
+
+// productSchema.pre('save', () => {
+//     this.discountedPrice = this.price - (this.price * this.discountPercentage / 100);
+// });
 
 exports.Product = mongoose.model('Product', productSchema);
 

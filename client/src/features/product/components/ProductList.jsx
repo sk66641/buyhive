@@ -474,9 +474,6 @@ function ProductGrid({ products }) {
                     <div className="mx-auto max-w-5xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
                         <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-10">
                             {products.map((product) => {
-
-                                const hasDiscount = product.discountPercentage && product.discountPercentage > 0;
-
                                 return (
                                     <div key={product.id} className="flex flex-col gap-2 justify-between">
                                         <Link
@@ -522,28 +519,22 @@ function ProductGrid({ products }) {
                                                 </div>
                                                 <div className="mt-4 flex items-end justify-between">
                                                     <div>
-                                                        {hasDiscount ? (
-                                                            <div className="flex flex-col">
-                                                                <div className="flex items-center gap-2">
-                                                                    <span className="text-sm font-bold text-green-500 dark:text-green-400">
-                                                                        ${product.discountedPrice}
+                                                        <div className="flex flex-col">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-sm font-bold text-green-500 dark:text-green-400">
+                                                                    ${product.discountedPrice}
+                                                                </span>
+                                                                <span className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs font-bold px-2 py-0.5 rounded-full border border-green-200 dark:border-green-700">
+                                                                    {product.discountPercentage}%
+                                                                    <span className="ml-1 text-xs">
+                                                                        OFF
                                                                     </span>
-                                                                    <span className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs font-bold px-2 py-0.5 rounded-full border border-green-200 dark:border-green-700">
-                                                                        {product.discountPercentage}%
-                                                                        <span className="ml-1 text-xs">
-                                                                            OFF
-                                                                        </span>
-                                                                    </span>
-                                                                </div>
-                                                                <span className="text-sm line-through text-gray-400 dark:text-gray-500">
-                                                                    ${product.price}
                                                                 </span>
                                                             </div>
-                                                        ) : (
-                                                            <span className="text-lg font-bold text-gray-900 dark:text-white">
+                                                            <span className="text-sm line-through text-gray-400 dark:text-gray-500">
                                                                 ${product.price}
                                                             </span>
-                                                        )}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
